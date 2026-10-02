@@ -1,0 +1,27 @@
+[
+  {
+    "id": "total-gross-revenue",
+    "question": "What is total gross revenue?",
+    "reference_sql": "SELECT SUM(gross_amount) AS total_gross_revenue\nFROM orders;"
+  },
+  {
+    "id": "net-revenue",
+    "question": "What is net revenue after discounts and refunds?",
+    "reference_sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders;"
+  },
+  {
+    "id": "top-region-by-net-revenue",
+    "question": "Which region has the highest net revenue?",
+    "reference_sql": "SELECT\n  region,\n  SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nGROUP BY region\nORDER BY net_revenue DESC, region ASC\nLIMIT 1;"
+  },
+  {
+    "id": "top-category-by-refunds",
+    "question": "Which category has the highest refund amount?",
+    "reference_sql": "SELECT\n  category,\n  SUM(refund_amount) AS total_refund_amount\nFROM orders\nGROUP BY category\nORDER BY total_refund_amount DESC, category ASC\nLIMIT 1;"
+  },
+  {
+    "id": "september-vs-august-net-revenue",
+    "question": "How does September net revenue compare with August?",
+    "reference_sql": "WITH monthly AS (\n  SELECT\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-08-01' AND order_date < DATE '2025-09-01'\n    ) AS august_net_revenue,\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-09-01' AND order_date < DATE '2025-10-01'\n    ) AS september_net_revenue\n  FROM orders\n)\nSELECT\n  august_net_revenue,\n  september_net_revenue,\n  september_net_revenue - august_net_revenue AS absolute_change,\n  ROUND(\n    100 * (september_net_revenue - august_net_revenue)\n      / NULLIF(august_net_revenue, 0),\n    2\n  ) AS percentage_change\nFROM monthly;"
+  }
+]
