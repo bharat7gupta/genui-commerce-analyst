@@ -1,0 +1,1 @@
+{"timestamp":"2026-10-02T13:29:00Z","experiment":"day-01-smoke","promptVersion":"smoke-v1","provider":"ollama","model":"qwen3.5:4b","input":"Reply with exactly: LOCAL_MODEL_OK","output":"LOCAL_MODEL_OK","inputTokens":17,"outputTokens":197,"totalTokens":214,"latencyMs":7168,"requestId":null,"success":true}
