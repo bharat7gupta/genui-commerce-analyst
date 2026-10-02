@@ -2,26 +2,84 @@
   {
     "id": "total-gross-revenue",
     "question": "What is total gross revenue?",
-    "reference_sql": "SELECT SUM(gross_amount) AS total_gross_revenue\nFROM orders;"
+    "reference_sql": "SELECT SUM(gross_amount) AS total_gross_revenue\nFROM orders;",
+    "referenceResult": [
+      {
+        "total_gross_revenue": "18010.00"
+      }
+    ],
+    "expectedAnswer": {
+      "type": "number",
+      "value": 18010,
+      "tolerance": 0
+    }
   },
   {
     "id": "net-revenue",
     "question": "What is net revenue after discounts and refunds?",
-    "reference_sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders;"
+    "reference_sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders;",
+    "referenceResult": [
+      {
+        "net_revenue": "15520.00"
+      }
+    ],
+    "expectedAnswer": {
+      "type": "number",
+      "value": 15520,
+      "tolerance": 0
+    }
   },
   {
     "id": "top-region-by-net-revenue",
     "question": "Which region has the highest net revenue?",
-    "reference_sql": "SELECT\n  region,\n  SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nGROUP BY region\nORDER BY net_revenue DESC, region ASC\nLIMIT 1;"
+    "reference_sql": "SELECT\n  region,\n  SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nGROUP BY region\nORDER BY net_revenue DESC, region ASC\nLIMIT 1;",
+    "referenceResult": [
+      {
+        "region": "North",
+        "net_revenue": "5125.00"
+      }
+    ],
+    "expectedAnswer": {
+      "type": "text",
+      "value": "North",
+      "caseSensitive": false
+    }
   },
   {
     "id": "top-category-by-refunds",
     "question": "Which category has the highest refund amount?",
-    "reference_sql": "SELECT\n  category,\n  SUM(refund_amount) AS total_refund_amount\nFROM orders\nGROUP BY category\nORDER BY total_refund_amount DESC, category ASC\nLIMIT 1;"
+    "reference_sql": "SELECT\n  category,\n  SUM(refund_amount) AS total_refund_amount\nFROM orders\nGROUP BY category\nORDER BY total_refund_amount DESC, category ASC\nLIMIT 1;",
+    "referenceResult": [
+      {
+        "category": "Beauty",
+        "total_refund_amount": "665.00"
+      }
+    ],
+    "expectedAnswer": {
+      "type": "text",
+      "value": "Beauty",
+      "caseSensitive": false
+    }
   },
   {
     "id": "september-vs-august-net-revenue",
     "question": "How does September net revenue compare with August?",
-    "reference_sql": "WITH monthly AS (\n  SELECT\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-08-01' AND order_date < DATE '2025-09-01'\n    ) AS august_net_revenue,\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-09-01' AND order_date < DATE '2025-10-01'\n    ) AS september_net_revenue\n  FROM orders\n)\nSELECT\n  august_net_revenue,\n  september_net_revenue,\n  september_net_revenue - august_net_revenue AS absolute_change,\n  ROUND(\n    100 * (september_net_revenue - august_net_revenue)\n      / NULLIF(august_net_revenue, 0),\n    2\n  ) AS percentage_change\nFROM monthly;"
+    "reference_sql": "WITH monthly AS (\n  SELECT\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-08-01' AND order_date < DATE '2025-09-01'\n    ) AS august_net_revenue,\n    SUM(gross_amount - discount_amount - refund_amount) FILTER (\n      WHERE order_date >= DATE '2025-09-01' AND order_date < DATE '2025-10-01'\n    ) AS september_net_revenue\n  FROM orders\n)\nSELECT\n  august_net_revenue,\n  september_net_revenue,\n  september_net_revenue - august_net_revenue AS absolute_change,\n  ROUND(\n    100 * (september_net_revenue - august_net_revenue)\n      / NULLIF(august_net_revenue, 0),\n    2\n  ) AS percentage_change\nFROM monthly;",
+    "referenceResult": [
+      {
+        "august_net_revenue": "7225.00",
+        "september_net_revenue": "8295.00",
+        "absolute_change": "1070.00",
+        "percentage_change": 14.81
+      }
+    ],
+    "expectedAnswer": {
+      "type": "comparison",
+      "august": 7225,
+      "september": 8295,
+      "absoluteChange": 1070,
+      "percentageChange": 14.81,
+      "direction": "increase"
+    }
   }
 ]
