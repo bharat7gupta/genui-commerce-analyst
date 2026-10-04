@@ -134,3 +134,44 @@
   predicted route.
 - Day 2 is completed with a failed production-readiness gate but a successful
   prompt-versioning and evaluation exercise.
+
+## Day 3 — Structured QueryPlan contract and extraction
+
+- `query-plan-v1` is the typed interpretation contract between natural-language
+  intent and future deterministic query compilation. UI selectors could emit
+  the same contract; the LLM's product value remains an unproven usability
+  benefit, not a requirement of the architecture.
+- Structural validity only proves conformance to the contract. Semantic
+  correctness additionally requires the right outcome and exact intent fields;
+  schema-constrained output did not guarantee either.
+- On the eight-case development set (three runs each), extraction-v1 achieved
+  100% structural validity, 50% outcome accuracy, 0% exact expected-plan field
+  accuracy, and 25% end-to-end success. It failed both scalar-total cases by
+  over-clarifying; emitted the wrong metric/limit for gross-by-region; failed
+  top-three-regions by clarifying; emitted the wrong metric, grouping, and limit
+  for North net revenue; and classified the reversed interval as unsupported.
+  Its profit outcome was correct, but manual review found the false claim that
+  net revenue equals profit in all three explanations.
+- Extraction-v2 achieved 87.5% structural validity, 75% outcome accuracy, 40%
+  exact expected-plan field accuracy, and 50% end-to-end success. Its remaining
+  failures were timestamp-shaped values for the explicit interval, omission of
+  the requested top-three limit, invented region grouping for filtered North
+  net revenue, and a generated plan for ambiguous revenue. It corrected scalar
+  aggregation, grouped revenue, reversed-interval clarification, and the profit
+  explanation.
+- Decision: retain immutable v2 as the stronger development candidate, but
+  keep v1 as the current default. Neither is production-ready, and the exposed
+  development cases must not drive another tuning round.
+- Application validation blocked all timestamp-shaped dates. A mocked transport
+  capture of the current request construction confirmed that Draft 7
+  `pattern: "^\\d{4}-\\d{2}-\\d{2}$"` reaches every interval date in the strict
+  JSON Schema; the saved v2 responses show three violations of that pattern.
+  This rules out a missing source constraint or adapter mapping loss, but does
+  not isolate a provider or backend root cause.
+- Known limitations and follow-ups: determine which JSON Schema keywords the
+  endpoint actually enforces; resolve the ambiguity boundary and remaining
+  field errors without tuning on this set; validate a frozen candidate on a
+  separately authored set; and compare the LLM flow with deterministic
+  selectors using measured user outcomes before claiming a usability benefit.
+- Artifacts: [`development-cases-v1`](../evals/query-plan/development-cases-v1.jsonl)
+  and [`query-plan-extraction-development-v1-v2`](../results/day-03-query-plan-extraction-development-v1-v2.jsonl).

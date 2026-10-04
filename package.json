@@ -11,7 +11,11 @@
     "experiment:routing-baseline": "tsx src/experiments/day-02-routing-baseline.ts router-v1",
     "experiment:routing-baseline-v2": "tsx src/experiments/day-02-routing-baseline.ts router-v2",
     "experiment:routing-baseline-v3": "tsx src/experiments/day-02-routing-baseline.ts router-v3",
+    "experiment:query-plan-development": "tsx src/experiments/day-03-query-plan-development.ts",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
+    "query-plan:extract": "tsx src/query-plan/query-plan-cli.ts",
+    "test:query-plan": "tsx --test src/query-plan/query-plan.test.ts",
+    "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
     "typecheck": "tsc --noEmit"
   },

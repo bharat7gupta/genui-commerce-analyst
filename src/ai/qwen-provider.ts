@@ -15,8 +15,10 @@ export type QwenProviderConfig = {
 type ChatCompletionResponse = {
   model?: string;
   choices?: Array<{
+    finish_reason?: string | null;
     message?: {
       content?: string | null;
+      refusal?: string | null;
     };
   }>;
   usage?: {
@@ -55,6 +57,18 @@ export class QwenProvider implements ModelProvider {
           ...(request.maxTokens === undefined
             ? {}
             : { max_tokens: request.maxTokens }),
+          ...(request.responseFormat === undefined
+            ? {}
+            : {
+                response_format: {
+                  type: "json_schema",
+                  json_schema: {
+                    name: request.responseFormat.name,
+                    strict: request.responseFormat.strict,
+                    schema: request.responseFormat.schema,
+                  },
+                },
+              }),
         }),
       });
     } catch (error) {
@@ -76,22 +90,31 @@ export class QwenProvider implements ModelProvider {
       );
     }
 
-    const text = body.choices?.[0]?.message?.content;
+    const choice = body.choices?.[0];
+    const text = choice?.message?.content;
+    const refusal = choice?.message?.refusal;
+    const finishReason = choice?.finish_reason;
 
-    if (typeof text !== "string") {
+    if (
+      typeof text !== "string" &&
+      typeof refusal !== "string" &&
+      (typeof finishReason !== "string" || finishReason === "stop")
+    ) {
       throw new Error("Qwen returned a response without message content");
     }
 
     const tokenUsage = toTokenUsage(body.usage);
 
     return {
-      text,
+      text: text ?? "",
       metadata: {
         model: body.model ?? this.config.model,
         tokenUsage: tokenUsage ?? null,
         latencyMs,
         requestId: requestId ?? null,
       },
+      finishReason: finishReason ?? null,
+      refusal: refusal ?? null,
     };
   }
 }
