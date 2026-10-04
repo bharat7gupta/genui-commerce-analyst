@@ -10,6 +10,7 @@
     "experiment:baseline": "tsx src/experiments/day-01-baseline.ts",
     "experiment:routing-baseline": "tsx src/experiments/day-02-routing-baseline.ts",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
+    "test:routing": "tsx --test src/routing/router.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

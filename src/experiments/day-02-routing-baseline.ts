@@ -11,17 +11,37 @@ import type {
 import { QwenProvider } from "../ai/qwen-provider.js";
 import { config } from "../config.js";
 import {
-  ROUTER_VERSION,
+  ROUTER_VERSION as ROUTER_V1_VERSION,
   ROUTE_LABELS,
   type RouteLabel,
 } from "../routing/router-v1-prompt.js";
+import { ROUTER_V2_VERSION } from "../routing/router-v2-prompt.js";
+import { ROUTER_V3_VERSION } from "../routing/router-v3-prompt.js";
 import {
   InvalidRouteOutputError,
   routeRequest,
+  type RouterVersion,
 } from "../routing/router.js";
 
-const EXPERIMENT_NAME = "routing-baseline-v1";
+const requestedRouterVersion = process.argv[2] ?? ROUTER_V1_VERSION;
+
+if (
+  requestedRouterVersion !== ROUTER_V1_VERSION &&
+  requestedRouterVersion !== ROUTER_V2_VERSION &&
+  requestedRouterVersion !== ROUTER_V3_VERSION
+) {
+  throw new Error(`Unknown router version: ${requestedRouterVersion}`);
+}
+
+const ROUTER_VERSION: RouterVersion = requestedRouterVersion;
+const EXPERIMENT_NAME =
+  ROUTER_VERSION === ROUTER_V3_VERSION
+    ? "routing-baseline-v3"
+    : ROUTER_VERSION === ROUTER_V2_VERSION
+      ? "routing-baseline-v2"
+      : "routing-baseline-v1";
 const CASE_SET_VERSION = "routing-cases-v1";
+const REQUIRED_MODEL = "qwen3.5:4b";
 const REPETITIONS = [1, 2, 3] as const;
 const MODEL_SETTINGS = {
   temperature: 0,
@@ -42,9 +62,12 @@ type RoutingCase = z.infer<typeof routingCaseSchema>;
 
 type RoutingRunRecord = {
   timestamp: string;
-  experiment: typeof EXPERIMENT_NAME;
+  experiment:
+    | "routing-baseline-v1"
+    | "routing-baseline-v2"
+    | "routing-baseline-v3";
   caseSetVersion: typeof CASE_SET_VERSION;
-  promptVersion: typeof ROUTER_VERSION;
+  promptVersion: RouterVersion;
   caseId: string;
   repetition: 1 | 2 | 3;
   input: string;
@@ -80,9 +103,21 @@ class ObservingProvider implements ModelProvider {
 const casesUrl = new URL("../../evals/routing/cases-v1.jsonl", import.meta.url);
 const resultsDirectoryUrl = new URL("../../results/", import.meta.url);
 const resultsUrl = new URL(
-  "day-02-routing-baseline-v1.jsonl",
+  `day-02-routing-baseline-${ROUTER_VERSION === ROUTER_V3_VERSION ? "v3" : ROUTER_VERSION === ROUTER_V2_VERSION ? "v2" : "v1"}.jsonl`,
   resultsDirectoryUrl,
 );
+
+if (config.model.model !== REQUIRED_MODEL) {
+  throw new Error(
+    `Expected model ${REQUIRED_MODEL}, configured ${config.model.model}`,
+  );
+}
+
+if (config.model.reasoningEffort !== "none") {
+  throw new Error(
+    `Expected reasoning effort none, configured ${config.model.reasoningEffort}`,
+  );
+}
 
 const cases = await loadCases();
 const baseProvider = new QwenProvider(config.model);
@@ -104,7 +139,11 @@ for (const [caseIndex, routingCase] of cases.entries()) {
     let providerError: string | null = null;
 
     try {
-      const decision = await routeRequest(observingProvider, routingCase.input);
+      const decision = await routeRequest(
+        observingProvider,
+        routingCase.input,
+        ROUTER_VERSION,
+      );
       actualRoute = decision.route;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -276,6 +315,14 @@ function buildSummary(records: RoutingRunRecord[], cases: RoutingCase[]) {
       },
     ];
   });
+  const tokenUsages = records.flatMap(({ tokenUsage }) =>
+    tokenUsage ? [tokenUsage] : [],
+  );
+  const firstRecord = records[0];
+  const warmRecords = records.slice(1);
+  const stableCaseCount = Object.values(stabilityByCase).filter(
+    ({ stable }) => stable,
+  ).length;
 
   return {
     experiment: EXPERIMENT_NAME,
@@ -292,8 +339,50 @@ function buildSummary(records: RoutingRunRecord[], cases: RoutingCase[]) {
       total: records.length,
       rate: invalidCount / records.length,
     },
+    stability: {
+      stableCases: stableCaseCount,
+      totalCases: cases.length,
+      rate: stableCaseCount / cases.length,
+    },
     stabilityByCase,
     confusionMatrix,
     failedOrUnstableCases,
+    averageTokenUsage: {
+      measuredCalls: tokenUsages.length,
+      inputTokens:
+        tokenUsages.reduce((sum, usage) => sum + usage.inputTokens, 0) /
+        tokenUsages.length,
+      outputTokens:
+        tokenUsages.reduce((sum, usage) => sum + usage.outputTokens, 0) /
+        tokenUsages.length,
+    },
+    latency: {
+      coldStartCandidate: firstRecord
+        ? {
+            caseId: firstRecord.caseId,
+            repetition: firstRecord.repetition,
+            latencyMs: firstRecord.latencyMs,
+          }
+        : null,
+      warm: summarizeNumbers(warmRecords.map(({ latencyMs }) => latencyMs)),
+    },
+  };
+}
+
+function summarizeNumbers(values: number[]) {
+  const sorted = [...values].sort((left, right) => left - right);
+  const middle = Math.floor(sorted.length / 2);
+  const median =
+    sorted.length % 2 === 0
+      ? ((sorted[middle - 1] ?? 0) + (sorted[middle] ?? 0)) / 2
+      : (sorted[middle] ?? 0);
+
+  return {
+    count: sorted.length,
+    averageMs: sorted.reduce((sum, value) => sum + value, 0) / sorted.length,
+    medianMs: median,
+    p95Ms: sorted[Math.ceil(sorted.length * 0.95) - 1] ?? null,
+    minMs: sorted[0] ?? null,
+    maxMs: sorted.at(-1) ?? null,
   };
 }
