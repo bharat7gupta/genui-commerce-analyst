@@ -42,3 +42,28 @@
   (177 ms versus 182 ms).
 - Decision: keep `router-v1` as the selected router. Retain immutable
   `router-v2` and its results as a rejected experiment for traceability.
+
+## Day 2 — Router v3 development-set decision
+
+- Hypothesis: concise few-shot examples may communicate route boundaries to
+  `qwen3.5:4b` better than the rule-heavy `router-v2` prompt.
+- `router-v3` achieved 90% accuracy with zero invalid outputs, zero provider
+  errors, and 20/20 stable cases. Per-route accuracy was: `analytics` 75%,
+  `docs` 100%, `investigation` 100%, `clarify` 75%, and `unsupported` 100%.
+- Two failures remain: `analytics-04` expected `analytics` but received `docs`;
+  `clarify-03` expected `clarify` but received `analytics`.
+- Comparison: `router-v1` scored 75% at 196.65 average input tokens,
+  `router-v2` scored 65% at 261.65 tokens, and `router-v3` scored 90% at
+  349.65 tokens. V3 improved accuracy by 15 percentage points over v1 while
+  increasing input usage by approximately 78%; warm median latency changed
+  only from 177 ms to 183 ms.
+- Decision: select immutable `router-v3` as the current development-set winner.
+  Retain v1 and v2 unchanged for reproducibility and rollback. Do not create a
+  v4 specifically for the two remaining failures, because further tuning on
+  these cases would overfit the evaluation set.
+- `routing-cases-v1` is now a development/regression set, not an unseen
+  held-out set. Before considering v3 production-ready, evaluate the frozen
+  prompt against a separately created held-out routing set.
+- Immutable experiment artifacts: [`routing-baseline-v1`](../results/day-02-routing-baseline-v1.jsonl),
+  [`routing-baseline-v2`](../results/day-02-routing-baseline-v2.jsonl), and
+  [`routing-baseline-v3`](../results/day-02-routing-baseline-v3.jsonl).

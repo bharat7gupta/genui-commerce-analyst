@@ -8,7 +8,9 @@
     "db:results": "tsx src/db/print-reference-results.ts",
     "dev": "tsx src/index.ts",
     "experiment:baseline": "tsx src/experiments/day-01-baseline.ts",
-    "experiment:routing-baseline": "tsx src/experiments/day-02-routing-baseline.ts",
+    "experiment:routing-baseline": "tsx src/experiments/day-02-routing-baseline.ts router-v1",
+    "experiment:routing-baseline-v2": "tsx src/experiments/day-02-routing-baseline.ts router-v2",
+    "experiment:routing-baseline-v3": "tsx src/experiments/day-02-routing-baseline.ts router-v3",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
     "typecheck": "tsc --noEmit"
