@@ -67,3 +67,70 @@
 - Immutable experiment artifacts: [`routing-baseline-v1`](../results/day-02-routing-baseline-v1.jsonl),
   [`routing-baseline-v2`](../results/day-02-routing-baseline-v2.jsonl), and
   [`routing-baseline-v3`](../results/day-02-routing-baseline-v3.jsonl).
+
+## Held-out evaluation
+
+- Prompt: `router-v3`.
+- Dataset: `routing-heldout-v1`.
+- Result: [`results/routing-heldout-v1-router-v3.jsonl`](../results/routing-heldout-v1-router-v3.jsonl).
+- Development accuracy: 90%.
+- Held-out accuracy: 76%.
+- Generalization gap: -14 percentage points.
+- Invalid outputs: 0%.
+- Provider errors: 0%.
+- Stability: 25/25 cases.
+- Unsupported accuracy: 100%.
+- Adversarial accuracy: 40%.
+- Overall acceptance verdict: failed.
+- Per-route held-out accuracy: `analytics` 80%, `docs` 100%,
+  `investigation` 40%, `clarify` 60%, and `unsupported` 100%.
+- Six systematic failures were stable across all three repetitions:
+  - `heldout-analytics-04` expected `analytics` but received `clarify`.
+  - `heldout-investigation-01` expected `investigation` but received
+    `analytics`.
+  - `heldout-investigation-04` expected `investigation` but received `docs`.
+  - `heldout-investigation-05` expected `investigation` but received `docs`.
+  - `heldout-clarify-01` expected `clarify` but received `analytics`.
+  - `heldout-clarify-04` expected `clarify` but received `analytics`.
+- Recorded checksums:
+  - Dataset SHA-256:
+    `bf7fb7af773233c689a412db93ce217273fdc5d2d9b397331ce334674631e25a`.
+  - `router-v3` prompt-package SHA-256:
+    `3f1ba625ae267eb3d6818ca7844793940d3ffd1a53c55ad6b0cb3f9f424422db`.
+  - Result-file SHA-256:
+    `656bb03daf496773154d2f3223264c68b430401f7fbb11941e6f4db656a49c9a`.
+
+## Interpretation
+
+- Exact-label output validation is reliable.
+- Temperature zero produced stable but consistently incorrect
+  classifications.
+- The model frequently relied on lexical cues instead of the operational
+  distinction between direct analytics, missing information, documentation
+  lookup, and multi-step investigation.
+- Few-shot prompting improved development performance but did not generalize
+  sufficiently.
+- Prompt-injection handling generalized only for `docs` and `unsupported`
+  examples; it failed for `analytics`, `investigation`, and `clarify`.
+- Unsupported-action detection remained strong.
+- Longer prompts increased tokens without guaranteeing generalization.
+
+## Decision
+
+- `router-v3` remains the best development-set version but is not
+  production-ready.
+- No prompt version passed the held-out acceptance gate.
+- Preserve router-v1, v2, and v3 unchanged for reproducibility.
+- Do not create router-v4 by tuning directly against the exposed held-out
+  failures.
+- `routing-heldout-v1` is now an audit/regression dataset and cannot serve as
+  an unseen final test again.
+- Any future iteration requires a new development cycle and another
+  independently authored held-out set.
+- A future iteration should compare prompt-only routing with stronger-model or
+  hybrid deterministic/model routing.
+- Downstream authorization, tool access, argument validation, and safety
+  controls must remain enforced in application code regardless of the
+  predicted route.
+- Day 2 is completed with a failed production-readiness gate but a successful
+  prompt-versioning and evaluation exercise.
