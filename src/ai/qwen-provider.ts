@@ -1,7 +1,10 @@
 import type {
+  ModelMessage,
   ModelProvider,
   ModelRequest,
   ModelResult,
+  ModelToolCall,
+  ModelToolDefinition,
   TokenUsage,
 } from "./provider.js";
 
@@ -19,6 +22,7 @@ type ChatCompletionResponse = {
     message?: {
       content?: string | null;
       refusal?: string | null;
+      tool_calls?: ChatCompletionResponseToolCall[] | null;
     };
   }>;
   usage?: {
@@ -31,10 +35,28 @@ type ChatCompletionResponse = {
   };
 };
 
+type ChatCompletionResponseToolCall = {
+  id?: string;
+  type?: string;
+  function?: {
+    name?: string;
+    arguments?: string;
+  };
+};
+
 export class QwenProvider implements ModelProvider {
   constructor(private readonly config: QwenProviderConfig) {}
 
   async generate(request: ModelRequest): Promise<ModelResult> {
+    const tools = request.tools?.map(toChatCompletionTool);
+    const hasTools = tools !== undefined && tools.length > 0;
+
+    if (request.responseFormat !== undefined && hasTools) {
+      throw new Error(
+        "Qwen requests cannot combine structured output with tool calling",
+      );
+    }
+
     const startedAt = performance.now();
     let response: Response;
 
@@ -50,7 +72,8 @@ export class QwenProvider implements ModelProvider {
         body: JSON.stringify({
           model: this.config.model,
           reasoning_effort: this.config.reasoningEffort,
-          messages: request.messages,
+          messages: request.messages.map(toChatCompletionMessage),
+          ...(hasTools ? { tools } : {}),
           ...(request.temperature === undefined
             ? {}
             : { temperature: request.temperature }),
@@ -94,10 +117,12 @@ export class QwenProvider implements ModelProvider {
     const text = choice?.message?.content;
     const refusal = choice?.message?.refusal;
     const finishReason = choice?.finish_reason;
+    const toolCalls = toModelToolCalls(choice?.message?.tool_calls);
 
     if (
       typeof text !== "string" &&
       typeof refusal !== "string" &&
+      toolCalls.length === 0 &&
       (typeof finishReason !== "string" || finishReason === "stop")
     ) {
       throw new Error("Qwen returned a response without message content");
@@ -107,6 +132,7 @@ export class QwenProvider implements ModelProvider {
 
     return {
       text: text ?? "",
+      toolCalls,
       metadata: {
         model: body.model ?? this.config.model,
         tokenUsage: tokenUsage ?? null,
@@ -117,6 +143,103 @@ export class QwenProvider implements ModelProvider {
       refusal: refusal ?? null,
     };
   }
+}
+
+type ChatCompletionMessage =
+  | {
+      role: "system" | "user";
+      content: string;
+    }
+  | {
+      role: "assistant";
+      content: string;
+      tool_calls?: Array<{
+        id: string;
+        type: "function";
+        function: {
+          name: string;
+          arguments: string;
+        };
+      }>;
+    }
+  | {
+      role: "tool";
+      tool_call_id: string;
+      content: string;
+    };
+
+type ChatCompletionTool = {
+  type: "function";
+  function: {
+    name: string;
+    description: string;
+    parameters: Readonly<Record<string, unknown>>;
+  };
+};
+
+function toChatCompletionMessage(message: ModelMessage): ChatCompletionMessage {
+  if (message.role === "tool") {
+    return {
+      role: "tool",
+      tool_call_id: message.toolCallId,
+      content: message.content,
+    };
+  }
+
+  if (message.role === "assistant") {
+    return {
+      role: "assistant",
+      content: message.content,
+      ...(message.toolCalls === undefined
+        ? {}
+        : {
+            tool_calls: message.toolCalls.map((toolCall) => ({
+              id: toolCall.id,
+              type: "function" as const,
+              function: {
+                name: toolCall.name,
+                arguments: toolCall.arguments,
+              },
+            })),
+          }),
+    };
+  }
+
+  return message;
+}
+
+function toChatCompletionTool(tool: ModelToolDefinition): ChatCompletionTool {
+  return {
+    type: "function",
+    function: {
+      name: tool.name,
+      description: tool.description,
+      parameters: tool.parameters,
+    },
+  };
+}
+
+function toModelToolCalls(
+  toolCalls: ChatCompletionResponseToolCall[] | null | undefined,
+): readonly ModelToolCall[] {
+  if (toolCalls == null) return [];
+
+  return toolCalls.map((toolCall, index) => {
+    if (
+      typeof toolCall.id !== "string" ||
+      toolCall.type !== "function" ||
+      typeof toolCall.function?.name !== "string" ||
+      typeof toolCall.function.arguments !== "string"
+    ) {
+      throw new Error(`Qwen returned an invalid tool call at index ${index}`);
+    }
+
+    return {
+      id: toolCall.id,
+      name: toolCall.function.name,
+      arguments: toolCall.function.arguments,
+    };
+  });
 }
 
 function getRequestId(response: Response): string | undefined {

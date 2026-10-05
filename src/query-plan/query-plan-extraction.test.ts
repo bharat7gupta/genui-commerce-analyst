@@ -158,6 +158,7 @@ function createFakeProvider(
       observe?.(request);
       return {
         text: output,
+        toolCalls: [],
         metadata: {
           model: "fixture-model",
           tokenUsage: {

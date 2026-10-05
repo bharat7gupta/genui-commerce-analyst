@@ -154,6 +154,7 @@ class CountingExecutor implements QueryPlanExecutor {
 function modelResult(text: string): ModelResult {
   return {
     text,
+    toolCalls: [],
     metadata: {
       model: "mock-model",
       tokenUsage: null,

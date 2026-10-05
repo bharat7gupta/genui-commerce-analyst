@@ -168,6 +168,7 @@ function createFakeProvider(
 
       return {
         text: output,
+        toolCalls: [],
         metadata: {
           model: "fake-model",
           tokenUsage: null,
