@@ -14,19 +14,48 @@ import {
   type GetMetricDefinitionHandler,
   type GetMetricDefinitionResult,
 } from "../tools/get-metric-definition.js";
+import {
+  executeGetSchema,
+  getSchema,
+  getSchemaToolDefinition,
+  type GetSchemaHandler,
+  type GetSchemaResult,
+} from "../tools/get-schema.js";
+import {
+  executePreviewQueryPlan,
+  previewQueryPlan,
+  previewQueryPlanToolDefinition,
+  type PreviewQueryPlanHandler,
+  type PreviewQueryPlanResult,
+} from "../tools/preview-query-plan.js";
 
-const MAX_TOOL_CALLS = 3;
+export const MAX_MODEL_REQUESTS = 4;
+export const MAX_TOTAL_TOOL_CALLS = 6;
 
-export const METRIC_DEFINITION_FINAL_ANSWER_SYSTEM_PROMPT = `Answer the user's original question using the application-owned metric definition in the tool result as authoritative.
-Preserve its calculation and its inclusion and exclusion rules exactly.
-Do not make assumptions about external platforms or underlying row values.
+export const TOOL_WORKFLOW_SYSTEM_PROMPT = `You may call the available tools across multiple turns before giving a final answer.
+Follow each tool's argument schema exactly, including every required field and tagged variant.
+If the user requests a preview, do not give a final answer until preview_query_plan returns a successful result.
+When a tool returns validation errors, use those errors to correct the next tool call.
+Previewing validates a query plan; it does not calculate revenue or execute a query.
+
+Complete valid preview_query_plan arguments example:
+{"plan":{"version":"query-plan-v1","metric":{"kind":"metric","value":"total_gross_revenue"},"dimensions":{"kind":"specified","values":["category"]},"filters":{"kind":"specified","items":[]},"dateRange":{"kind":"all_time"},"comparison":{"kind":"none"},"ordering":{"kind":"none"},"limit":{"kind":"none"},"visualization":{"kind":"type","value":"table"}}}
+
+Answer the user's original question using application-owned tool results as authoritative.
+Preserve metric calculations and inclusion and exclusion rules exactly.
+Treat the returned schema as the complete set of supported query capabilities.
+Do not make assumptions about external platforms, database contents, or underlying row values.
 Do not describe revenue as profit or earnings.
-Answer briefly. If the definition does not contain information needed to answer, acknowledge that limitation.`;
+Answer briefly only when giving the final answer; do not abbreviate or omit required tool arguments. If the tool results do not contain information needed to answer, acknowledge that limitation.`;
 
-type ModelCallPhase = "initial" | "follow_up";
+export const standaloneToolDefinitions = Object.freeze([
+  getMetricDefinitionToolDefinition,
+  getSchemaToolDefinition,
+  previewQueryPlanToolDefinition,
+]);
 
 export type WorkflowModelCall = Readonly<{
-  phase: ModelCallPhase;
+  requestIndex: number;
   model: string | null;
   latencyMs: number;
   tokenUsage: TokenUsage | null;
@@ -50,8 +79,10 @@ type MalformedArgumentsResult = Readonly<{
   }>;
 }>;
 
-export type MetricDefinitionToolResult =
+export type StandaloneToolResult =
   | GetMetricDefinitionResult
+  | GetSchemaResult
+  | PreviewQueryPlanResult
   | UnknownToolResult
   | MalformedArgumentsResult;
 
@@ -59,189 +90,201 @@ export type ProcessedToolCall = Readonly<{
   id: string;
   name: string;
   arguments: string;
-  result: MetricDefinitionToolResult;
+  result: StandaloneToolResult;
 }>;
+
+export type StandaloneToolHandlers = Readonly<{
+  getMetricDefinition: GetMetricDefinitionHandler;
+  getSchema: GetSchemaHandler;
+  previewQueryPlan: PreviewQueryPlanHandler;
+}>;
+
+const defaultHandlers: StandaloneToolHandlers = {
+  getMetricDefinition,
+  getSchema,
+  previewQueryPlan,
+};
 
 type WorkflowBase = Readonly<{
   modelCalls: readonly WorkflowModelCall[];
   toolResults: readonly ProcessedToolCall[];
 }>;
 
-export type MetricDefinitionWorkflowResult =
+export type StandaloneToolWorkflowResult =
   | (WorkflowBase &
       Readonly<{
         outcome: "answer";
         answer: string;
-        source: "initial" | "follow_up";
+        modelRequestCount: number;
       }>)
   | (WorkflowBase &
       Readonly<{
         outcome: "invalid_tool_call_batch";
+        requestIndex: number;
         error: Readonly<{
-          code:
-            | "MISSING_TOOL_CALL_ID"
-            | "DUPLICATE_TOOL_CALL_ID"
-            | "TOO_MANY_TOOL_CALLS";
+          code: "MISSING_TOOL_CALL_ID" | "DUPLICATE_TOOL_CALL_ID";
           message: string;
         }>;
       }>)
   | (WorkflowBase &
       Readonly<{
-        outcome: "unexpected_tool_calls";
+        outcome: "budget_exhausted";
+        requestIndex: number;
+        limit: "model_requests" | "tool_calls";
+        message: string;
         responseText: string;
-        toolCalls: readonly ModelToolCall[];
+        pendingToolCalls: readonly ModelToolCall[];
       }>)
   | (WorkflowBase &
       Readonly<{
         outcome: "refusal";
-        phase: ModelCallPhase;
+        requestIndex: number;
         refusal: string;
         responseText: string;
       }>)
   | (WorkflowBase &
       Readonly<{
         outcome: "provider_error";
-        phase: ModelCallPhase;
+        requestIndex: number;
         error: string;
       }>);
 
-export async function runMetricDefinitionToolWorkflow(
+export async function runStandaloneToolWorkflow(
+  provider: ModelProvider,
+  question: string,
+  handlers: StandaloneToolHandlers = defaultHandlers,
+): Promise<StandaloneToolWorkflowResult> {
+  const conversation: ModelMessage[] = [{ role: "user", content: question }];
+  const modelCalls: WorkflowModelCall[] = [];
+  const toolResults: ProcessedToolCall[] = [];
+  const seenCallIds = new Set<string>();
+
+  for (let requestIndex = 1; requestIndex <= MAX_MODEL_REQUESTS; requestIndex += 1) {
+    const requestMessages: readonly ModelMessage[] = [
+      { role: "system", content: TOOL_WORKFLOW_SYSTEM_PROMPT },
+      ...conversation,
+    ];
+    const attempt = await callProvider(provider, requestIndex, {
+      messages: requestMessages,
+      tools: standaloneToolDefinitions,
+    });
+    modelCalls.push(attempt.telemetry);
+
+    if (!attempt.success) {
+      return {
+        outcome: "provider_error",
+        requestIndex,
+        error: attempt.error,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    const result = attempt.result;
+    if (result.refusal !== null && result.refusal !== undefined) {
+      return {
+        outcome: "refusal",
+        requestIndex,
+        refusal: result.refusal,
+        responseText: result.text,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    if (result.toolCalls.length === 0) {
+      return {
+        outcome: "answer",
+        answer: result.text,
+        modelRequestCount: requestIndex,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    const batchError = validateToolCallBatch(result.toolCalls, seenCallIds);
+    if (batchError !== null) {
+      return {
+        outcome: "invalid_tool_call_batch",
+        requestIndex,
+        error: batchError,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    if (toolResults.length + result.toolCalls.length > MAX_TOTAL_TOOL_CALLS) {
+      return {
+        outcome: "budget_exhausted",
+        requestIndex,
+        limit: "tool_calls",
+        message: `Executing this batch would exceed the limit of ${MAX_TOTAL_TOOL_CALLS} total tool calls`,
+        responseText: result.text,
+        pendingToolCalls: result.toolCalls,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    if (requestIndex === MAX_MODEL_REQUESTS) {
+      return {
+        outcome: "budget_exhausted",
+        requestIndex,
+        limit: "model_requests",
+        message: `The requested tools cannot be executed because producing a subsequent answer would exceed the limit of ${MAX_MODEL_REQUESTS} model requests`,
+        responseText: result.text,
+        pendingToolCalls: result.toolCalls,
+        modelCalls,
+        toolResults,
+      };
+    }
+
+    conversation.push({
+      role: "assistant",
+      content: result.text,
+      toolCalls: result.toolCalls,
+    });
+
+    for (const toolCall of result.toolCalls) {
+      const toolResult = executeToolCall(toolCall, handlers);
+      toolResults.push({ ...toolCall, result: toolResult });
+      seenCallIds.add(toolCall.id);
+      conversation.push({
+        role: "tool",
+        toolCallId: toolCall.id,
+        content: JSON.stringify(toolResult),
+      });
+    }
+  }
+
+  throw new Error("Unreachable workflow state");
+}
+
+// Retained as a compatibility entry point for the original Day 4 workflow.
+export function runMetricDefinitionToolWorkflow(
   provider: ModelProvider,
   question: string,
   handler: GetMetricDefinitionHandler = getMetricDefinition,
-): Promise<MetricDefinitionWorkflowResult> {
-  const initialMessages: readonly ModelMessage[] = [
-    { role: "user", content: question },
-  ];
-  const initialAttempt = await callProvider(provider, "initial", {
-    messages: initialMessages,
-    tools: [getMetricDefinitionToolDefinition],
+): Promise<StandaloneToolWorkflowResult> {
+  return runStandaloneToolWorkflow(provider, question, {
+    ...defaultHandlers,
+    getMetricDefinition: handler,
   });
-
-  if (!initialAttempt.success) {
-    return {
-      outcome: "provider_error",
-      phase: "initial",
-      error: initialAttempt.error,
-      modelCalls: [initialAttempt.telemetry],
-      toolResults: [],
-    };
-  }
-
-  const initialResult = initialAttempt.result;
-  const initialTelemetry = initialAttempt.telemetry;
-  const initialRefusal = initialResult.refusal ?? null;
-
-  if (initialRefusal !== null) {
-    return {
-      outcome: "refusal",
-      phase: "initial",
-      refusal: initialRefusal,
-      responseText: initialResult.text,
-      modelCalls: [initialTelemetry],
-      toolResults: [],
-    };
-  }
-
-  if (initialResult.toolCalls.length === 0) {
-    return {
-      outcome: "answer",
-      answer: initialResult.text,
-      source: "initial",
-      modelCalls: [initialTelemetry],
-      toolResults: [],
-    };
-  }
-
-  const batchError = validateToolCallBatch(initialResult.toolCalls);
-  if (batchError !== null) {
-    return {
-      outcome: "invalid_tool_call_batch",
-      error: batchError,
-      modelCalls: [initialTelemetry],
-      toolResults: [],
-    };
-  }
-
-  const toolResults: ProcessedToolCall[] = [];
-  const toolResultMessages: ModelMessage[] = [];
-
-  for (const toolCall of initialResult.toolCalls) {
-    const result = executeToolCall(toolCall, handler);
-    toolResults.push({ ...toolCall, result });
-    toolResultMessages.push({
-      role: "tool",
-      toolCallId: toolCall.id,
-      content: JSON.stringify(result),
-    });
-  }
-
-  const assistantMessage: ModelMessage = {
-    role: "assistant",
-    content: initialResult.text,
-    toolCalls: initialResult.toolCalls,
-  };
-  const followUpAttempt = await callProvider(provider, "follow_up", {
-    messages: [
-      {
-        role: "system",
-        content: METRIC_DEFINITION_FINAL_ANSWER_SYSTEM_PROMPT,
-      },
-      ...initialMessages,
-      assistantMessage,
-      ...toolResultMessages,
-    ],
-  });
-
-  if (!followUpAttempt.success) {
-    return {
-      outcome: "provider_error",
-      phase: "follow_up",
-      error: followUpAttempt.error,
-      modelCalls: [initialTelemetry, followUpAttempt.telemetry],
-      toolResults,
-    };
-  }
-
-  const followUpResult = followUpAttempt.result;
-  const modelCalls = [initialTelemetry, followUpAttempt.telemetry];
-  const followUpRefusal = followUpResult.refusal ?? null;
-
-  if (followUpRefusal !== null) {
-    return {
-      outcome: "refusal",
-      phase: "follow_up",
-      refusal: followUpRefusal,
-      responseText: followUpResult.text,
-      modelCalls,
-      toolResults,
-    };
-  }
-
-  if (followUpResult.toolCalls.length > 0) {
-    return {
-      outcome: "unexpected_tool_calls",
-      responseText: followUpResult.text,
-      toolCalls: followUpResult.toolCalls,
-      modelCalls,
-      toolResults,
-    };
-  }
-
-  return {
-    outcome: "answer",
-    answer: followUpResult.text,
-    source: "follow_up",
-    modelCalls,
-    toolResults,
-  };
 }
+
+export type MetricDefinitionWorkflowResult = StandaloneToolWorkflowResult;
+export const METRIC_DEFINITION_FINAL_ANSWER_SYSTEM_PROMPT =
+  TOOL_WORKFLOW_SYSTEM_PROMPT;
 
 function executeToolCall(
   toolCall: ModelToolCall,
-  handler: GetMetricDefinitionHandler,
-): MetricDefinitionToolResult {
-  if (toolCall.name !== getMetricDefinitionToolDefinition.name) {
+  handlers: StandaloneToolHandlers,
+): StandaloneToolResult {
+  if (
+    toolCall.name !== "get_metric_definition" &&
+    toolCall.name !== "get_schema" &&
+    toolCall.name !== "preview_query_plan"
+  ) {
     return {
       success: false,
       error: {
@@ -264,23 +307,30 @@ function executeToolCall(
     };
   }
 
-  return executeGetMetricDefinition(parsedArguments, handler);
+  switch (toolCall.name) {
+    case "get_metric_definition":
+      return executeGetMetricDefinition(
+        parsedArguments,
+        handlers.getMetricDefinition,
+      );
+    case "get_schema":
+      return executeGetSchema(parsedArguments, handlers.getSchema);
+    case "preview_query_plan":
+      return executePreviewQueryPlan(
+        parsedArguments,
+        handlers.previewQueryPlan,
+      );
+  }
 }
 
 function validateToolCallBatch(
   toolCalls: readonly ModelToolCall[],
+  priorCallIds: ReadonlySet<string>,
 ): Extract<
-  MetricDefinitionWorkflowResult,
+  StandaloneToolWorkflowResult,
   { outcome: "invalid_tool_call_batch" }
 >["error"] | null {
-  if (toolCalls.length > MAX_TOOL_CALLS) {
-    return {
-      code: "TOO_MANY_TOOL_CALLS",
-      message: `At most ${MAX_TOOL_CALLS} tool calls are allowed in one response`,
-    };
-  }
-
-  const seenIds = new Set<string>();
+  const batchIds = new Set<string>();
   for (const [index, toolCall] of toolCalls.entries()) {
     if (toolCall.id.length === 0) {
       return {
@@ -289,14 +339,14 @@ function validateToolCallBatch(
       };
     }
 
-    if (seenIds.has(toolCall.id)) {
+    if (batchIds.has(toolCall.id) || priorCallIds.has(toolCall.id)) {
       return {
         code: "DUPLICATE_TOOL_CALL_ID",
         message: `Duplicate tool call ID: ${JSON.stringify(toolCall.id)}`,
       };
     }
 
-    seenIds.add(toolCall.id);
+    batchIds.add(toolCall.id);
   }
 
   return null;
@@ -316,7 +366,7 @@ type ProviderCallAttempt =
 
 async function callProvider(
   provider: ModelProvider,
-  phase: ModelCallPhase,
+  requestIndex: number,
   request: ModelRequest,
 ): Promise<ProviderCallAttempt> {
   const startedAt = performance.now();
@@ -326,14 +376,18 @@ async function callProvider(
     return {
       success: true,
       result,
-      telemetry: toTelemetry(phase, result.metadata, result.finishReason),
+      telemetry: toTelemetry(
+        requestIndex,
+        result.metadata,
+        result.finishReason,
+      ),
     };
   } catch (error) {
     return {
       success: false,
       error: toErrorMessage(error),
       telemetry: {
-        phase,
+        requestIndex,
         model: null,
         latencyMs: Math.round(performance.now() - startedAt),
         tokenUsage: null,
@@ -345,12 +399,12 @@ async function callProvider(
 }
 
 function toTelemetry(
-  phase: ModelCallPhase,
+  requestIndex: number,
   metadata: ModelMetadata,
   finishReason: string | null | undefined,
 ): WorkflowModelCall {
   return {
-    phase,
+    requestIndex,
     model: metadata.model,
     latencyMs: metadata.latencyMs,
     tokenUsage: metadata.tokenUsage,

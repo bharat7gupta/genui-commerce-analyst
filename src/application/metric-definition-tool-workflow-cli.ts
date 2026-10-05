@@ -1,18 +1,18 @@
 import type { ModelProvider } from "../ai/provider.js";
 import { QwenProvider } from "../ai/qwen-provider.js";
 import { config } from "../config.js";
-import { runMetricDefinitionToolWorkflow } from "./metric-definition-tool-workflow.js";
+import { runStandaloneToolWorkflow } from "./metric-definition-tool-workflow.js";
 
 const question = process.argv.slice(2).join(" ").trim();
 
 if (question.length === 0) {
   console.error(
-    'Usage: npm run tool:metric-definition -- "What does net revenue mean?"',
+    'Usage: npm run tool:workflow -- "Build and preview a net revenue query by region"',
   );
   process.exitCode = 1;
 } else {
   const provider: ModelProvider = new QwenProvider(config.model);
-  const result = await runMetricDefinitionToolWorkflow(provider, question);
+  const result = await runStandaloneToolWorkflow(provider, question);
 
   console.log(
     JSON.stringify(

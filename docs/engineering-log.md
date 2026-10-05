@@ -175,3 +175,28 @@
   selectors using measured user outcomes before claiming a usability benefit.
 - Artifacts: [`development-cases-v1`](../evals/query-plan/development-cases-v1.jsonl)
   and [`query-plan-extraction-development-v1-v2`](../results/day-03-query-plan-extraction-development-v1-v2.jsonl).
+
+## Day 4 — Function calling
+
+- Implemented three application-owned, runtime-validated tools:
+  `get_metric_definition`, `get_schema`, and `preview_query_plan`. A bounded
+  standalone workflow executes calls sequentially with limits of four model
+  requests and six total tool calls; it remains separate from the commerce
+  analysis pipeline and database execution.
+- Real `qwen3.5:4b` runs successfully used `get_metric_definition` for metric
+  questions and correctly returned greetings without unnecessary tool calls.
+- Two failure classes remain. First, final answers sometimes added unsupported
+  interpretations or contradicted authoritative tool results. Stronger
+  grounding instructions improved the constraint but did not establish
+  reliable faithfulness.
+- Second, complex argument generation repeatedly produced structurally invalid
+  QueryPlans and incorrect date interpretations. Supplying the complete
+  generated schema and a valid, differently shaped `preview_query_plan`
+  example did not resolve these errors.
+- Both complex-preview experiments terminated through the model-request budget
+  without a successful preview or final answer. Runtime validation rejected
+  every invalid plan, and no invalid plan reached database execution.
+- Future experiments should compare a simpler model-facing argument contract,
+  a stronger model, and deterministic orchestration using the existing
+  extraction path. Do not treat additional prompt tuning on these observed
+  failures as evidence of generalization.

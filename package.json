@@ -15,6 +15,7 @@
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
     "query-plan:extract": "tsx src/query-plan/query-plan-cli.ts",
     "tool:metric-definition": "tsx src/application/metric-definition-tool-workflow-cli.ts",
+    "tool:workflow": "tsx src/application/metric-definition-tool-workflow-cli.ts",
     "test:query-plan": "tsx --test src/query-plan/query-plan.test.ts",
     "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
