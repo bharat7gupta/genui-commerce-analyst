@@ -17,6 +17,7 @@
     "test:query-plan": "tsx --test src/query-plan/query-plan.test.ts",
     "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
+    "test:safety": "tsx --test src/application/commerce-analysis-pipeline.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
