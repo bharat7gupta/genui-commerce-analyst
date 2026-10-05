@@ -14,18 +14,79 @@ export const SUPPORTED_DIMENSIONS = Object.freeze([
   "status",
 ] as const);
 
-const regionSchema = z.enum(["North", "South", "East", "West"]);
-const categorySchema = z.enum([
+export const SUPPORTED_REGION_FILTER_VALUES = Object.freeze([
+  "North",
+  "South",
+  "East",
+  "West",
+] as const);
+
+export const SUPPORTED_CATEGORY_FILTER_VALUES = Object.freeze([
   "Electronics",
   "Apparel",
   "Home",
   "Beauty",
-]);
-const statusSchema = z.enum([
+] as const);
+
+export const SUPPORTED_STATUS_FILTER_VALUES = Object.freeze([
   "completed",
   "partially_refunded",
   "refunded",
-]);
+] as const);
+
+export const SUPPORTED_FILTER_FIELDS = Object.freeze([
+  "order_id",
+  "customer_id",
+  "region",
+  "category",
+  "status",
+  "gross_amount",
+  "discount_amount",
+  "refund_amount",
+] as const);
+
+const EQUALITY_FILTER_OPERATOR = "eq" as const;
+const MEMBERSHIP_FILTER_OPERATOR = "in" as const;
+
+const CATEGORICAL_FILTER_OPERATORS = Object.freeze([
+  EQUALITY_FILTER_OPERATOR,
+  MEMBERSHIP_FILTER_OPERATOR,
+] as const);
+
+const AMOUNT_FILTER_OPERATORS = Object.freeze([
+  EQUALITY_FILTER_OPERATOR,
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+] as const);
+
+export const SUPPORTED_FILTER_OPERATORS_BY_FIELD = Object.freeze({
+  order_id: CATEGORICAL_FILTER_OPERATORS,
+  customer_id: CATEGORICAL_FILTER_OPERATORS,
+  region: CATEGORICAL_FILTER_OPERATORS,
+  category: CATEGORICAL_FILTER_OPERATORS,
+  status: CATEGORICAL_FILTER_OPERATORS,
+  gross_amount: AMOUNT_FILTER_OPERATORS,
+  discount_amount: AMOUNT_FILTER_OPERATORS,
+  refund_amount: AMOUNT_FILTER_OPERATORS,
+});
+
+export const ENUMERATED_FILTER_VALUES_BY_FIELD = Object.freeze({
+  region: SUPPORTED_REGION_FILTER_VALUES,
+  category: SUPPORTED_CATEGORY_FILTER_VALUES,
+  status: SUPPORTED_STATUS_FILTER_VALUES,
+});
+
+const SUPPORTED_AMOUNT_FILTER_FIELDS = Object.freeze([
+  "gross_amount",
+  "discount_amount",
+  "refund_amount",
+] as const);
+
+const regionSchema = z.enum(SUPPORTED_REGION_FILTER_VALUES);
+const categorySchema = z.enum(SUPPORTED_CATEGORY_FILTER_VALUES);
+const statusSchema = z.enum(SUPPORTED_STATUS_FILTER_VALUES);
 const identifierSchema = z.string().trim().min(1);
 const amountSchema = z.number().finite().nonnegative();
 
@@ -65,14 +126,14 @@ const regionFilterSchema = z.union([
   z
     .object({
       field: z.literal("region"),
-      operator: z.literal("eq"),
+      operator: z.literal(EQUALITY_FILTER_OPERATOR),
       value: regionSchema,
     })
     .strict(),
   z
     .object({
       field: z.literal("region"),
-      operator: z.literal("in"),
+      operator: z.literal(MEMBERSHIP_FILTER_OPERATOR),
       values: z.array(regionSchema).min(1),
     })
     .strict(),
@@ -82,14 +143,14 @@ const categoryFilterSchema = z.union([
   z
     .object({
       field: z.literal("category"),
-      operator: z.literal("eq"),
+      operator: z.literal(EQUALITY_FILTER_OPERATOR),
       value: categorySchema,
     })
     .strict(),
   z
     .object({
       field: z.literal("category"),
-      operator: z.literal("in"),
+      operator: z.literal(MEMBERSHIP_FILTER_OPERATOR),
       values: z.array(categorySchema).min(1),
     })
     .strict(),
@@ -99,14 +160,14 @@ const statusFilterSchema = z.union([
   z
     .object({
       field: z.literal("status"),
-      operator: z.literal("eq"),
+      operator: z.literal(EQUALITY_FILTER_OPERATOR),
       value: statusSchema,
     })
     .strict(),
   z
     .object({
       field: z.literal("status"),
-      operator: z.literal("in"),
+      operator: z.literal(MEMBERSHIP_FILTER_OPERATOR),
       values: z.array(statusSchema).min(1),
     })
     .strict(),
@@ -116,14 +177,14 @@ const orderIdFilterSchema = z.union([
   z
     .object({
       field: z.literal("order_id"),
-      operator: z.literal("eq"),
+      operator: z.literal(EQUALITY_FILTER_OPERATOR),
       value: identifierSchema,
     })
     .strict(),
   z
     .object({
       field: z.literal("order_id"),
-      operator: z.literal("in"),
+      operator: z.literal(MEMBERSHIP_FILTER_OPERATOR),
       values: z.array(identifierSchema).min(1),
     })
     .strict(),
@@ -133,14 +194,14 @@ const customerIdFilterSchema = z.union([
   z
     .object({
       field: z.literal("customer_id"),
-      operator: z.literal("eq"),
+      operator: z.literal(EQUALITY_FILTER_OPERATOR),
       value: identifierSchema,
     })
     .strict(),
   z
     .object({
       field: z.literal("customer_id"),
-      operator: z.literal("in"),
+      operator: z.literal(MEMBERSHIP_FILTER_OPERATOR),
       values: z.array(identifierSchema).min(1),
     })
     .strict(),
@@ -148,8 +209,8 @@ const customerIdFilterSchema = z.union([
 
 const amountFilterSchema = z
   .object({
-    field: z.enum(["gross_amount", "discount_amount", "refund_amount"]),
-    operator: z.enum(["eq", "gt", "gte", "lt", "lte"]),
+    field: z.enum(SUPPORTED_AMOUNT_FILTER_FIELDS),
+    operator: z.enum(AMOUNT_FILTER_OPERATORS),
     value: amountSchema,
   })
   .strict();
