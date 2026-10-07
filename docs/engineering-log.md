@@ -234,3 +234,36 @@
   explicitly as `emptySetSemantics: "returns_null"`.
 - Artifact: [`day-05-deterministic-numerical-evaluation-v1`](../results/day-05-deterministic-numerical-evaluation-v1.jsonl),
   SHA-256 `92a092b2bd79e62b92cac61b016a7be76e20d043c3f65e4af22d7d850bab8d4b`.
+
+## Day 6 — Minimal React KPI
+
+- Added a server-rendered React page using an explicit `query-plan-v1` plan:
+  `net_revenue`, interval `[2025-08-01, 2025-09-01)`, empty dimensions and
+  filters, and `none` for comparison, ordering, limit, and visualization.
+  This 31-day interval satisfies the existing 366-day executor policy.
+- Ran the example against the existing database through the unchanged compiler
+  and read-only DuckDB executor, without model calls. Actual executor rows:
+  `[{"net_revenue":"7225.00"}]`. Verified the HTTP response contains one React
+  KPI card showing `7225.00`, `net_revenue`, and both interval boundaries with
+  inclusive/exclusive labels. The decimal string is rendered unchanged; SQL
+  `NULL` is shown as “No matching orders.”
+- Database execution stays on the server and runs on each page request with
+  the existing deadline. Type checking and all ten focused compiler/executor
+  tests passed. This demonstrates deterministic execution-to-UI rendering;
+  it makes no new claim about live-model reliability or production readiness.
+- Launch with `npm run example:net-revenue-ui`, then open
+  `http://127.0.0.1:3000`.
+
+## Day 6 — Validated KPI specification
+
+- Added the fixed specification `{"type":"kpi","resultField":"net_revenue"}`
+  with a strict runtime schema. Only this component type and result field are
+  allowed; extra properties, including a numeric value, are rejected. The
+  renderer validates before looking up the separate executor result and maps
+  `kpi` to the existing React card.
+- Ran `example:kpi-specification` without model calls: the actual DuckDB row
+  `{"net_revenue":"7225.00"}` rendered `7225.00`; `type: "chart"` was rejected
+  with “Unknown component type; expected \"kpi\"”; `resultField: "profit"`
+  was rejected with “Unknown result field; expected \"net_revenue\".”
+- Type checking and five deterministic UI tests passed, including changing
+  executor values, strict rejection, SQL NULL, and missing-result handling.
