@@ -267,3 +267,61 @@
   was rejected with “Unknown result field; expected \"net_revenue\".”
 - Type checking and five deterministic UI tests passed, including changing
   executor values, strict rejection, SQL NULL, and missing-result handling.
+
+## Day 6 — Table specification
+
+- Extended the strict UI specification to allow exactly `kpi` and `table`;
+  resultField remains restricted to `net_revenue` and extra properties are
+  rejected. The table renders executor rows under “Net revenue.” Both views
+  keep the metric and exact date boundaries visible; fixed server views are
+  available at `/` and `/table`.
+- Ran both fixed specifications against one real DuckDB executor result:
+  `[{"net_revenue":"7225.00"}]`. Both rendered `7225.00`. Unsupported `chart`
+  was rejected with “Unknown component type; expected \"kpi\" or \"table\".”
+  No model calls, metric additions, or compiler changes were made.
+- Type checking and all six deterministic UI tests passed, including table
+  rows and validation for both specifications.
+
+## Day 6 — Model display selection
+
+- Froze `display-selection-v1` and its strict JSON Schema generated from the
+  existing UI specification, then ran two requests once each with `qwen3.5:4b`,
+  temperature 0, max output tokens 128, and reasoning effort none. No retries
+  or prompt tuning were used; source checksums matched before and after.
+- The model received only the display-selection instructions and user request;
+  expected types and numeric results remained evaluator/application data.
+  The August plan stayed fixed and real DuckDB separately returned
+  `[{"net_revenue":"7225.00"}]` for both renders.
+- Raw KPI output: `{"type": "kpi", "resultField": "net_revenue"}`;
+  raw table output: `{"type": "table", "resultField": "net_revenue"}`.
+  Both passed strict validation, matched the requested type, and rendered
+  `7225.00` with the metric and exact date interval visible.
+- KPI latency was 8,801 ms with 101 input / 17 output tokens; table latency
+  was 946 ms with 99 input / 16 output tokens. The first call is a cold-start
+  candidate; two calls do not establish representative latency or reliability.
+- Generation and validation failures have no successful specification and
+  produce an error-only HTML page. Type checking and nine deterministic UI
+  tests passed; both saved HTML pages were inspected for component, value,
+  metric, and date boundaries.
+- Artifacts: [`display-selection run`](../results/day-06-display-selection-2026-10-07T05-13-13-537Z/),
+  including raw-call JSONL, frozen protocol/checksums, per-case outcomes, and
+  rendered pages. This small demonstration is not a production-readiness test.
+
+## Day 6 — Interactive model display
+
+- Added a browser page with “Show KPI” and “Show table.” Selection waits for
+  complete server-side generation and strict specification validation; a
+  separate server request then executes the unchanged August plan and renders
+  the existing component. No result values enter model messages, and no token
+  streaming or retries were added.
+- Verified in headless Chrome with one real provider call and real DuckDB:
+  “Choosing display…” → “Running query…” → “Display ready.” with a KPI value
+  of `7225.00`, metric, and exact date boundaries. Both buttons were disabled
+  during both pending stages and enabled after completion.
+- The next click cleared the previous KPI immediately. A test-only injected
+  provider failure produced “Choosing display…” → “Display generation failed:
+  Simulated provider failure,” no result, and enabled buttons. DuckDB invocation
+  count stayed at one, confirming that provider failure prevented execution.
+- Type checking and nine deterministic UI tests passed. Browser verification
+  uses an isolated temporary server/browser. Launch the interactive page
+  with `npm run example:model-display-ui` at `http://127.0.0.1:3001`.

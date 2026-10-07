@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const kpiSpecificationSchema = z.object({
-  type: z.literal("kpi", { error: 'Unknown component type; expected "kpi".' }),
+  type: z.enum(["kpi", "table"], { error: 'Unknown component type; expected "kpi" or "table".' }),
   resultField: z.literal("net_revenue", {
     error: 'Unknown result field; expected "net_revenue".',
   }),
@@ -11,6 +11,11 @@ export type KpiSpecification = z.infer<typeof kpiSpecificationSchema>;
 
 export const KPI_SPECIFICATION = {
   type: "kpi",
+  resultField: "net_revenue",
+} satisfies KpiSpecification;
+
+export const TABLE_SPECIFICATION = {
+  type: "table",
   resultField: "net_revenue",
 } satisfies KpiSpecification;
 

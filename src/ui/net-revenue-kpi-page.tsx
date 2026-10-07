@@ -1,4 +1,5 @@
 import { renderToStaticMarkup } from "react-dom/server";
+import type { ReactNode } from "react";
 
 import type { TableRow } from "../application/commerce-analysis-pipeline.js";
 import { parseKpiSpecification } from "./kpi-specification.js";
@@ -10,7 +11,7 @@ if (plan.metric.kind !== "metric" || plan.dateRange.kind !== "interval") {
 const metric = plan.metric.value;
 const { start, end } = plan.dateRange;
 
-function NetRevenuePage({ value }: { value: string | null }) {
+function NetRevenuePage({ content }: { content: ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -32,38 +33,76 @@ function NetRevenuePage({ value }: { value: string | null }) {
           dt { color: #536574; font-size: 13px; margin-top: 12px; }
           dd { margin: 4px 0 0; overflow-wrap: anywhere; }
           .definition { color: #536574; font-size: 14px; line-height: 1.5; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { text-align: left; padding: 12px; border-bottom: 1px solid #e5eaee;
+            font-variant-numeric: tabular-nums; }
         `}</style>
       </head>
       <body>
         <main>
           <h1>Commerce Analyst</h1>
-          <article className="kpi" aria-labelledby="metric-title">
-            <h2 id="metric-title">Net revenue</h2>
-            <p className="value">{value ?? "No matching orders"}</p>
-            <dl>
-              <dt>Metric</dt>
-              <dd>{metric}</dd>
-              <dt>Date range</dt>
-              <dd><time dateTime={start}>{start}</time> (inclusive) → <time dateTime={end}>{end}</time> (exclusive)</dd>
-            </dl>
-            <p className="definition">Gross revenue minus discounts and refunds. All regions and order statuses.</p>
-          </article>
+          {content}
         </main>
       </body>
     </html>
   );
 }
 
-export function renderKpiPage(input: unknown, rows: readonly TableRow[]): string {
+function NetRevenueCard({ content }: { content: ReactNode }) {
+  return (
+    <article className="kpi" aria-labelledby="metric-title">
+      <h2 id="metric-title">Net revenue</h2>
+      {content}
+      <dl>
+        <dt>Metric</dt>
+        <dd>{metric}</dd>
+        <dt>Date range</dt>
+        <dd><time dateTime={start}>{start}</time> (inclusive) → <time dateTime={end}>{end}</time> (exclusive)</dd>
+      </dl>
+      <p className="definition">Gross revenue minus discounts and refunds. All regions and order statuses.</p>
+    </article>
+  );
+}
+
+function createCard(input: unknown, rows: readonly TableRow[]): ReactNode {
   // Validate before selecting a component or looking up any result value.
   const specification = parseKpiSpecification(input);
-  const value = rows[0]?.[specification.resultField];
-  if (rows.length !== 1 || (value !== null && typeof value !== "string")) {
-    throw new Error("Expected one net_revenue row containing a decimal string or NULL");
-  }
+  const values = rows.map((row) => {
+    const value = row[specification.resultField];
+    if (value !== null && typeof value !== "string") {
+      throw new Error("Expected net_revenue rows containing a decimal string or NULL");
+    }
+    return value;
+  });
 
+  let content: ReactNode;
   switch (specification.type) {
     case "kpi":
-      return "<!doctype html>" + renderToStaticMarkup(<NetRevenuePage value={value} />);
+      if (values.length !== 1) {
+        throw new Error("Expected one net_revenue row for the KPI");
+      }
+      content = <p className="value">{values[0] ?? "No matching orders"}</p>;
+      break;
+    case "table":
+      content = (
+        <table aria-label="Net revenue results">
+          <thead><tr><th scope="col">Net revenue</th></tr></thead>
+          <tbody>
+            {values.map((value, index) => (
+              <tr key={index}><td>{value ?? "No matching orders"}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      );
+      break;
   }
+  return <NetRevenueCard content={content} />;
+}
+
+export function renderKpiPage(input: unknown, rows: readonly TableRow[]): string {
+  return "<!doctype html>" + renderToStaticMarkup(<NetRevenuePage content={createCard(input, rows)} />);
+}
+
+export function renderKpiFragment(input: unknown, rows: readonly TableRow[]): string {
+  return renderToStaticMarkup(createCard(input, rows));
 }
