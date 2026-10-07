@@ -17,6 +17,8 @@
     "tool:metric-definition": "tsx src/application/metric-definition-tool-workflow-cli.ts",
     "tool:workflow": "tsx src/application/metric-definition-tool-workflow-cli.ts",
     "test:query-plan": "tsx --test src/query-plan/query-plan.test.ts",
+    "test:query-plan-sql-compiler": "tsx --test src/db/query-plan-sql-compiler.test.ts",
+    "test:query-plan-executor": "tsx --test src/db/duckdb-query-plan-executor.integration.test.ts",
     "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
     "test:safety": "tsx --test src/application/commerce-analysis-pipeline.test.ts",
