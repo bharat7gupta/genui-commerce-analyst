@@ -4,12 +4,7 @@ import type { ReactNode } from "react";
 import type { TableRow } from "../application/commerce-analysis-pipeline.js";
 import { parseKpiSpecification } from "./kpi-specification.js";
 import { NET_REVENUE_KPI_PLAN as plan } from "./net-revenue-kpi-plan.js";
-
-if (plan.metric.kind !== "metric" || plan.dateRange.kind !== "interval") {
-  throw new Error("The KPI example requires a metric and an explicit interval");
-}
-const metric = plan.metric.value;
-const { start, end } = plan.dateRange;
+import { parseQueryPlan, type QueryPlan } from "../query-plan/query-plan.js";
 
 function NetRevenuePage({ content }: { content: ReactNode }) {
   return (
@@ -48,25 +43,33 @@ function NetRevenuePage({ content }: { content: ReactNode }) {
   );
 }
 
-function NetRevenueCard({ content }: { content: ReactNode }) {
+function NetRevenueCard({ content, range }: {
+  content: ReactNode;
+  range: Extract<QueryPlan["dateRange"], { kind: "interval" }>;
+}) {
   return (
     <article className="kpi" aria-labelledby="metric-title">
       <h2 id="metric-title">Net revenue</h2>
       {content}
       <dl>
         <dt>Metric</dt>
-        <dd>{metric}</dd>
+        <dd>net_revenue</dd>
         <dt>Date range</dt>
-        <dd><time dateTime={start}>{start}</time> (inclusive) → <time dateTime={end}>{end}</time> (exclusive)</dd>
+        <dd><time dateTime={range.start}>{range.start}</time> (inclusive) → <time dateTime={range.end}>{range.end}</time> (exclusive)</dd>
       </dl>
       <p className="definition">Gross revenue minus discounts and refunds. All regions and order statuses.</p>
     </article>
   );
 }
 
-function createCard(input: unknown, rows: readonly TableRow[]): ReactNode {
+function createCard(input: unknown, rows: readonly TableRow[], executedPlan: QueryPlan): ReactNode {
   // Validate before selecting a component or looking up any result value.
   const specification = parseKpiSpecification(input);
+  const parsedPlan = parseQueryPlan(executedPlan);
+  if (parsedPlan.metric.kind !== "metric" || parsedPlan.metric.value !== "net_revenue" ||
+      parsedPlan.dateRange.kind !== "interval") {
+    throw new Error("The display requires net_revenue and an explicit interval");
+  }
   const values = rows.map((row) => {
     const value = row[specification.resultField];
     if (value !== null && typeof value !== "string") {
@@ -75,13 +78,25 @@ function createCard(input: unknown, rows: readonly TableRow[]): ReactNode {
     return value;
   });
 
+  if (values.length === 0) {
+    throw new Error("Expected one net_revenue row; an aggregate result is missing");
+  }
+  // This SUM over NOT NULL money columns returns NULL exactly when no orders match.
+  // Keep decimal "0.00" as matching data; never test the numeric value for truthiness.
+  if (values.length === 1 && values[0] === null) {
+    return <NetRevenueCard
+      content={<p role="status">No matching data for this date range</p>}
+      range={parsedPlan.dateRange}
+    />;
+  }
+
   let content: ReactNode;
   switch (specification.type) {
     case "kpi":
       if (values.length !== 1) {
         throw new Error("Expected one net_revenue row for the KPI");
       }
-      content = <p className="value">{values[0] ?? "No matching orders"}</p>;
+      content = <p className="value">{values[0]}</p>;
       break;
     case "table":
       content = (
@@ -89,20 +104,20 @@ function createCard(input: unknown, rows: readonly TableRow[]): ReactNode {
           <thead><tr><th scope="col">Net revenue</th></tr></thead>
           <tbody>
             {values.map((value, index) => (
-              <tr key={index}><td>{value ?? "No matching orders"}</td></tr>
+              <tr key={index}><td>{value ?? "Unavailable"}</td></tr>
             ))}
           </tbody>
         </table>
       );
       break;
   }
-  return <NetRevenueCard content={content} />;
+  return <NetRevenueCard content={content} range={parsedPlan.dateRange} />;
 }
 
-export function renderKpiPage(input: unknown, rows: readonly TableRow[]): string {
-  return "<!doctype html>" + renderToStaticMarkup(<NetRevenuePage content={createCard(input, rows)} />);
+export function renderKpiPage(input: unknown, rows: readonly TableRow[], executedPlan: QueryPlan = plan): string {
+  return "<!doctype html>" + renderToStaticMarkup(<NetRevenuePage content={createCard(input, rows, executedPlan)} />);
 }
 
-export function renderKpiFragment(input: unknown, rows: readonly TableRow[]): string {
-  return renderToStaticMarkup(createCard(input, rows));
+export function renderKpiFragment(input: unknown, rows: readonly TableRow[], executedPlan: QueryPlan = plan): string {
+  return renderToStaticMarkup(createCard(input, rows, executedPlan));
 }

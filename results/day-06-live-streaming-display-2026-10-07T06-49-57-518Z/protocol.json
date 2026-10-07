@@ -1,0 +1,109 @@
+{
+  "request": "Show table",
+  "expectedType": "table",
+  "expectedRows": [
+    {
+      "net_revenue": "7225.00"
+    }
+  ],
+  "promptVersion": "display-selection-v1",
+  "model": "qwen3.5:4b",
+  "reasoningEffort": "none",
+  "settings": {
+    "temperature": 0,
+    "maxTokens": 128
+  },
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "kpi",
+          "table"
+        ]
+      },
+      "resultField": {
+        "type": "string",
+        "const": "net_revenue"
+      }
+    },
+    "required": [
+      "type",
+      "resultField"
+    ],
+    "additionalProperties": false
+  },
+  "plan": {
+    "version": "query-plan-v1",
+    "metric": {
+      "kind": "metric",
+      "value": "net_revenue"
+    },
+    "dimensions": {
+      "kind": "specified",
+      "values": []
+    },
+    "filters": {
+      "kind": "specified",
+      "items": []
+    },
+    "dateRange": {
+      "kind": "interval",
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "comparison": {
+      "kind": "none"
+    },
+    "ordering": {
+      "kind": "none"
+    },
+    "limit": {
+      "kind": "none"
+    },
+    "visualization": {
+      "kind": "none"
+    }
+  },
+  "completionRule": "finish_reason \"stop\" and [DONE]",
+  "checksums": [
+    {
+      "file": "../ai/provider.ts",
+      "sha256": "564870028e0e0cd5599f47ee795144e301436dffbf5ac30cd117b5b63daacb76"
+    },
+    {
+      "file": "../ai/qwen-provider.ts",
+      "sha256": "bf5842543484311189a2d9013f335df01c039f1193bbe5357d14d0d394e8b358"
+    },
+    {
+      "file": "../ui/display-selection.ts",
+      "sha256": "2d4f6f23bdeff011d6d28ab602cfe01bbea18003a3aa324e6eff3c0a80495069"
+    },
+    {
+      "file": "../ui/kpi-specification.ts",
+      "sha256": "5855eea1e2c1a54788bd22c68325dd31c1a1ceb28f0d4d6dfe60c45f4f3563f2"
+    },
+    {
+      "file": "../ui/model-display-server.tsx",
+      "sha256": "021fff3651016afba52ce1c4a3f627c6c6c21d91701b1bedef18870dd90f7557"
+    },
+    {
+      "file": "../ui/model-display-client.js",
+      "sha256": "a698493795bc2811bd11af47870680a2d5817cf66ed9b44a50e9c94110e63196"
+    },
+    {
+      "file": "../ui/net-revenue-kpi-plan.ts",
+      "sha256": "d947149a8cf39d8e6a0ed5385a09534b5719a29a64384e742ab93192b8e84ba7"
+    },
+    {
+      "file": "../ui/net-revenue-kpi-page.tsx",
+      "sha256": "c2fb993dd06e7cdb7e78e1584666d88ff50aa8983c24ba0107fa0f405086c5e7"
+    },
+    {
+      "file": "./day-06-live-streaming-display.ts",
+      "sha256": "5a4c24872391af9cc11ad1983a976e8645797c7246971fd423ecc1d4f71273ca"
+    }
+  ]
+}

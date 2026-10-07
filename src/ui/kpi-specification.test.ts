@@ -24,7 +24,7 @@ test("the table displays each executor row under the Net revenue column", () => 
   assert.ok(html.includes('<th scope="col">Net revenue</th>'));
   assert.ok(html.includes("<td>12.34</td>"));
   assert.ok(html.includes("<td>98.76</td>"));
-  assert.ok(html.includes("<td>No matching orders</td>"));
+  assert.ok(html.includes("<td>Unavailable</td>"));
 });
 
 test("unknown component types are rejected before reading results", () => {
@@ -54,7 +54,24 @@ test("a specification cannot carry its own numeric value", () => {
   }
 });
 
-test("NULL is shown as no matching orders, and missing results are rejected", () => {
-  assert.ok(renderKpiPage(KPI_SPECIFICATION, [{ net_revenue: null }]).includes("No matching orders"));
-  assert.throws(() => renderKpiPage(KPI_SPECIFICATION, []), /Expected one net_revenue row/);
+test("SQL NULL shows the no-match state for both types; missing aggregate rows are errors", () => {
+  for (const specification of [KPI_SPECIFICATION, TABLE_SPECIFICATION]) {
+    const html = renderKpiPage(specification, [{ net_revenue: null }]);
+    assert.ok(html.includes("No matching data for this date range"));
+    assert.ok(html.includes("net_revenue"));
+    assert.ok(html.includes("2025-08-01"));
+    assert.ok(html.includes("2025-09-01"));
+    assert.ok(!html.includes('<p class="value">'));
+    assert.ok(!html.includes("<table"));
+    assert.throws(() => renderKpiPage(specification, []), /Expected one net_revenue row/);
+  }
+});
+
+test("decimal zero remains a normal KPI/table value", () => {
+  for (const specification of [KPI_SPECIFICATION, TABLE_SPECIFICATION]) {
+    const html = renderKpiPage(specification, [{ net_revenue: "0.00" }]);
+    assert.ok(html.includes(specification.type === "kpi"
+      ? '<p class="value">0.00</p>' : '<td>0.00</td>'));
+    assert.ok(!html.includes("No matching data"));
+  }
 });

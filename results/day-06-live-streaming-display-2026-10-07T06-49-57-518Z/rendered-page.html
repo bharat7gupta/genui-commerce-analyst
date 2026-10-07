@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Choose the net revenue display</title><style>
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; color: #172a3a; background: #f4f6f8; margin: 0; }
+        main { max-width: 640px; margin: 8vh auto; padding: 24px; }
+        h1 { font-size: 24px; } h2 { font-size: 16px; }
+        button { padding: 12px 18px; margin-right: 12px; border-radius: 8px;
+          border: 1px solid #b7c6d1; background: white; font: inherit; cursor: pointer; }
+        button:disabled { opacity: .5; cursor: wait; }
+        .dates { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0; }
+        label { display: grid; gap: 6px; }
+        input { padding: 10px; font: inherit; border: 1px solid #b7c6d1; border-radius: 8px; }
+        #status { min-height: 24px; } [role=alert] { color: #a02121; }
+        .kpi { background: white; border: 1px solid #dce3e8; border-radius: 16px; padding: 28px; }
+        .value { font-size: 48px; font-weight: 650; font-variant-numeric: tabular-nums; }
+        dl { border-top: 1px solid #e5eaee; padding-top: 12px; }
+        dt { color: #536574; font-size: 13px; margin-top: 12px; } dd { margin: 4px 0; }
+        .definition { color: #536574; font-size: 14px; line-height: 1.5; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #e5eaee; }
+      </style></head><body><main><h1>Net revenue</h1><p>Choose the date range and how to display net_revenue.</p><div class="dates"><label for="start">Start (inclusive)<input id="start" type="date" required="" value="2025-08-01"></label><label for="end">End (exclusive)<input id="end" type="date" required="" value="2025-09-01"></label></div><button type="button" data-display="kpi">Show KPI</button><button type="button" data-display="table">Show table</button><p id="status" role="status" aria-live="polite">Display ready.</p><p id="missing-dates"></p><div id="result" aria-busy="false"><article class="kpi" aria-labelledby="metric-title"><h2 id="metric-title">Net revenue</h2><table aria-label="Net revenue results"><thead><tr><th scope="col">Net revenue</th></tr></thead><tbody><tr><td>7225.00</td></tr></tbody></table><dl><dt>Metric</dt><dd>net_revenue</dd><dt>Date range</dt><dd><time datetime="2025-08-01">2025-08-01</time> (inclusive) → <time datetime="2025-09-01">2025-09-01</time> (exclusive)</dd></dl><p class="definition">Gross revenue minus discounts and refunds. All regions and order statuses.</p></article></div></main><script type="module" src="/model-display-client.js"></script></body></html>

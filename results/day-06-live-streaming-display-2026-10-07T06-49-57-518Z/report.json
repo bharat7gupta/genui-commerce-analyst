@@ -1,0 +1,101 @@
+{
+  "chunks": [
+    {
+      "text": "{\"",
+      "elapsedMs": 8122
+    },
+    {
+      "text": "type",
+      "elapsedMs": 8150
+    },
+    {
+      "text": "\":",
+      "elapsedMs": 8197
+    },
+    {
+      "text": " \"",
+      "elapsedMs": 8242
+    },
+    {
+      "text": "table",
+      "elapsedMs": 8284
+    },
+    {
+      "text": "\",",
+      "elapsedMs": 8327
+    },
+    {
+      "text": " \"",
+      "elapsedMs": 8370
+    },
+    {
+      "text": "result",
+      "elapsedMs": 8410
+    },
+    {
+      "text": "Field",
+      "elapsedMs": 8452
+    },
+    {
+      "text": "\":",
+      "elapsedMs": 8491
+    },
+    {
+      "text": " \"",
+      "elapsedMs": 8529
+    },
+    {
+      "text": "net",
+      "elapsedMs": 8566
+    },
+    {
+      "text": "_re",
+      "elapsedMs": 8603
+    },
+    {
+      "text": "venue",
+      "elapsedMs": 8641
+    },
+    {
+      "text": "\"}",
+      "elapsedMs": 8679
+    }
+  ],
+  "completionStatus": "completed",
+  "finishReason": "stop",
+  "timeToFirstContentMs": 8122,
+  "totalModelDurationMs": 8719,
+  "metadata": {
+    "model": "qwen3.5:4b",
+    "latencyMs": 8719,
+    "tokenUsage": {
+      "inputTokens": 98,
+      "outputTokens": 16,
+      "totalTokens": 114
+    },
+    "requestId": null
+  },
+  "validatedSpecification": {
+    "type": "table",
+    "resultField": "net_revenue"
+  },
+  "renderedValue": "7225.00",
+  "error": null,
+  "observations": [
+    {
+      "status": "Choosing display…",
+      "result": ""
+    },
+    {
+      "status": "Running query…",
+      "result": ""
+    },
+    {
+      "status": "Display ready.",
+      "result": "Net revenueNet revenue7225.00Metricnet_revenueDate range2025-08-01 (inclusive) → 2025-09-01 (exclusive)Gross revenue minus discounts and refunds. All regions and order statuses."
+    }
+  ],
+  "modelCalls": 1,
+  "executorCalls": 1,
+  "checksumsVerified": true
+}

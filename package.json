@@ -13,6 +13,12 @@
     "example:model-display-selection": "node --import tsx src/experiments/day-06-display-selection.tsx",
     "example:model-display-ui": "node --import tsx src/ui/model-display-cli.ts",
     "verify:model-display-browser": "node --import tsx src/examples/verify-model-display-browser.ts",
+    "verify:model-display-dates": "node --import tsx src/examples/verify-model-display-dates.ts",
+    "verify:no-matching-data": "node --import tsx src/examples/verify-no-matching-data.ts",
+    "verify:query-failure": "node --import tsx src/examples/verify-query-failure.ts",
+    "verify:date-clarification": "node --import tsx src/examples/verify-date-clarification.ts",
+    "verify:streaming-boundary": "node --import tsx src/examples/verify-streaming-boundary.ts",
+    "verify:live-streaming-display": "node --import tsx src/experiments/day-06-live-streaming-display.ts",
     "experiment:baseline": "tsx src/experiments/day-01-baseline.ts",
     "experiment:routing-baseline": "tsx src/experiments/day-02-routing-baseline.ts router-v1",
     "experiment:routing-baseline-v2": "tsx src/experiments/day-02-routing-baseline.ts router-v2",
@@ -31,7 +37,8 @@
     "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
     "test:safety": "tsx --test src/application/commerce-analysis-pipeline.test.ts",
-    "test:ui": "node --import tsx --test src/ui/kpi-specification.test.ts src/ui/display-selection.test.ts",
+    "test:ui": "node --import tsx --test src/ui/kpi-specification.test.ts src/ui/display-selection.test.ts src/ui/model-display-request.test.ts",
+    "test:provider": "node --import tsx --test src/ai/qwen-provider.test.ts src/ai/qwen-provider-stream.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

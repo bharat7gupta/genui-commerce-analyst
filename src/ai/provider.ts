@@ -65,3 +65,20 @@ export type ModelResult = {
 export interface ModelProvider {
   generate(request: ModelRequest): Promise<ModelResult>;
 }
+
+export type ModelContentChunk = Readonly<{ text: string; elapsedMs: number }>;
+export type StreamingModelResult = ModelResult & {
+  stream: Readonly<{
+    completion: "completed";
+    chunks: readonly ModelContentChunk[];
+    timeToFirstContentMs: number | null;
+    totalDurationMs: number;
+  }>;
+};
+
+export interface StreamingModelProvider extends ModelProvider {
+  generateStreaming(
+    request: ModelRequest,
+    onContent?: (chunk: ModelContentChunk) => void,
+  ): Promise<StreamingModelResult>;
+}

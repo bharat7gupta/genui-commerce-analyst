@@ -325,3 +325,130 @@
 - Type checking and nine deterministic UI tests passed. Browser verification
   uses an isolated temporary server/browser. Launch the interactive page
   with `npm run example:model-display-ui` at `http://127.0.0.1:3001`.
+
+## Day 6 — Editable date interval
+
+- Added start-inclusive and end-exclusive date inputs defaulting to
+  `[2025-08-01, 2025-09-01)`, preserving net_revenue and KPI/table selection.
+  Only the interval changes in the application-owned plan. Both server stages
+  reuse QueryPlan validation and the executor's existing 366-day policy; the
+  selection stage rejects invalid intervals before a model call. Compiler
+  behavior is unchanged.
+- Chrome verification submitted `[2025-08-02, 2025-08-04)` once with table
+  selection and real model/DuckDB execution. Actual rows were
+  `[{"net_revenue":"1100.00"}]`; the table showed `1100.00` and the executed
+  inclusive/exclusive boundaries. All other plan fields matched the original
+  fixed plan. Dates remain separate from model display selection.
+- Editing a date immediately cleared the previous result. Reversed
+  `[2025-08-04, 2025-08-02)` produced “Invalid QueryPlan semantics:
+  dateRange.start must be earlier than dateRange.end for a [start, end)
+  interval,” with zero additional model/executor calls. A direct reversed
+  request to the execution endpoint was also rejected before execution.
+- Date controls are disabled during requests to prevent stale results after
+  edits. Type checking, 13 deterministic UI tests, and five real-executor
+  integration tests passed. Reproduce with `npm run verify:model-display-dates`.
+
+## Day 6 — No matching data versus zero
+
+- First ran the unchanged compiler/executor for `[2026-01-01, 2026-02-01)`
+  against the existing database. Raw result: `[{"net_revenue":null}]`.
+  Confirmed that gross_amount, discount_amount, and refund_amount are NOT NULL
+  in both the seed and live schema. SUM therefore distinguishes no matches
+  from a genuine zero decimal; no production match-count metadata is needed.
+- Both display choices now show “No matching data for this date range” for
+  the single SQL NULL aggregate, retaining metric and executed interval labels.
+  Missing aggregate rows are errors; `"0.00"` retains ordinary KPI/table rendering.
+- Chrome verified both types against the real no-match interval, and against
+  a temporary DuckDB fixture with two matching zero-net orders and a positive
+  order on the excluded end date. Independent reference SQL confirmed two
+  matches; the executor returned `[{"net_revenue":"0.00"}]` and both components
+  displayed `0.00`. The count exists only in fixture verification, outside the
+  model specification. The production database and compiler are unchanged.
+- Type checking and 14 deterministic UI tests passed. No model calls or prompt
+  changes were made. Reproduce with `npm run verify:no-matching-data`.
+
+## Day 6 — Deterministic query failure
+
+- Added `verify:query-failure` using a valid stubbed display-selection response
+  and a throwing executor, with no live model or database calls. A prior
+  stubbed KPI value is rendered first to verify clearing on the failing click.
+- Chrome observed “Choosing display…” → “Running query…” → “Query failed:
+  Simulated query error”. The selection endpoint returned 200 with the valid
+  table specification; the execution endpoint returned 503. The result stayed
+  empty throughout, no KPI/table rendered, and both buttons re-enabled.
+- The failing request made exactly one selection invocation and one executor
+  invocation, with no retries. Existing error handling passed unchanged;
+  only the demonstration and its launch instructions were added. Type checking
+  and the browser demonstration passed.
+
+## Day 6 — Missing-date clarification
+
+- Added a missing-date clarification to the existing page and request boundary.
+  Empty or omitted date inputs produce “Choose a start and end date” with the
+  missing input identified. Both server endpoints stop before selection or
+  execution; non-empty dates retain existing QueryPlan/date-policy validation,
+  including reversed-interval errors. The model UI schema is unchanged.
+- Chrome verification first rendered the August KPI, then cleared the end
+  date. The previous result disappeared; submitting showed clarification for
+  “End (exclusive)” with zero additional API, selection, or executor calls.
+  Direct requests with omitted dates were also clarified by both endpoints.
+- Providing `2025-09-01` restored “Choosing display…” → “Running query…” →
+  “Display ready.” and displayed the real DuckDB value `7225.00`. Verification
+  used stubbed selection, with no live model calls, guessing, or new metrics.
+- Type checking and 15 deterministic UI tests passed, as did the browser
+  demonstration. Reproduce with `npm run verify:date-clarification`.
+
+## Day 6 — Simulated streaming boundary
+
+- Added `verify:streaming-boundary` using the existing interactive page,
+  selectDisplay validator, and renderer. A test-only simulated response
+  accumulates three chunks: `{"type": "ta`, `ble", "resultF`, and
+  `ield": "net_revenue"}`. No generated-output parsing or validation happens
+  during accumulation; even complete assembled JSON waits for the explicit
+  completion signal before returning through the existing provider contract.
+- Chrome confirmed “Choosing display…” and no component after each chunk.
+  Completion produced `{"type": "table", "resultField": "net_revenue"}`,
+  which passed validation before fixture execution and table rendering of
+  `7225.00`. The value stayed in a separate executor-result fixture.
+- Ending after the first two chunks produced “Display generation failed:
+  Simulated display stream ended early before completion.” The previous result
+  stayed cleared, no generated specification was validated, and the fixture
+  executor was not called for that request. Both buttons re-enabled.
+- Type checking and browser verification passed. No live model/database calls,
+  provider adapter changes, or production streaming implementation were added.
+
+## Day 6 — Live server-side display streaming
+
+- Added a text-only `generateStreaming` method to the existing Qwen adapter;
+  retained the non-streaming `generate` path. The interactive CLI now accumulates
+  chat-completions content deltas on the server with the existing strict UI JSON
+  schema and unchanged display-selection prompt/settings. Only `stop` plus
+  `[DONE]` permits the existing parser/validator to run. EOF, disconnect,
+  malformed events, and abnormal completion fail without rendering or execution.
+- Ran exactly one live **Show table** request, without retries or prompt tuning.
+  Received 15 content chunks with normal completion (`stop` and `[DONE]`).
+  First-content latency was 8,122 ms; total model duration was 8,719 ms.
+  The completed output was
+  `{"type":"table","resultField":"net_revenue"}`, which passed validation.
+  Usage: 98 input, 16 output, 114 total tokens. This single first-call measurement
+  is not a representative warm-latency estimate.
+- Chrome observed “Choosing display…” with no result, then “Running query…”
+  with no result, then “Display ready.” Parsing and strict validation wait for
+  provider completion; query execution and rendering wait for validated output.
+  Partial content never renders. The real August DuckDB executor returned
+  `[{"net_revenue":"7225.00"}]`; the table showed `7225.00`, `net_revenue`,
+  and `[2025-08-01, 2025-09-01)`. One model invocation and one executor call;
+  numeric data was not sent to the model. Frozen source checksums matched.
+- The live run demonstrates successful streaming and real DuckDB execution.
+  Interrupted-stream behavior was checked separately with simulated browser
+  chunks and mocked adapter transport: early termination produces a readable
+  error and no result component. Those checks made no live model calls and do
+  not establish behavior under a real provider/network interruption.
+- Limitations remain: only `kpi`/`table` and `net_revenue` are supported; content
+  accumulates on the server, without browser token streaming or partial renders.
+  No retries or prompt tuning were added. One successful live request does not
+  establish reliability, representative latency, or production readiness.
+- Artifact: [live streaming report](../results/day-06-live-streaming-display-2026-10-07T06-49-57-518Z/report.json),
+  with raw invocation, chunk timestamps, protocol, executor rows, and rendered
+  page in the same directory. Type checking, all 12 provider tests (including
+  non-streaming regression tests), and all 15 UI tests passed.

@@ -36,8 +36,11 @@ end exclusive). The 31-day interval fits the existing 366-day policy; the
 existing execution deadline remains in effect. Dimensions and filters are
 explicitly empty, and comparison, ordering, limit, and visualization are
 `none`. KPI rendering is owned by the page rather than the compiler.
-SQL `NULL` is displayed as “No matching orders,” preserving the executor's
-empty-set semantics without converting it to zero.
+SQL `NULL` is displayed as “No matching data for this date range,” with the
+metric and executed dates visible. The three money columns are `NOT NULL`, so
+this SUM distinguishes an empty match set (`null`) from genuine zero net
+revenue (`"0.00"`). Zero remains a normal KPI/table value. No match-count
+metadata or UI specification fields are needed for the current schema.
 
 The example requires `data/commerce.duckdb`. If it is absent, run `npm run
 db:init` once to create the deterministic seed database. That command recreates
@@ -89,20 +92,78 @@ launch and `test:ui` remain model-free.
 npm run example:model-display-ui
 ```
 
-Open http://127.0.0.1:3001 and click **Show KPI** or **Show table**. Each click
-makes one server-side structured-output model call, waits for the complete
-specification, and validates it. Only then does the server execute the fixed
-August plan through read-only DuckDB and render the existing React component.
-The model never receives the numeric result.
+Open http://127.0.0.1:3001. Enter **Start (inclusive)** and **End (exclusive)**,
+which default to `[2025-08-01, 2025-09-01)`, then click **Show KPI** or
+**Show table**. The server builds the net-revenue plan with those dates and
+applies the existing QueryPlan validation and 366-day policy before any model
+call. Each valid click makes one server-side streaming structured-output model
+call. The server accumulates content deltas and requires a normal `stop` finish
+and the `[DONE]` marker before parsing and validating the complete specification. Only then does the
+server revalidate the request and execute the plan through read-only DuckDB.
+The existing React component labels the actual executed interval beside the
+result. The model selects only the display and never receives the numeric result.
 
 The page clears the previous result and disables both buttons while showing
 “Choosing display…” followed by “Running query…” and then the component.
 Generation, validation, and query failures show a readable error and leave no
-successful result; both buttons become available again. There is no token
-streaming or retry.
+successful result; both buttons become available again. A disconnected or
+truncated stream is a generation error, even if its accumulated JSON looks
+complete. Tokens are not streamed to the browser, and there are no retries.
+The provider's existing non-streaming `generate` path remains available.
+
+`npm run verify:live-streaming-display` makes exactly one live **Show table**
+request in isolated headless Chrome and executes the August plan through real
+DuckDB. It writes a new `results/day-06-live-streaming-display-<timestamp>/`
+artifact directory with content chunks, raw model output, completion status,
+time to first content, total model duration, validated specification, executor
+rows, browser states, and rendered HTML. It does not retry a failed request.
+`npm run test:provider` checks stream completion and truncation with mocked
+transport responses, alongside the existing non-streaming adapter tests.
+
+Editing either date clears the previous result immediately. Date inputs are
+disabled while a request is pending so the displayed result cannot arrive for
+a range edited in the meantime. Only dates vary; metric, dimensions, filters,
+and all other plan fields remain application-owned.
+
+Missing dates show “Choose a start and end date” and identify the absent input.
+The page clears any previous result, associates the clarification with that
+input, and blocks submission. Both server endpoints also clarify missing dates
+before model or executor calls. Supplying the dates allows the normal flow;
+reversed dates remain validation errors, and no dates are guessed.
 
 `npm run verify:model-display-browser` verifies this flow in a separate
 headless Chrome instance using the installed macOS Google Chrome. It makes
 one real model request and one simulated provider failure, checks visible
 state transitions and button locking, and closes its temporary server/browser.
 The simulated failure is injected only by the verification script.
+
+`npm run verify:model-display-dates` verifies one edited interval against real
+DuckDB, checks result clearing on edit, and confirms a reversed interval is
+rejected before any additional model call or database execution. This command
+makes one real model request and uses an isolated headless Chrome instance.
+
+`npm run verify:no-matching-data` checks both display choices against the real
+no-match interval `[2026-01-01, 2026-02-01)` and a temporary DuckDB fixture with
+two matching orders whose net revenue is zero. It uses deterministic display
+selection, makes no model calls, and removes the fixture after verification.
+
+`npm run verify:query-failure` demonstrates query failure after a valid stubbed
+table specification. It first renders a stubbed KPI, then checks
+“Choosing display…” → “Running query…” → “Query failed: Simulated query error”.
+The previous result stays cleared, neither component renders, and both buttons
+re-enable. The demonstration uses the existing error handling and makes no
+live model or database calls.
+
+`npm run verify:date-clarification` checks a missing end date with no calls or
+stale result, then restores the end date and verifies normal selection/query
+states and the real DuckDB value. Display selection is stubbed; this verification
+makes no live model calls.
+
+`npm run verify:streaming-boundary` demonstrates simulated model chunks in the
+existing interactive page. It holds “Choosing display…” after each of three
+chunks, including after the assembled JSON becomes complete, until the explicit
+stream-completion signal. The existing validator then accepts the specification
+and the renderer displays a table from a separate fixed executor-result fixture.
+A stream ending after two chunks shows a readable error without a component.
+This isolated demonstration changes no provider adapter and makes no live
+model or database calls.

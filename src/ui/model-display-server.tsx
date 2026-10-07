@@ -5,13 +5,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 import type { ModelProvider } from "../ai/provider.js";
 import type { QueryPlanExecutor } from "../application/commerce-analysis-pipeline.js";
 import { selectDisplay } from "./display-selection.js";
-import { parseKpiSpecification } from "./kpi-specification.js";
+import { MissingDatesError, parseModelDisplayRequest } from "./model-display-request.js";
 import { renderKpiFragment } from "./net-revenue-kpi-page.js";
-import { NET_REVENUE_KPI_PLAN } from "./net-revenue-kpi-plan.js";
 
 const QUESTIONS = {
-  kpi: "Show the August net revenue as a KPI card.",
-  table: "Show the August net revenue in a table.",
+  kpi: "Show the net revenue as a KPI card.",
+  table: "Show the net revenue in a table.",
 } as const;
 
 function BrowserPage() {
@@ -27,6 +26,9 @@ function BrowserPage() {
         button { padding: 12px 18px; margin-right: 12px; border-radius: 8px;
           border: 1px solid #b7c6d1; background: white; font: inherit; cursor: pointer; }
         button:disabled { opacity: .5; cursor: wait; }
+        .dates { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0; }
+        label { display: grid; gap: 6px; }
+        input { padding: 10px; font: inherit; border: 1px solid #b7c6d1; border-radius: 8px; }
         #status { min-height: 24px; } [role=alert] { color: #a02121; }
         .kpi { background: white; border: 1px solid #dce3e8; border-radius: 16px; padding: 28px; }
         .value { font-size: 48px; font-weight: 650; font-variant-numeric: tabular-nums; }
@@ -37,11 +39,20 @@ function BrowserPage() {
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #e5eaee; }
       `}</style>
     </head><body><main>
-      <h1>August net revenue</h1>
-      <p>Choose how to display net_revenue for 2025-08-01 (inclusive) → 2025-09-01 (exclusive).</p>
+      <h1>Net revenue</h1>
+      <p>Choose the date range and how to display net_revenue.</p>
+      <div className="dates">
+        <label htmlFor="start">Start (inclusive)
+          <input id="start" type="date" defaultValue="2025-08-01" required />
+        </label>
+        <label htmlFor="end">End (exclusive)
+          <input id="end" type="date" defaultValue="2025-09-01" required />
+        </label>
+      </div>
       <button type="button" data-display="kpi">Show KPI</button>
       <button type="button" data-display="table">Show table</button>
       <p id="status" role="status" aria-live="polite">Choose a display.</p>
+      <p id="missing-dates" />
       <div id="result" aria-busy="false" />
     </main><script type="module" src="/model-display-client.js" /></body></html>
   );
@@ -59,7 +70,7 @@ async function readSpecification(request: IncomingMessage) {
   let parsed: unknown;
   try { parsed = JSON.parse(Buffer.concat(chunks).toString("utf8")); }
   catch { throw new Error("UI specification request must be valid JSON."); }
-  return parseKpiSpecification(parsed);
+  return parseModelDisplayRequest(parsed);
 }
 
 function json(response: ServerResponse, status: number, body: unknown) {
@@ -82,19 +93,19 @@ export function createModelDisplayServer(provider: ModelProvider, executor: Quer
     }
     if (request.method === "POST" && request.url === "/api/select-display") {
       const requested = await readSpecification(request);
-      const selection = await selectDisplay(provider, QUESTIONS[requested.type]);
+      const selection = await selectDisplay(provider, QUESTIONS[requested.specification.type]);
       if (selection.outcome !== "validated") {
         json(response, 502, { error: selection.error });
         return;
       }
-      json(response, 200, { specification: selection.specification });
+      json(response, 200, { specification: selection.specification, dateRange: requested.plan.dateRange });
       return;
     }
     if (request.method === "POST" && request.url === "/api/run-query") {
-      const specification = await readSpecification(request);
+      const { specification, plan } = await readSpecification(request);
       try {
-        const rows = await executor.execute(NET_REVENUE_KPI_PLAN);
-        json(response, 200, { html: renderKpiFragment(specification, rows) });
+        const rows = await executor.execute(plan);
+        json(response, 200, { html: renderKpiFragment(specification, rows, plan) });
       } catch (error) {
         json(response, 503, { error: `Query failed: ${error instanceof Error ? error.message : String(error)}` });
       }
@@ -104,6 +115,10 @@ export function createModelDisplayServer(provider: ModelProvider, executor: Quer
   }
   return createServer((request, response) => {
     void handle(request, response).catch((error: unknown) => {
+      if (error instanceof MissingDatesError) {
+        json(response, 400, { outcome: "clarification", error: error.message, missingInputs: error.missingInputs });
+        return;
+      }
       json(response, 400, { error: error instanceof Error ? error.message : String(error) });
     });
   });

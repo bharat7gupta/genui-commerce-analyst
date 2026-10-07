@@ -1,0 +1,39 @@
+{
+  "plan": {
+    "version": "query-plan-v1",
+    "metric": {
+      "kind": "metric",
+      "value": "net_revenue"
+    },
+    "dimensions": {
+      "kind": "specified",
+      "values": []
+    },
+    "filters": {
+      "kind": "specified",
+      "items": []
+    },
+    "dateRange": {
+      "kind": "interval",
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "comparison": {
+      "kind": "none"
+    },
+    "ordering": {
+      "kind": "none"
+    },
+    "limit": {
+      "kind": "none"
+    },
+    "visualization": {
+      "kind": "none"
+    }
+  },
+  "rows": [
+    {
+      "net_revenue": "7225.00"
+    }
+  ]
+}

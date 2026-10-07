@@ -115,9 +115,9 @@ export class DuckDBQueryPlanExecutor implements QueryPlanExecutor {
   }
 }
 
-function enforceExplicitDateIntervalLimit(
+export function enforceExplicitDateIntervalLimit(
   plan: QueryPlan,
-  maximumDays: number,
+  maximumDays: number = DEFAULT_MAXIMUM_EXPLICIT_DATE_INTERVAL_DAYS,
 ): void {
   if (plan.dateRange.kind !== "interval") return;
 

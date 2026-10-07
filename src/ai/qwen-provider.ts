@@ -1,6 +1,10 @@
+import { z } from "zod";
+
 import type {
+  ModelContentChunk,
   ModelMessage,
-  ModelProvider,
+  StreamingModelProvider,
+  StreamingModelResult,
   ModelRequest,
   ModelResult,
   ModelToolCall,
@@ -44,8 +48,42 @@ type ChatCompletionResponseToolCall = {
   };
 };
 
-export class QwenProvider implements ModelProvider {
+export class QwenProvider implements StreamingModelProvider {
   constructor(private readonly config: QwenProviderConfig) {}
+
+  /** Structured text streaming only; resolves after stop + the protocol's terminal marker. */
+  async generateStreaming(request: ModelRequest, onContent?: (chunk: ModelContentChunk) => void): Promise<StreamingModelResult> {
+    if (request.tools !== undefined && request.tools.length > 0) {
+      throw new Error("Qwen structured text streaming does not support tool calls");
+    }
+    const startedAt = performance.now();
+    let response: Response;
+    try {
+      response = await fetch(`${this.config.baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: { "content-type": "application/json", ...(this.config.apiKey ? { authorization: `Bearer ${this.config.apiKey}` } : {}) },
+        body: JSON.stringify({
+          model: this.config.model, reasoning_effort: this.config.reasoningEffort,
+          messages: request.messages.map(toChatCompletionMessage),
+          stream: true, stream_options: { include_usage: true },
+          ...(request.temperature === undefined ? {} : { temperature: request.temperature }),
+          ...(request.maxTokens === undefined ? {} : { max_tokens: request.maxTokens }),
+          ...(request.responseFormat === undefined ? {} : {
+            response_format: { type: "json_schema", json_schema: {
+              name: request.responseFormat.name, strict: request.responseFormat.strict, schema: request.responseFormat.schema,
+            } },
+          }),
+        }),
+      });
+    } catch (error) {
+      throw new Error(`Unable to connect to model endpoint: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
+    }
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error(`Qwen streaming request failed: HTTP ${response.status}`);
+    }
+    return readChatCompletionStream(response, this.config.model, startedAt, onContent);
+  }
 
   async generate(request: ModelRequest): Promise<ModelResult> {
     const tools = request.tools?.map(toChatCompletionTool);
@@ -142,6 +180,105 @@ export class QwenProvider implements ModelProvider {
       finishReason: finishReason ?? null,
       refusal: refusal ?? null,
     };
+  }
+}
+
+export class QwenStreamError extends Error {
+  constructor(
+    message: string,
+    readonly chunks: readonly ModelContentChunk[],
+    readonly finishReason: string | null,
+    readonly totalDurationMs: number,
+    cause: unknown,
+  ) {
+    super(`Qwen stream failed: ${message}`, { cause });
+    this.name = "QwenStreamError";
+  }
+}
+
+const streamChunkSchema = z.object({
+  model: z.string().optional(),
+  choices: z.array(z.object({
+    index: z.number().int(),
+    delta: z.object({
+      content: z.string().nullish(), refusal: z.string().nullish(),
+      tool_calls: z.array(z.unknown()).nullish(), function_call: z.unknown().optional(),
+    }).passthrough(),
+    finish_reason: z.string().nullish(),
+  }).passthrough()),
+  usage: z.object({
+    prompt_tokens: z.number(), completion_tokens: z.number(), total_tokens: z.number(),
+  }).passthrough().nullish(),
+}).passthrough();
+
+async function readChatCompletionStream(
+  response: Response, configuredModel: string, startedAt: number,
+  onContent?: (chunk: ModelContentChunk) => void,
+): Promise<StreamingModelResult> {
+  const chunks: ModelContentChunk[] = [];
+  let finishReason: string | null = null;
+  let refusal: string | null = null;
+  let model = configuredModel;
+  let usage: TokenUsage | null = null;
+  const reader = response.body?.getReader();
+  try {
+    if (!reader || !response.headers.get("content-type")?.includes("text/event-stream")) {
+      throw new Error("Expected a chat-completions event stream");
+    }
+    const decoder = new TextDecoder("utf-8", { fatal: true });
+    let buffer = "";
+    while (true) {
+      const read = await reader.read();
+      if (read.done) throw new Error("Stream disconnected or ended before the terminal completion marker");
+      buffer += decoder.decode(read.value, { stream: true });
+      let boundary = /\r?\n\r?\n/.exec(buffer);
+      while (boundary) {
+        const event = buffer.slice(0, boundary.index);
+        buffer = buffer.slice(boundary.index + boundary[0].length);
+        const data = event.split(/\r?\n/).filter(line => line.startsWith("data:"))
+          .map(line => line.slice(5).replace(/^ /, "")).join("\n");
+        if (data === "[DONE]") {
+          if (finishReason !== "stop") throw new Error(`Generation did not complete normally (finish reason ${finishReason ?? "missing"})`);
+          if (chunks.length === 0 && refusal === null) throw new Error("Stream completed without content");
+          const totalDurationMs = Math.round(performance.now() - startedAt);
+          return {
+            text: chunks.map(chunk => chunk.text).join(""), toolCalls: [], finishReason, refusal,
+            metadata: { model, latencyMs: totalDurationMs, tokenUsage: usage, requestId: getRequestId(response) ?? null },
+            stream: { completion: "completed", chunks, timeToFirstContentMs: chunks[0]?.elapsedMs ?? null, totalDurationMs },
+          };
+        }
+        if (data !== "") {
+          const parsed: unknown = JSON.parse(data);
+          const payload = streamChunkSchema.parse(parsed);
+          if (payload.model !== undefined) model = payload.model;
+          if (payload.usage != null) usage = toTokenUsage(payload.usage) ?? null;
+          for (const choice of payload.choices) {
+            if (choice.index !== 0) throw new Error("Multiple streamed choices are unsupported");
+            if (choice.delta.tool_calls?.length || choice.delta.function_call != null) {
+              throw new Error("Unexpected streamed tool call");
+            }
+            if (choice.delta.content) {
+              if (finishReason !== null) throw new Error("Content arrived after generation finished");
+              const chunk = { text: choice.delta.content, elapsedMs: Math.round(performance.now() - startedAt) };
+              chunks.push(chunk);
+              onContent?.(chunk);
+            }
+            if (choice.delta.refusal != null) refusal = (refusal ?? "") + choice.delta.refusal;
+            if (choice.finish_reason != null) finishReason = choice.finish_reason;
+          }
+        }
+        boundary = /\r?\n\r?\n/.exec(buffer);
+      }
+    }
+  } catch (error) {
+    throw new QwenStreamError(
+      error instanceof Error ? error.message : String(error), chunks, finishReason,
+      Math.round(performance.now() - startedAt), error,
+    );
+  } finally {
+    // Once DONE is received, any remaining transport bytes are irrelevant.
+    try { await reader?.cancel(); } catch { /* Preserve the original stream outcome. */ }
+    reader?.releaseLock();
   }
 }
 
