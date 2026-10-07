@@ -52,6 +52,11 @@ format and `start` must precede `end`.
   accepted.
 - Date intent is explicit: `unspecified`, explicit `all_time`, or an explicit
   interval. `unspecified` is preserved and is not interpreted as all-time.
+- The DuckDB executor applies an application-owned maximum of 366 days to an
+  explicit `[start, end)` interval by default. The application may configure
+  that maximum; it rejects longer intervals rather than shortening them.
+  Explicit `all_time` has no date-range cap and remains subject to the database
+  execution deadline.
 - Comparison supports exactly two named, non-overlapping date intervals. A
   comparison owns its periods, so the top-level date range must remain
   `unspecified`.

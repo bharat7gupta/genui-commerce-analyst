@@ -7,7 +7,11 @@ import test, { after, before } from "node:test";
 import { DuckDBInstance } from "@duckdb/node-api";
 
 import type { QueryPlan } from "../query-plan/query-plan.js";
-import { DuckDBQueryPlanExecutor } from "./duckdb-query-plan-executor.js";
+import {
+  DuckDBDateIntervalLimitError,
+  DuckDBExecutionTimeoutError,
+  DuckDBQueryPlanExecutor,
+} from "./duckdb-query-plan-executor.js";
 
 // Independently calculated from the four fixture rows:
 // 85.00 + 150.00 + 250.00 + 350.00.
@@ -51,24 +55,41 @@ const FIXTURE_SQL = `
     ('OTHER_REGION', 'C004', DATE '2025-08-20', 'South', 'Home', 400.00, 40.00, 10.00, 'partially_refunded');
 `;
 
+const EXPENSIVE_FIXTURE_SQL = `
+  CREATE VIEW orders AS
+  SELECT
+    DATE '2025-08-01' AS order_date,
+    'North' AS region,
+    CAST((generated_id % 100) + 1 AS DECIMAL(12, 2)) AS gross_amount,
+    CAST(0 AS DECIMAL(12, 2)) AS discount_amount,
+    CAST(0 AS DECIMAL(12, 2)) AS refund_amount
+  FROM range(1000000000000) AS generated(generated_id);
+`;
+
+const RECOVERY_FIXTURE_SQL = `
+  CREATE TABLE orders (
+    order_date DATE NOT NULL,
+    region VARCHAR NOT NULL,
+    gross_amount DECIMAL(12, 2) NOT NULL,
+    discount_amount DECIMAL(12, 2) NOT NULL,
+    refund_amount DECIMAL(12, 2) NOT NULL
+  );
+
+  INSERT INTO orders VALUES
+    (DATE '2025-08-01', 'North', 10.00, 1.00, 0.00);
+`;
+
 let temporaryDirectory: string;
 let testDatabasePath: string;
+let expensiveDatabasePath: string;
 
 before(async () => {
   temporaryDirectory = await mkdtemp(join(tmpdir(), "commerce-executor-"));
   testDatabasePath = join(temporaryDirectory, "commerce-test.duckdb");
+  expensiveDatabasePath = join(temporaryDirectory, "expensive-test.duckdb");
 
-  const instance = await DuckDBInstance.create(testDatabasePath);
-  const connection = await instance.connect();
-  try {
-    await connection.run(FIXTURE_SQL);
-  } finally {
-    try {
-      connection.closeSync();
-    } finally {
-      instance.closeSync();
-    }
-  }
+  await seedDatabase(testDatabasePath, FIXTURE_SQL);
+  await seedDatabase(expensiveDatabasePath, EXPENSIVE_FIXTURE_SQL);
 });
 
 after(async () => {
@@ -76,7 +97,9 @@ after(async () => {
 });
 
 test("executes all-time net revenue and preserves the decimal string", async () => {
-  const executor = new DuckDBQueryPlanExecutor(testDatabasePath);
+  const executor = new DuckDBQueryPlanExecutor({
+    databasePath: testDatabasePath,
+  });
   const actualRows = await executor.execute(makePlan());
   const referenceRows = await runReferenceQuery(REFERENCE_ALL_TIME_SQL);
   const expectedRows = [{ net_revenue: EXPECTED_ALL_TIME_AMOUNT }];
@@ -87,7 +110,9 @@ test("executes all-time net revenue and preserves the decimal string", async () 
 });
 
 test("binds the half-open interval and region filter during execution", async () => {
-  const executor = new DuckDBQueryPlanExecutor(testDatabasePath);
+  const executor = new DuckDBQueryPlanExecutor({
+    databasePath: testDatabasePath,
+  });
   const actualRows = await executor.execute(
     makePlan({
       dateRange: {
@@ -109,6 +134,88 @@ test("binds the half-open interval and region filter during execution", async ()
   assert.equal(typeof actualRows[0]?.net_revenue, "string");
 });
 
+test("executes an explicit interval exactly at the 366-day maximum", async () => {
+  const executor = new DuckDBQueryPlanExecutor({
+    databasePath: testDatabasePath,
+  });
+
+  assert.deepEqual(
+    await executor.execute(
+      makePlan({
+        dateRange: {
+          kind: "interval",
+          start: "2025-01-01",
+          end: "2026-01-02",
+        },
+      }),
+    ),
+    [{ net_revenue: EXPECTED_ALL_TIME_AMOUNT }],
+  );
+});
+
+test("rejects an explicit interval one day beyond the maximum before opening DuckDB", async () => {
+  const missingDatabasePath = join(
+    temporaryDirectory,
+    "must-not-be-opened.duckdb",
+  );
+  const executor = new DuckDBQueryPlanExecutor({
+    databasePath: missingDatabasePath,
+  });
+
+  await assert.rejects(
+    executor.execute(
+      makePlan({
+        dateRange: {
+          kind: "interval",
+          start: "2025-01-01",
+          end: "2026-01-03",
+        },
+      }),
+    ),
+    (error) => {
+      assert.ok(error instanceof DuckDBDateIntervalLimitError);
+      assert.equal(error.code, "QUERY_DATE_INTERVAL_TOO_LARGE");
+      assert.equal(error.intervalDays, 367);
+      assert.equal(error.maximumDays, 366);
+      return true;
+    },
+  );
+
+  await assert.rejects(
+    DuckDBInstance.create(missingDatabasePath, { access_mode: "READ_ONLY" }),
+  );
+});
+
+test(
+  "interrupts an expensive query and permits a subsequent invocation",
+  { timeout: 15_000 },
+  async () => {
+    const executor = new DuckDBQueryPlanExecutor({
+      databasePath: expensiveDatabasePath,
+      executionDeadlineMs: 25,
+    });
+
+    await assert.rejects(
+      executor.execute(makePlan()),
+      (error) => {
+        assert.ok(error instanceof DuckDBExecutionTimeoutError);
+        assert.equal(error.code, "QUERY_EXECUTION_TIMEOUT");
+        assert.equal(error.deadlineMs, 25);
+        assert.match(String(error.cause), /interrupt/i);
+        return true;
+      },
+    );
+
+    await rm(expensiveDatabasePath, { force: true });
+    await rm(`${expensiveDatabasePath}.wal`, { force: true });
+    await seedDatabase(expensiveDatabasePath, RECOVERY_FIXTURE_SQL);
+
+    assert.deepEqual(await executor.execute(makePlan()), [
+      { net_revenue: "9.00" },
+    ]);
+  },
+);
+
 async function runReferenceQuery(sql: string) {
   const instance = await DuckDBInstance.create(testDatabasePath, {
     access_mode: "READ_ONLY",
@@ -117,6 +224,20 @@ async function runReferenceQuery(sql: string) {
   try {
     const reader = await connection.runAndReadAll(sql);
     return reader.getRowObjectsJson();
+  } finally {
+    try {
+      connection.closeSync();
+    } finally {
+      instance.closeSync();
+    }
+  }
+}
+
+async function seedDatabase(path: string, sql: string): Promise<void> {
+  const instance = await DuckDBInstance.create(path);
+  const connection = await instance.connect();
+  try {
+    await connection.run(sql);
   } finally {
     try {
       connection.closeSync();
