@@ -200,3 +200,37 @@
   a stronger model, and deterministic orchestration using the existing
   extraction path. Do not treat additional prompt tuning on these observed
   failures as evidence of generalization.
+
+## Day 5 — Live commerce-analysis pipeline
+
+- Ran three frozen questions once each with `qwen3.5:4b`, `router-v3`,
+  `query-plan-extractor-v2`, the deterministic SQL compiler, and the real
+  read-only DuckDB executor. Handwritten reference SQL and expected rows were
+  verified before the first model call; no retries or prompt tuning were used.
+- Result: 0/3 end-to-end passes. The all-time request was routed to `clarify`,
+  so extraction and execution did not run. Both explicit-interval requests
+  routed to `analytics`, but extraction emitted timestamp-shaped dates and was
+  rejected by runtime validation before database execution. The North request
+  also added a region dimension despite asking for a filter-only scalar total.
+- No case reached DuckDB through the live pipeline, so this run provides no
+  live-model evidence about numerical execution accuracy. The failures are one
+  routing failure and two extraction failures, not execution or numerical
+  mismatches.
+- Artifact: [`day-05-live-commerce-analysis-v1`](../results/day-05-live-commerce-analysis-v1.jsonl),
+  SHA-256 `39db73dbca914d4547ffa35fb4970646380e815701abda9005feff8f700cdafb`.
+
+## Day 5 — Deterministic numerical evaluation
+
+- Ran ten model-free cases through the real read-only DuckDB executor within
+  the current compiler slice: all-time and explicit intervals, both with and
+  without region equality filters. Each executed row was compared exactly with
+  separately declared expected rows and independently handwritten reference
+  SQL; all 10 cases passed all three comparisons.
+- A `[2025-08-02, 2025-08-04)` case included O001 on the start date and
+  excluded O002 exactly on the end date, producing `1100.00` and confirming
+  the existing half-open boundary semantics.
+- `SUM(gross_amount - discount_amount - refund_amount)` over no matching rows
+  returns one row containing SQL `NULL`, not zero. The evaluator records this
+  explicitly as `emptySetSemantics: "returns_null"`.
+- Artifact: [`day-05-deterministic-numerical-evaluation-v1`](../results/day-05-deterministic-numerical-evaluation-v1.jsonl),
+  SHA-256 `92a092b2bd79e62b92cac61b016a7be76e20d043c3f65e4af22d7d850bab8d4b`.
