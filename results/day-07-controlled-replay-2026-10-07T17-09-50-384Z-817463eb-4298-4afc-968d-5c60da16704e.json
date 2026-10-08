@@ -1,0 +1,710 @@
+{
+  "label": "Controlled replay with edited dates; no model calls or SQL execution",
+  "timestamp": "2026-10-07T17:09:50.384Z",
+  "source": "results/day-07-five-cases-2026-10-07T17-03-49-943Z-cbd59012-0742-4e24-a4e8-20dab522dcd2",
+  "originalRunOverall": {
+    "passed": 0,
+    "total": 5,
+    "failedRequests": 5
+  },
+  "originalArtifactsUnchanged": true,
+  "sourceChecksums": {
+    "preflight.json": "1fd7e5a9766f43e942c80bc13c5d1ce823d0a7c712a01c3449357be2c17ea95b",
+    "summary.json": "394f45ad8130848dd3ae1e0c6a82b4037741d9ebbee5302d7e87452f7ae78c4b",
+    "day-7-september-net-revenue-v1/calls.jsonl": "a2360b48ebefe9c1b73692ee5cda309b62dcc140774119b7a56ce6e5934477d9",
+    "day-7-september-net-revenue-v1/result.json": "fbcb828645127a7a5055ff2ffe477d7f766e367eee41576178b9d45ca7b294c7",
+    "day-7-august-south-net-revenue-v1/calls.jsonl": "9c9808d6884aed09a0cde3fdb7ec5a99b354719c8bfdcb1bd6acef2f5951bee2",
+    "day-7-august-south-net-revenue-v1/result.json": "5a18874a76e4abd42b627e734ef2e609b11a6215743f38b732ba19357ce9e059",
+    "day-7-august-north-net-revenue-v1/calls.jsonl": "a4d1a5513e9278ec95db64e9862948d5ddd2c7f962aec7a7146ad2e0edfea58e",
+    "day-7-august-north-net-revenue-v1/result.json": "4248f671e01693a11efe1751e74ab2e26662e206d083596a899b1b15a7769244",
+    "day-7-august-net-revenue-v1/calls.jsonl": "bfe3364acab8bb13aeb88265a265c4c894c8343f517851e37e0bcf653f8b3a91",
+    "day-7-august-net-revenue-v1/result.json": "0d3bfe1dcbfc02f412ccfa29f272f6b4f73b7cc349767b87e0f51d9cc1a39c4e",
+    "day-7-august-net-revenue-paraphrase-v1/calls.jsonl": "6d28825f8cb45a6f9c9e7825a9ffd80e9df6413c5bb4d64086eb5c8c6176b339",
+    "day-7-august-net-revenue-paraphrase-v1/result.json": "77e8f241d68b46b2ebd9725e3735de094636a352c0b5d3955f9ec010e52ce1ab"
+  },
+  "cases": [
+    {
+      "caseId": "day-7-august-net-revenue-v1",
+      "category": "explicit_instructions",
+      "edits": [
+        {
+          "field": "dateRange.start",
+          "before": "2025-08-01T00:00:00Z",
+          "after": "2025-08-01"
+        },
+        {
+          "field": "dateRange.end",
+          "before": "2025-09-01T00:00:00Z",
+          "after": "2025-09-01"
+        }
+      ],
+      "unchangedBoundaries": [],
+      "originalSchema": {
+        "status": "fail",
+        "errors": [
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a real calendar date"
+          },
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a real calendar date"
+          }
+        ]
+      },
+      "schema": {
+        "status": "pass",
+        "errors": []
+      },
+      "businessRules": {
+        "status": "pass",
+        "errors": []
+      },
+      "meaning": {
+        "status": "fail",
+        "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}; visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}",
+        "mismatches": [
+          {
+            "field": "limit",
+            "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+          },
+          {
+            "field": "visualization",
+            "reason": "visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+          }
+        ]
+      },
+      "editedOutput": {
+        "schemaVersion": "query-plan-output-v1",
+        "outcome": "query_plan",
+        "queryPlan": {
+          "version": "query-plan-v1",
+          "metric": {
+            "kind": "metric",
+            "value": "net_revenue"
+          },
+          "dimensions": {
+            "kind": "specified",
+            "values": []
+          },
+          "filters": {
+            "kind": "specified",
+            "items": []
+          },
+          "dateRange": {
+            "kind": "interval",
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "comparison": {
+            "kind": "none"
+          },
+          "ordering": {
+            "kind": "none"
+          },
+          "limit": {
+            "kind": "unspecified"
+          },
+          "visualization": {
+            "kind": "unspecified"
+          }
+        }
+      }
+    },
+    {
+      "caseId": "day-7-august-net-revenue-paraphrase-v1",
+      "category": "paraphrase",
+      "edits": [
+        {
+          "field": "dateRange.start",
+          "before": "2025-08-01T00:00:00Z",
+          "after": "2025-08-01"
+        },
+        {
+          "field": "dateRange.end",
+          "before": "2025-09-01T00:00:00Z",
+          "after": "2025-09-01"
+        }
+      ],
+      "unchangedBoundaries": [],
+      "originalSchema": {
+        "status": "fail",
+        "errors": [
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a real calendar date"
+          },
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a real calendar date"
+          }
+        ]
+      },
+      "schema": {
+        "status": "pass",
+        "errors": []
+      },
+      "businessRules": {
+        "status": "fail",
+        "errors": [
+          {
+            "path": "filters.items",
+            "code": "CONTRADICTORY_FILTERS",
+            "message": "filters on region have no value that can satisfy all constraints"
+          }
+        ]
+      },
+      "meaning": {
+        "status": "not_reached",
+        "reason": "No validated QueryPlan available"
+      },
+      "editedOutput": {
+        "schemaVersion": "query-plan-output-v1",
+        "outcome": "query_plan",
+        "queryPlan": {
+          "version": "query-plan-v1",
+          "metric": {
+            "kind": "metric",
+            "value": "net_revenue"
+          },
+          "dimensions": {
+            "kind": "specified",
+            "values": []
+          },
+          "filters": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "North"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "South"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "East"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "West"
+              }
+            ]
+          },
+          "dateRange": {
+            "kind": "interval",
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "comparison": {
+            "kind": "none"
+          },
+          "ordering": {
+            "kind": "none"
+          },
+          "limit": {
+            "kind": "unspecified"
+          },
+          "visualization": {
+            "kind": "unspecified"
+          }
+        }
+      }
+    },
+    {
+      "caseId": "day-7-september-net-revenue-v1",
+      "category": "date_interval",
+      "edits": [
+        {
+          "field": "dateRange.start",
+          "before": "2025-09-01T00:00:00Z",
+          "after": "2025-09-01"
+        },
+        {
+          "field": "dateRange.end",
+          "before": "2025-10-01T00:00:00Z",
+          "after": "2025-10-01"
+        }
+      ],
+      "unchangedBoundaries": [],
+      "originalSchema": {
+        "status": "fail",
+        "errors": [
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a real calendar date"
+          },
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a real calendar date"
+          }
+        ]
+      },
+      "schema": {
+        "status": "pass",
+        "errors": []
+      },
+      "businessRules": {
+        "status": "fail",
+        "errors": [
+          {
+            "path": "filters.items",
+            "code": "CONTRADICTORY_FILTERS",
+            "message": "filters on region have no value that can satisfy all constraints"
+          }
+        ]
+      },
+      "meaning": {
+        "status": "not_reached",
+        "reason": "No validated QueryPlan available"
+      },
+      "editedOutput": {
+        "schemaVersion": "query-plan-output-v1",
+        "outcome": "query_plan",
+        "queryPlan": {
+          "version": "query-plan-v1",
+          "metric": {
+            "kind": "metric",
+            "value": "net_revenue"
+          },
+          "dimensions": {
+            "kind": "specified",
+            "values": []
+          },
+          "filters": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "North"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "South"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "East"
+              },
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "West"
+              }
+            ]
+          },
+          "dateRange": {
+            "kind": "interval",
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "comparison": {
+            "kind": "none"
+          },
+          "ordering": {
+            "kind": "none"
+          },
+          "limit": {
+            "kind": "unspecified"
+          },
+          "visualization": {
+            "kind": "unspecified"
+          }
+        }
+      }
+    },
+    {
+      "caseId": "day-7-august-north-net-revenue-v1",
+      "category": "region_filter",
+      "edits": [
+        {
+          "field": "dateRange.start",
+          "before": "2025-08-01T00:00:00Z",
+          "after": "2025-08-01"
+        },
+        {
+          "field": "dateRange.end",
+          "before": "2025-09-01T00:00:00Z",
+          "after": "2025-09-01"
+        }
+      ],
+      "unchangedBoundaries": [],
+      "originalSchema": {
+        "status": "fail",
+        "errors": [
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a real calendar date"
+          },
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a real calendar date"
+          }
+        ]
+      },
+      "schema": {
+        "status": "pass",
+        "errors": []
+      },
+      "businessRules": {
+        "status": "pass",
+        "errors": []
+      },
+      "meaning": {
+        "status": "fail",
+        "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+        "mismatches": [
+          {
+            "field": "dimensions",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+          },
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+          }
+        ]
+      },
+      "editedOutput": {
+        "schemaVersion": "query-plan-output-v1",
+        "outcome": "query_plan",
+        "queryPlan": {
+          "version": "query-plan-v1",
+          "metric": {
+            "kind": "metric",
+            "value": "net_revenue"
+          },
+          "dimensions": {
+            "kind": "specified",
+            "values": [
+              "region"
+            ]
+          },
+          "filters": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "North"
+              },
+              {
+                "field": "status",
+                "operator": "in",
+                "values": [
+                  "completed",
+                  "partially_refunded",
+                  "refunded"
+                ]
+              },
+              {
+                "field": "gross_amount",
+                "operator": "gte",
+                "value": 0
+              }
+            ]
+          },
+          "dateRange": {
+            "kind": "interval",
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "comparison": {
+            "kind": "none"
+          },
+          "ordering": {
+            "kind": "none"
+          },
+          "limit": {
+            "kind": "unspecified"
+          },
+          "visualization": {
+            "kind": "unspecified"
+          }
+        }
+      }
+    },
+    {
+      "caseId": "day-7-august-south-net-revenue-v1",
+      "category": "region_filter",
+      "edits": [
+        {
+          "field": "dateRange.start",
+          "before": "2025-08-01T00:00:00Z",
+          "after": "2025-08-01"
+        },
+        {
+          "field": "dateRange.end",
+          "before": "2025-09-01T00:00:00Z",
+          "after": "2025-09-01"
+        }
+      ],
+      "unchangedBoundaries": [],
+      "originalSchema": {
+        "status": "fail",
+        "errors": [
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "start"
+            ],
+            "message": "Expected a real calendar date"
+          },
+          {
+            "origin": "string",
+            "code": "invalid_format",
+            "format": "regex",
+            "pattern": "/^\\d{4}-\\d{2}-\\d{2}$/",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a date in YYYY-MM-DD format"
+          },
+          {
+            "code": "custom",
+            "path": [
+              "queryPlan",
+              "dateRange",
+              "end"
+            ],
+            "message": "Expected a real calendar date"
+          }
+        ]
+      },
+      "schema": {
+        "status": "pass",
+        "errors": []
+      },
+      "businessRules": {
+        "status": "pass",
+        "errors": []
+      },
+      "meaning": {
+        "status": "fail",
+        "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]}]}",
+        "mismatches": [
+          {
+            "field": "dimensions",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+          },
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]}]}"
+          }
+        ]
+      },
+      "editedOutput": {
+        "schemaVersion": "query-plan-output-v1",
+        "outcome": "query_plan",
+        "queryPlan": {
+          "version": "query-plan-v1",
+          "metric": {
+            "kind": "metric",
+            "value": "net_revenue"
+          },
+          "dimensions": {
+            "kind": "specified",
+            "values": [
+              "region"
+            ]
+          },
+          "filters": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "South"
+              },
+              {
+                "field": "status",
+                "operator": "in",
+                "values": [
+                  "completed",
+                  "partially_refunded",
+                  "refunded"
+                ]
+              }
+            ]
+          },
+          "dateRange": {
+            "kind": "interval",
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "comparison": {
+            "kind": "none"
+          },
+          "ordering": {
+            "kind": "none"
+          },
+          "limit": {
+            "kind": "unspecified"
+          },
+          "visualization": {
+            "kind": "unspecified"
+          }
+        }
+      }
+    }
+  ]
+}

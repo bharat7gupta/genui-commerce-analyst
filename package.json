@@ -26,6 +26,9 @@
     "experiment:query-plan-development": "tsx src/experiments/day-03-query-plan-development.ts",
     "experiment:deterministic-numerical": "tsx src/experiments/day-05-deterministic-numerical-evaluation.ts",
     "experiment:live-commerce-analysis": "tsx src/experiments/day-05-live-commerce-analysis.ts",
+    "experiment:day-7-supported-cases": "node --import tsx src/experiments/day-07-one-case-evaluation.ts",
+    "experiment:day-7-supported-cases-v3": "node --import tsx src/experiments/day-07-one-case-evaluation.ts query-plan-extractor-v3",
+    "experiment:day-7-heldout-cases-v3": "node --import tsx src/experiments/day-07-one-case-evaluation.ts query-plan-extractor-v3 held_out",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
     "query-plan:extract": "tsx src/query-plan/query-plan-cli.ts",
     "tool:metric-definition": "tsx src/application/metric-definition-tool-workflow-cli.ts",
@@ -37,6 +40,7 @@
     "test:query-plan-extraction": "tsx --test src/query-plan/query-plan-extraction.test.ts src/ai/qwen-provider.test.ts",
     "test:routing": "tsx --test src/routing/router.test.ts",
     "test:safety": "tsx --test src/application/commerce-analysis-pipeline.test.ts",
+    "test:evals": "node --import tsx --test src/evals/scalar-numerical-grader.test.ts src/evals/plan-meaning-grader.test.ts src/evals/supported-analytics-cases.test.ts src/evals/extraction-outcome-grader.test.ts",
     "test:ui": "node --import tsx --test src/ui/kpi-specification.test.ts src/ui/display-selection.test.ts src/ui/model-display-request.test.ts",
     "test:provider": "node --import tsx --test src/ai/qwen-provider.test.ts src/ai/qwen-provider-stream.test.ts",
     "typecheck": "tsc --noEmit"

@@ -1,4 +1,5 @@
-import { appendFile, mkdir, readFile } from "node:fs/promises";
+import { createHash, randomUUID } from "node:crypto";
+import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 
 import { z } from "zod";
 
@@ -34,15 +35,22 @@ if (
 }
 
 const ROUTER_VERSION: RouterVersion = requestedRouterVersion;
+const plannedRun = process.argv[3] === "day-7-planned";
+if (process.argv[3] !== undefined && !plannedRun) {
+  throw new Error(`Unknown routing case selection: ${process.argv[3]}`);
+}
+if (plannedRun && ROUTER_VERSION !== ROUTER_V3_VERSION) {
+  throw new Error("Day 7 planned routing cases require router-v3");
+}
 const EXPERIMENT_NAME =
-  ROUTER_VERSION === ROUTER_V3_VERSION
+  plannedRun ? "day-07-planned-routing-v1" : ROUTER_VERSION === ROUTER_V3_VERSION
     ? "routing-baseline-v3"
     : ROUTER_VERSION === ROUTER_V2_VERSION
       ? "routing-baseline-v2"
       : "routing-baseline-v1";
-const CASE_SET_VERSION = "routing-cases-v1";
+const CASE_SET_VERSION = plannedRun ? "day-7-planned-routing-cases-v1" : "routing-cases-v1";
 const REQUIRED_MODEL = "qwen3.5:4b";
-const REPETITIONS = [1, 2, 3] as const;
+const REPETITIONS = plannedRun ? [1] as const : [1, 2, 3] as const;
 const MODEL_SETTINGS = {
   temperature: 0,
   maxTokens: 8,
@@ -59,10 +67,23 @@ const routingCaseSchema = z
   .strict();
 
 type RoutingCase = z.infer<typeof routingCaseSchema>;
+const plannedCaseSchema = routingCaseSchema.extend({
+  category: z.literal("routing"),
+  datasetRole: z.literal("development"),
+  paraphraseFamily: z.string().min(1),
+  sourceFile: z.enum(["evals/routing/cases-v1.jsonl", "evals/routing/heldout-cases-v1.jsonl"]),
+  previouslyHeldOut: z.boolean(),
+  policyVerification: z.object({
+    status: z.enum(["verified", "unresolved"]), reason: z.string().min(1),
+  }).strict(),
+});
+type PlannedCase = z.infer<typeof plannedCaseSchema>;
+const plannedMetadata = new Map<string, PlannedCase>();
 
 type RoutingRunRecord = {
   timestamp: string;
   experiment:
+    | "day-07-planned-routing-v1"
     | "routing-baseline-v1"
     | "routing-baseline-v2"
     | "routing-baseline-v3";
@@ -82,6 +103,14 @@ type RoutingRunRecord = {
   requestId: string | null;
   validationError: string | null;
   providerError: string | null;
+  component?: "router";
+  category?: string;
+  datasetRole?: string;
+  paraphraseFamily?: string;
+  previouslyHeldOut?: boolean;
+  sourceSha256?: Readonly<Record<string, string>>;
+  finishReason?: string | null;
+  refusal?: string | null;
 };
 
 class ObservingProvider implements ModelProvider {
@@ -100,10 +129,13 @@ class ObservingProvider implements ModelProvider {
   }
 }
 
-const casesUrl = new URL("../../evals/routing/cases-v1.jsonl", import.meta.url);
+const casesUrl = new URL(plannedRun
+  ? "../../evals/routing/day-7-planned-cases-v1.jsonl"
+  : "../../evals/routing/cases-v1.jsonl", import.meta.url);
 const resultsDirectoryUrl = new URL("../../results/", import.meta.url);
+const runStem = `day-07-planned-routing-${new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-")}-${randomUUID()}`;
 const resultsUrl = new URL(
-  `day-02-routing-baseline-${ROUTER_VERSION === ROUTER_V3_VERSION ? "v3" : ROUTER_VERSION === ROUTER_V2_VERSION ? "v2" : "v1"}.jsonl`,
+  plannedRun ? `${runStem}.jsonl` : `day-02-routing-baseline-${ROUTER_VERSION === ROUTER_V3_VERSION ? "v3" : ROUTER_VERSION === ROUTER_V2_VERSION ? "v2" : "v1"}.jsonl`,
   resultsDirectoryUrl,
 );
 
@@ -120,16 +152,26 @@ if (config.model.reasoningEffort !== "none") {
 }
 
 const cases = await loadCases();
+async function frozenChecksums() {
+  const paths = [casesUrl, ...[
+    "../../evals/routing/cases-v1.jsonl", "../../evals/routing/heldout-cases-v1.jsonl",
+    "../routing/router-v3-prompt.ts", "../routing/router.ts", "../../docs/evals/day-7-dataset-plan.md",
+  ].map(path => new URL(path, import.meta.url))];
+  return Object.fromEntries(await Promise.all(paths.map(async path =>
+    [path.pathname, createHash("sha256").update(await readFile(path)).digest("hex")])));
+}
+const sourceSha256 = plannedRun ? await frozenChecksums() : null;
 const baseProvider = new QwenProvider(config.model);
 const observingProvider = new ObservingProvider(baseProvider);
 const records: RoutingRunRecord[] = [];
 
 await mkdir(resultsDirectoryUrl, { recursive: true });
+if (plannedRun) await writeFile(resultsUrl, "", { flag: "wx" });
 
 for (const [caseIndex, routingCase] of cases.entries()) {
   for (const repetition of REPETITIONS) {
     console.log(
-      `[${caseIndex + 1}/${cases.length}] ${routingCase.id} — run ${repetition}/3`,
+      `[${caseIndex + 1}/${cases.length}] ${routingCase.id} — run ${repetition}/${REPETITIONS.length}`,
     );
 
     observingProvider.reset();
@@ -177,6 +219,16 @@ for (const [caseIndex, routingCase] of cases.entries()) {
       requestId: observedResult?.metadata.requestId ?? null,
       validationError,
       providerError,
+      ...(plannedRun ? {
+        component: "router" as const,
+        category: plannedMetadata.get(routingCase.id)!.category,
+        datasetRole: plannedMetadata.get(routingCase.id)!.datasetRole,
+        paraphraseFamily: plannedMetadata.get(routingCase.id)!.paraphraseFamily,
+        previouslyHeldOut: plannedMetadata.get(routingCase.id)!.previouslyHeldOut,
+        sourceSha256: sourceSha256!,
+        finishReason: observedResult?.finishReason ?? null,
+        refusal: observedResult?.refusal ?? null,
+      } : {}),
     };
 
     await appendRunRecord(record);
@@ -187,7 +239,18 @@ for (const [caseIndex, routingCase] of cases.entries()) {
   }
 }
 
-console.log(JSON.stringify(buildSummary(records, cases), null, 2));
+const summary = buildSummary(records, cases);
+if (plannedRun) {
+  const sourcesUnchanged = JSON.stringify(sourceSha256) === JSON.stringify(await frozenChecksums());
+  await writeFile(new URL(`${runStem}-summary.json`, resultsDirectoryUrl), JSON.stringify({
+    ...summary, component: "router", sourcesUnchanged, sourceSha256,
+    note: "Exposed development/regression component results; not full-pipeline success. Two cases were previously held out. One call per case does not measure stability.",
+    modelName: config.model.model, modelSettings: MODEL_SETTINGS,
+    cases: records,
+  }, null, 2) + "\n", { flag: "wx" });
+  if (!sourcesUnchanged) throw new Error("Frozen inputs changed during routing evaluation");
+}
+console.log(JSON.stringify(summary, null, 2));
 console.log(`Results: ${resultsUrl.pathname}`);
 
 async function loadCases(): Promise<RoutingCase[]> {
@@ -196,6 +259,11 @@ async function loadCases(): Promise<RoutingCase[]> {
     .filter((line) => line.length > 0);
   const parsedCases = lines.map((line, index) => {
     try {
+      if (plannedRun) {
+        const item = plannedCaseSchema.parse(JSON.parse(line));
+        plannedMetadata.set(item.id, item);
+        return item;
+      }
       return routingCaseSchema.parse(JSON.parse(line));
     } catch (error) {
       throw new Error(`Invalid routing case on line ${index + 1}`, {
@@ -204,13 +272,33 @@ async function loadCases(): Promise<RoutingCase[]> {
     }
   });
 
-  if (parsedCases.length !== 20) {
-    throw new Error(`Expected 20 routing cases, found ${parsedCases.length}`);
+  const expectedCount = plannedRun ? 10 : 20;
+  if (parsedCases.length !== expectedCount) {
+    throw new Error(`Expected ${expectedCount} routing cases, found ${parsedCases.length}`);
   }
 
   const ids = new Set(parsedCases.map(({ id }) => id));
   if (ids.size !== parsedCases.length) {
     throw new Error("Routing case IDs must be unique");
+  }
+  if (plannedRun) {
+    const plan = await readFile(new URL("../../docs/evals/day-7-dataset-plan.md", import.meta.url), "utf8");
+    const plannedIds = [...plan.matchAll(/^\| (?:[1-9]|10) \| `([^`]+)`/gm)].map(match => match[1]);
+    if (JSON.stringify(plannedIds) !== JSON.stringify(parsedCases.map(item => item.id))) {
+      throw new Error("Manifest must match the ten planned routing IDs in order");
+    }
+    for (const item of plannedMetadata.values()) {
+      if (item.policyVerification.status !== "verified") {
+        throw new Error(`Unresolved routing policy for ${item.id}: ${item.policyVerification.reason}; no calls made`);
+      }
+      const source = (await readFile(new URL(`../../${item.sourceFile}`, import.meta.url), "utf8"))
+        .trim().split("\n").map(line => routingCaseSchema.parse(JSON.parse(line)))
+        .find(sourceCase => sourceCase.id === item.id);
+      if (!source || source.input !== item.input || source.expectedRoute !== item.expectedRoute || source.reason !== item.reason
+          || item.previouslyHeldOut !== item.sourceFile.includes("heldout")) {
+        throw new Error(`Frozen source mismatch for ${item.id}; no calls made`);
+      }
+    }
   }
 
   return parsedCases;
@@ -249,7 +337,7 @@ function buildSummary(records: RoutingRunRecord[], cases: RoutingCase[]) {
         {
           correct: routeCorrect,
           total: routeRecords.length,
-          accuracy: routeCorrect / routeRecords.length,
+          accuracy: routeRecords.length === 0 ? null : routeCorrect / routeRecords.length,
         },
       ];
     }),
@@ -303,7 +391,7 @@ function buildSummary(records: RoutingRunRecord[], cases: RoutingCase[]) {
       {
         caseId: routingCase.id,
         expectedRoute: routingCase.expectedRoute,
-        stable: stability?.stable ?? false,
+        stable: plannedRun ? null : stability?.stable ?? false,
         runs: caseRecords.map((record) => ({
           repetition: record.repetition,
           rawModelOutput: record.rawModelOutput,
@@ -339,12 +427,12 @@ function buildSummary(records: RoutingRunRecord[], cases: RoutingCase[]) {
       total: records.length,
       rate: invalidCount / records.length,
     },
-    stability: {
+    stability: plannedRun ? { status: "not_assessed", reason: "One invocation per case" } : {
       stableCases: stableCaseCount,
       totalCases: cases.length,
       rate: stableCaseCount / cases.length,
     },
-    stabilityByCase,
+    stabilityByCase: plannedRun ? null : stabilityByCase,
     confusionMatrix,
     failedOrUnstableCases,
     averageTokenUsage: {

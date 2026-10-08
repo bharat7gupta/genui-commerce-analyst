@@ -1,0 +1,414 @@
+{
+  "timestamp": "2026-10-07T17:34:15.917Z",
+  "datasetPath": "evals/analytics/heldout-cases-v1.jsonl",
+  "datasetSha256": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365",
+  "seedSha256": "18f4ddd475ab0274ebe904412519d049e10f3850d42ca0fca0f70a78ab52ced2",
+  "modelCalls": 0,
+  "purpose": "Held-out dataset preparation and canonical-plan verification; no held-out model evaluation performed",
+  "frozenSourceChecksums": {
+    "src/query-plan/query-plan-extraction-v3-prompt.ts": "85fc542f8c0c9098e0a16438ea598c79ac61281b1c343f02e68b65438de6a75e",
+    "src/evals/august-net-revenue-case.ts": "d49c3ef00a9f00429b0080c6f25d371d05271257d8caf8b1dae22fffd426c7c8",
+    "src/evals/supported-analytics-cases.ts": "8d73406d14c7659f42b110c34ce08b4b37227ad80a6b606afde2e4c3156fcf57",
+    "src/evals/plan-meaning-grader.ts": "1a77abea29f820b36e0a371558a341f2ef222228692aa30754958e0b3d6863e8",
+    "src/evals/scalar-numerical-grader.ts": "834147db32dec81f2f02fa197b5f2815aba85ebcd6eafdfe60398457ce41aa30",
+    "src/query-plan/query-plan.ts": "21ca9d77734bf292367846b5c9a2b0ebe026b40a0aa3f35160378da4a6cd2963",
+    "src/db/query-plan-sql-compiler.ts": "2ac710b241cc05bf7c6c9ee2f5a6a5779ad699a8de4d91c8c0743e1572e37ed4",
+    "src/db/duckdb-query-plan-executor.ts": "bd47a23a23d38ba57837cc0ef3fcb5bd1ca94c8a88d821969332d8ab381d44e2"
+  },
+  "priorSavedScopesChecked": true,
+  "liveRowsMatchSeed": true,
+  "capabilities": "Scalar net_revenue, explicit all_time or [start,end) dates, empty dimensions, zero or one region eq filter, comparison/ordering/limit/visualization strictly none. Explicit intervals limited to 366 days; executor deadline 2000 ms.",
+  "discrepancy": "Omitted ordering/limit/visualization accept none or unspecified for meaning. Compiler requires none and rejects unspecified. Canonical plans use none; this discrepancy is retained explicitly.",
+  "arithmetic": [
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "orderIds": [
+        "O003",
+        "O004",
+        "O005",
+        "O006",
+        "O007",
+        "O008",
+        "O009"
+      ],
+      "gross": "3630.00",
+      "discounts": "175.00",
+      "refunds": "300.00",
+      "net": "3155.00"
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "orderIds": [
+        "O020",
+        "O021",
+        "O022",
+        "O023",
+        "O024",
+        "O025",
+        "O026"
+      ],
+      "gross": "4960.00",
+      "discounts": "335.00",
+      "refunds": "600.00",
+      "net": "4025.00"
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "orderIds": [
+        "O011",
+        "O015",
+        "O018"
+      ],
+      "gross": "2050.00",
+      "discounts": "100.00",
+      "refunds": "0.00",
+      "net": "1950.00"
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "orderIds": [
+        "O004",
+        "O008",
+        "O012",
+        "O019",
+        "O023"
+      ],
+      "gross": "2270.00",
+      "discounts": "165.00",
+      "refunds": "250.00",
+      "net": "1855.00"
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "orderIds": [
+        "O003",
+        "O004",
+        "O005",
+        "O006",
+        "O007",
+        "O008",
+        "O009"
+      ],
+      "gross": "3630.00",
+      "discounts": "175.00",
+      "refunds": "300.00",
+      "net": "3155.00"
+    }
+  ],
+  "verification": [
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "schema": "pass",
+      "businessRules": "pass",
+      "compilation": "pass",
+      "execution": "pass",
+      "compiled": {
+        "sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nWHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE);",
+        "parameters": [
+          "2025-08-05",
+          "2025-08-18"
+        ]
+      },
+      "referenceRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "liveReferenceRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "actualRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "meaning": {
+        "pass": true,
+        "reason": "Plan matches the case's meaning requirements",
+        "mismatches": []
+      },
+      "numerical": {
+        "pass": true,
+        "reason": "net_revenue equals 3155.00 exactly"
+      }
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "schema": "pass",
+      "businessRules": "pass",
+      "compilation": "pass",
+      "execution": "pass",
+      "compiled": {
+        "sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nWHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE);",
+        "parameters": [
+          "2025-09-10",
+          "2025-09-24"
+        ]
+      },
+      "referenceRows": [
+        {
+          "net_revenue": "4025.00"
+        }
+      ],
+      "liveReferenceRows": [
+        {
+          "net_revenue": "4025.00"
+        }
+      ],
+      "actualRows": [
+        {
+          "net_revenue": "4025.00"
+        }
+      ],
+      "meaning": {
+        "pass": true,
+        "reason": "Plan matches the case's meaning requirements",
+        "mismatches": []
+      },
+      "numerical": {
+        "pass": true,
+        "reason": "net_revenue equals 4025.00 exactly"
+      }
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "schema": "pass",
+      "businessRules": "pass",
+      "compilation": "pass",
+      "execution": "pass",
+      "compiled": {
+        "sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nWHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE) AND region = ?;",
+        "parameters": [
+          "2025-08-20",
+          "2025-09-14",
+          "East"
+        ]
+      },
+      "referenceRows": [
+        {
+          "net_revenue": "1950.00"
+        }
+      ],
+      "liveReferenceRows": [
+        {
+          "net_revenue": "1950.00"
+        }
+      ],
+      "actualRows": [
+        {
+          "net_revenue": "1950.00"
+        }
+      ],
+      "meaning": {
+        "pass": true,
+        "reason": "Plan matches the case's meaning requirements",
+        "mismatches": []
+      },
+      "numerical": {
+        "pass": true,
+        "reason": "net_revenue equals 1950.00 exactly"
+      }
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "schema": "pass",
+      "businessRules": "pass",
+      "compilation": "pass",
+      "execution": "pass",
+      "compiled": {
+        "sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nWHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE) AND region = ?;",
+        "parameters": [
+          "2025-08-07",
+          "2025-09-18",
+          "West"
+        ]
+      },
+      "referenceRows": [
+        {
+          "net_revenue": "1855.00"
+        }
+      ],
+      "liveReferenceRows": [
+        {
+          "net_revenue": "1855.00"
+        }
+      ],
+      "actualRows": [
+        {
+          "net_revenue": "1855.00"
+        }
+      ],
+      "meaning": {
+        "pass": true,
+        "reason": "Plan matches the case's meaning requirements",
+        "mismatches": []
+      },
+      "numerical": {
+        "pass": true,
+        "reason": "net_revenue equals 1855.00 exactly"
+      }
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "schema": "pass",
+      "businessRules": "pass",
+      "compilation": "pass",
+      "execution": "pass",
+      "compiled": {
+        "sql": "SELECT SUM(gross_amount - discount_amount - refund_amount) AS net_revenue\nFROM orders\nWHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE);",
+        "parameters": [
+          "2025-08-05",
+          "2025-08-18"
+        ]
+      },
+      "referenceRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "liveReferenceRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "actualRows": [
+        {
+          "net_revenue": "3155.00"
+        }
+      ],
+      "meaning": {
+        "pass": true,
+        "reason": "Plan matches the case's meaning requirements",
+        "mismatches": []
+      },
+      "numerical": {
+        "pass": true,
+        "reason": "net_revenue equals 3155.00 exactly"
+      }
+    }
+  ],
+  "optionalDiscrepancies": [
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "field": "ordering",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_ORDERING"
+    },
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "field": "limit",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_LIMIT"
+    },
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "field": "visualization",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_VISUALIZATION"
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "field": "ordering",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_ORDERING"
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "field": "limit",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_LIMIT"
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "field": "visualization",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_VISUALIZATION"
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "field": "ordering",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_ORDERING"
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "field": "limit",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_LIMIT"
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "field": "visualization",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_VISUALIZATION"
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "field": "ordering",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_ORDERING"
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "field": "limit",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_LIMIT"
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "field": "visualization",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_VISUALIZATION"
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "field": "ordering",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_ORDERING"
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "field": "limit",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_LIMIT"
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "field": "visualization",
+      "representation": "unspecified",
+      "meaning": "pass",
+      "compilation": "fail",
+      "code": "UNSUPPORTED_VISUALIZATION"
+    }
+  ]
+}

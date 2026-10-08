@@ -1,0 +1,1024 @@
+{
+  "timestamp": "2026-10-07T17:23:23.652Z",
+  "label": "Real, unedited pipeline comparison; edited replays excluded",
+  "sources": {
+    "v2": "results/day-07-five-cases-2026-10-07T17-03-49-943Z-cbd59012-0742-4e24-a4e8-20dab522dcd2",
+    "v3": "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613"
+  },
+  "promptDiff": {
+    "addedSystemPromptLine": "- Interval boundaries must be date-only YYYY-MM-DD strings, never timestamps or timezone-bearing values.",
+    "otherSystemPromptChanges": false,
+    "examplesUnchanged": true
+  },
+  "configuration": {
+    "v2": {
+      "model": "qwen3.5:4b",
+      "reasoningEffort": "none",
+      "routerVersion": "router-v3",
+      "extractionPromptVersion": "query-plan-extractor-v2",
+      "routing": {
+        "temperature": 0,
+        "maxTokens": 8
+      },
+      "extraction": {
+        "temperature": 0,
+        "maxTokens": 1024
+      }
+    },
+    "v3": {
+      "model": "qwen3.5:4b",
+      "reasoningEffort": "none",
+      "routerVersion": "router-v3",
+      "extractionPromptVersion": "query-plan-extractor-v3",
+      "routing": {
+        "temperature": 0,
+        "maxTokens": 8
+      },
+      "extraction": {
+        "temperature": 0,
+        "maxTokens": 1024
+      }
+    }
+  },
+  "overall": {
+    "v2": {
+      "passed": 0,
+      "total": 5,
+      "failedRequests": 5
+    },
+    "v3": {
+      "passed": 0,
+      "total": 5,
+      "failedRequests": 5
+    }
+  },
+  "checkCounts": {
+    "v2": {
+      "routing": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "schemaValidation": {
+        "passed": 0,
+        "failed": 5,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "0/5",
+        "totalCases": 5
+      },
+      "businessRuleValidation": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "planMeaning": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "compilation": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "databaseExecution": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "numericalResult": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      }
+    },
+    "v3": {
+      "routing": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "schemaValidation": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "businessRuleValidation": {
+        "passed": 3,
+        "failed": 2,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "3/5",
+        "totalCases": 5
+      },
+      "planMeaning": {
+        "passed": 0,
+        "failed": 3,
+        "not_reached": 2,
+        "not_observable": 0,
+        "gradingDenominator": 3,
+        "passFraction": "0/3",
+        "totalCases": 5
+      },
+      "compilation": {
+        "passed": 0,
+        "failed": 3,
+        "not_reached": 2,
+        "not_observable": 0,
+        "gradingDenominator": 3,
+        "passFraction": "0/3",
+        "totalCases": 5
+      },
+      "databaseExecution": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "numericalResult": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      }
+    }
+  },
+  "cases": [
+    {
+      "caseId": "day-7-august-net-revenue-v1",
+      "checks": {
+        "routing": {
+          "v2": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          }
+        },
+        "schemaValidation": {
+          "v2": {
+            "status": "fail",
+            "reason": "Extraction envelope/QueryPlan schema validation failed"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Recorded extraction passed strict envelope and plan schemas"
+          }
+        },
+        "businessRuleValidation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No structurally valid QueryPlan available"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "QueryPlan business rules passed"
+          }
+        },
+        "planMeaning": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}; visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}",
+            "mismatches": [
+              {
+                "field": "limit",
+                "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+              },
+              {
+                "field": "visualization",
+                "reason": "visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+              }
+            ]
+          }
+        },
+        "compilation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "QueryPlanCompilationError [UNSUPPORTED_LIMIT]: This compiler slice requires an explicit limit value of none"
+          }
+        },
+        "databaseExecution": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Compilation failed before database execution"
+          }
+        },
+        "numericalResult": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          }
+        },
+        "overall": {
+          "v2": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          }
+        }
+      },
+      "newlyObservedChecks": [
+        "businessRuleValidation",
+        "planMeaning",
+        "compilation"
+      ],
+      "metadata": {
+        "v2": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 385,
+              "outputTokens": 2,
+              "totalTokens": 387
+            },
+            "latencyMs": 9791,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 665,
+              "outputTokens": 138,
+              "totalTokens": 803
+            },
+            "latencyMs": 7889,
+            "requestId": null
+          }
+        ],
+        "v3": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 385,
+              "outputTokens": 2,
+              "totalTokens": 387
+            },
+            "latencyMs": 8563,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 685,
+              "outputTokens": 118,
+              "totalTokens": 803
+            },
+            "latencyMs": 7036,
+            "requestId": null
+          }
+        ]
+      },
+      "pipelineLatencyMs": {
+        "v2": 17692,
+        "v3": 15612
+      },
+      "nonDateFieldsChanged": [],
+      "v3ValidationErrors": [],
+      "actualRows": {
+        "v2": null,
+        "v3": null
+      }
+    },
+    {
+      "caseId": "day-7-august-net-revenue-paraphrase-v1",
+      "checks": {
+        "routing": {
+          "v2": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          }
+        },
+        "schemaValidation": {
+          "v2": {
+            "status": "fail",
+            "reason": "Extraction envelope/QueryPlan schema validation failed"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Recorded extraction passed strict envelope and plan schemas"
+          }
+        },
+        "businessRuleValidation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No structurally valid QueryPlan available"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "QueryPlan business-rule validation failed"
+          }
+        },
+        "planMeaning": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          }
+        },
+        "compilation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          }
+        },
+        "databaseExecution": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          }
+        },
+        "numericalResult": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          }
+        },
+        "overall": {
+          "v2": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          }
+        }
+      },
+      "newlyObservedChecks": [
+        "businessRuleValidation"
+      ],
+      "metadata": {
+        "v2": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1356,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 654,
+              "outputTokens": 186,
+              "totalTokens": 840
+            },
+            "latencyMs": 8645,
+            "requestId": null
+          }
+        ],
+        "v3": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1401,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 674,
+              "outputTokens": 166,
+              "totalTokens": 840
+            },
+            "latencyMs": 7923,
+            "requestId": null
+          }
+        ]
+      },
+      "pipelineLatencyMs": {
+        "v2": 10005,
+        "v3": 9329
+      },
+      "nonDateFieldsChanged": [],
+      "v3ValidationErrors": [
+        {
+          "path": "filters.items",
+          "code": "CONTRADICTORY_FILTERS",
+          "message": "filters on region have no value that can satisfy all constraints"
+        }
+      ],
+      "actualRows": {
+        "v2": null,
+        "v3": null
+      }
+    },
+    {
+      "caseId": "day-7-september-net-revenue-v1",
+      "checks": {
+        "routing": {
+          "v2": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          }
+        },
+        "schemaValidation": {
+          "v2": {
+            "status": "fail",
+            "reason": "Extraction envelope/QueryPlan schema validation failed"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Recorded extraction passed strict envelope and plan schemas"
+          }
+        },
+        "businessRuleValidation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No structurally valid QueryPlan available"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "QueryPlan business-rule validation failed"
+          }
+        },
+        "planMeaning": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          }
+        },
+        "compilation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          }
+        },
+        "databaseExecution": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          }
+        },
+        "numericalResult": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          }
+        },
+        "overall": {
+          "v2": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          }
+        }
+      },
+      "newlyObservedChecks": [
+        "businessRuleValidation"
+      ],
+      "metadata": {
+        "v2": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 372,
+              "outputTokens": 2,
+              "totalTokens": 374
+            },
+            "latencyMs": 1342,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 652,
+              "outputTokens": 186,
+              "totalTokens": 838
+            },
+            "latencyMs": 8918,
+            "requestId": null
+          }
+        ],
+        "v3": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 372,
+              "outputTokens": 2,
+              "totalTokens": 374
+            },
+            "latencyMs": 1327,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 672,
+              "outputTokens": 166,
+              "totalTokens": 838
+            },
+            "latencyMs": 8077,
+            "requestId": null
+          }
+        ]
+      },
+      "pipelineLatencyMs": {
+        "v2": 10264,
+        "v3": 9407
+      },
+      "nonDateFieldsChanged": [],
+      "v3ValidationErrors": [
+        {
+          "path": "filters.items",
+          "code": "CONTRADICTORY_FILTERS",
+          "message": "filters on region have no value that can satisfy all constraints"
+        }
+      ],
+      "actualRows": {
+        "v2": null,
+        "v3": null
+      }
+    },
+    {
+      "caseId": "day-7-august-north-net-revenue-v1",
+      "checks": {
+        "routing": {
+          "v2": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          }
+        },
+        "schemaValidation": {
+          "v2": {
+            "status": "fail",
+            "reason": "Extraction envelope/QueryPlan schema validation failed"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Recorded extraction passed strict envelope and plan schemas"
+          }
+        },
+        "businessRuleValidation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No structurally valid QueryPlan available"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "QueryPlan business rules passed"
+          }
+        },
+        "planMeaning": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+            "mismatches": [
+              {
+                "field": "dimensions",
+                "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+              },
+              {
+                "field": "filters",
+                "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+              }
+            ]
+          }
+        },
+        "compilation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "QueryPlanCompilationError [UNSUPPORTED_DIMENSIONS]: This compiler slice requires explicitly specified empty dimensions"
+          }
+        },
+        "databaseExecution": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Compilation failed before database execution"
+          }
+        },
+        "numericalResult": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          }
+        },
+        "overall": {
+          "v2": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          }
+        }
+      },
+      "newlyObservedChecks": [
+        "businessRuleValidation",
+        "planMeaning",
+        "compilation"
+      ],
+      "metadata": {
+        "v2": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1339,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 654,
+              "outputTokens": 186,
+              "totalTokens": 840
+            },
+            "latencyMs": 8630,
+            "requestId": null
+          }
+        ],
+        "v3": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1345,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 674,
+              "outputTokens": 166,
+              "totalTokens": 840
+            },
+            "latencyMs": 7911,
+            "requestId": null
+          }
+        ]
+      },
+      "pipelineLatencyMs": {
+        "v2": 9980,
+        "v3": 9268
+      },
+      "nonDateFieldsChanged": [],
+      "v3ValidationErrors": [],
+      "actualRows": {
+        "v2": null,
+        "v3": null
+      }
+    },
+    {
+      "caseId": "day-7-august-south-net-revenue-v1",
+      "checks": {
+        "routing": {
+          "v2": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Expected analytics; observed analytics"
+          }
+        },
+        "schemaValidation": {
+          "v2": {
+            "status": "fail",
+            "reason": "Extraction envelope/QueryPlan schema validation failed"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "Recorded extraction passed strict envelope and plan schemas"
+          }
+        },
+        "businessRuleValidation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No structurally valid QueryPlan available"
+          },
+          "v3": {
+            "status": "pass",
+            "reason": "QueryPlan business rules passed"
+          }
+        },
+        "planMeaning": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No validated QueryPlan available to grade"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+            "mismatches": [
+              {
+                "field": "dimensions",
+                "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+              },
+              {
+                "field": "filters",
+                "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+              }
+            ]
+          }
+        },
+        "compilation": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "QueryPlanCompilationError [UNSUPPORTED_DIMENSIONS]: This compiler slice requires explicitly specified empty dimensions"
+          }
+        },
+        "databaseExecution": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "Executor was not invoked"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "Compilation failed before database execution"
+          }
+        },
+        "numericalResult": {
+          "v2": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          },
+          "v3": {
+            "status": "not_reached",
+            "reason": "No database rows returned"
+          }
+        },
+        "overall": {
+          "v2": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          },
+          "v3": {
+            "status": "fail",
+            "reason": "One or more required checks did not pass"
+          }
+        }
+      },
+      "newlyObservedChecks": [
+        "businessRuleValidation",
+        "planMeaning",
+        "compilation"
+      ],
+      "metadata": {
+        "v2": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1379,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 654,
+              "outputTokens": 173,
+              "totalTokens": 827
+            },
+            "latencyMs": 8505,
+            "requestId": null
+          }
+        ],
+        "v3": [
+          {
+            "stage": "routing",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 374,
+              "outputTokens": 2,
+              "totalTokens": 376
+            },
+            "latencyMs": 1344,
+            "requestId": null
+          },
+          {
+            "stage": "extraction",
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 674,
+              "outputTokens": 166,
+              "totalTokens": 840
+            },
+            "latencyMs": 8158,
+            "requestId": null
+          }
+        ]
+      },
+      "pipelineLatencyMs": {
+        "v2": 9889,
+        "v3": 9508
+      },
+      "nonDateFieldsChanged": [
+        {
+          "field": "filters",
+          "v2": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "South"
+              },
+              {
+                "field": "status",
+                "operator": "in",
+                "values": [
+                  "completed",
+                  "partially_refunded",
+                  "refunded"
+                ]
+              }
+            ]
+          },
+          "v3": {
+            "kind": "specified",
+            "items": [
+              {
+                "field": "region",
+                "operator": "eq",
+                "value": "South"
+              },
+              {
+                "field": "status",
+                "operator": "in",
+                "values": [
+                  "completed",
+                  "partially_refunded",
+                  "refunded"
+                ]
+              },
+              {
+                "field": "gross_amount",
+                "operator": "gte",
+                "value": 0
+              }
+            ]
+          }
+        }
+      ],
+      "v3ValidationErrors": [],
+      "actualRows": {
+        "v2": null,
+        "v3": null
+      }
+    }
+  ]
+}

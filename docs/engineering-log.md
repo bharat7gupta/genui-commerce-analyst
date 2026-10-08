@@ -452,3 +452,38 @@
   with raw invocation, chunk timestamps, protocol, executor rows, and rendered
   page in the same directory. Type checking, all 12 provider tests (including
   non-streaming regression tests), and all 15 UI tests passed.
+
+## Day 7 — Evaluation harnesses and consolidated findings
+
+- Consolidated exactly 40 cases with separate targets: 17 router, 11 extractor,
+  2 executor, and 10 full pipeline. Router matches: **14/17**; extractor outcome
+  correctness: **9/11**; interpretation meaning: **3/6**. Manual quality passed
+  for **1/1** reached clarification and **2/2** unsupported reasons; two
+  clarification assessments were not reached after wrong outcomes.
+- The date-only extractor-v3 instruction raised development schema success from
+  **0/5 to 5/5**, but full-pipeline success stayed **0/5**. The five former
+  held-out pipeline cases also scored **0/5**. Edited replays are diagnostics,
+  not successful requests. Downstream v3 checks were newly observed, not
+  automatically improved.
+- Failure classes included routing overrides, invented gross-revenue defaults,
+  added grouping/filters, contradictory region filters, and omitted limits.
+  Schema/business validity did not establish meaning. Compiler restrictions
+  remained separate: only a narrow scalar-net slice executes, and omitted
+  operations accepted as `unspecified` by some expectations require `none`
+  for compilation. None of the ten pipeline runs produced database rows;
+  numerical grades were `not_reached`, not numerical failures.
+- Both fresh model-free executor cases passed (**2/2**): boundary sum `1100.00`
+  and one SQL NULL row for no matches. References used independent seed
+  arithmetic and handwritten SQL; all 30 live rows matched the seed. Monetary
+  grading used exact decimals without tolerance; NULL remained distinct from zero.
+- Results are small, single-run, related-case evidence, with no user-facing
+  rendering evaluation. Former held-out cases and both reserved candidates are
+  now exposed. Component passes do not establish pipeline reliability or
+  production readiness. Original artifacts remain unchanged; the ten matching
+  v3 pipeline runs were reused, with provenance verified.
+- Next priorities: decide omitted-operation semantics; address scope/default and
+  clarification errors in a new development cycle; improve routing-override
+  coverage; add end-to-end numerical/UI coverage and a genuinely unseen test set.
+  No fixes were implemented during consolidation. See the
+  [40-case report](evals/day-7-final-report.md) for inventory, denominators, and
+  saved evidence.

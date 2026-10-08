@@ -1,0 +1,448 @@
+{
+  "kind": "offline_supplementary_extraction_outcome_grading",
+  "timestamp": "2026-10-08T04:14:25.857Z",
+  "note": "Unedited captured outputs. Original plan checks copied unchanged; no original overall verdict recalculated. Envelope schema includes query-plan structure on its query_plan branch; business validation is separate.",
+  "heldoutDatasetSha256": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365",
+  "sourceSha256": {
+    "evals/analytics/extraction-outcomes-v1.json": "d6fb3405db150c64396c52ae90b11677026c31e8150b2a18c1584f0c1528a91b",
+    "evals/analytics/heldout-cases-v1.jsonl": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/summary.json": "9256c0054d56af78c89849ab6fb2d38c98f1801509f6771feafecb707c0643dc",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-net-revenue-v1/calls.jsonl": "7df8996fa82c0d362bd0f79e978810292886865760641f45c8e5d173ee263482",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-net-revenue-v1/result.json": "add2f1db7dcc2598d7dcbf6b95ca63e662204f832ff9deab8879cbd3a55761d0",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-net-revenue-paraphrase-v1/calls.jsonl": "3adabe464f7a9c1422071a09619c631703d88a0a09b43e8078459e133937c860",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-net-revenue-paraphrase-v1/result.json": "25c22456469c4a08d2dc7925add342dde2daefb63f55c6d5414eb6ca5a7952e1",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-september-net-revenue-v1/calls.jsonl": "aa904e63d2ca6c2fa21912fe002e5e51f120cf4d6f483da2202b98e1a352f435",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-september-net-revenue-v1/result.json": "317e487fdc04e0a29923b8f4fe7afd819a6d3239b9974f4587804450afbd407e",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-north-net-revenue-v1/calls.jsonl": "0f28d6b50b6340e239a975cf98ca1eaef80e5f869dd7105e73eeb0f29783a9b9",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-north-net-revenue-v1/result.json": "bc85caa9afafa29c627c23a758641a23c4409f62a793c81b697fb8fe005ed359",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-south-net-revenue-v1/calls.jsonl": "2b76a06fe818b5cf8882659f242839310ab2f6aedfe759aee5b2308933558082",
+    "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613/day-7-august-south-net-revenue-v1/result.json": "f0f826fe5073245506a73599e53379de94d8e20c34f814876a32bca95097d2de",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/summary.json": "f07fdfc39d7fb58492f787cee4e949edccfd4035a14c8b0517baf40b216d46fd",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-interval-01-v1/calls.jsonl": "6ad83d51cddc46327b6ef3c5ed447d1d7f2f472b6ed17bb85af939098f4e982f",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-interval-01-v1/result.json": "6d574aa2af68b91d06fc0d2617ed3e5bf9f3220598981b7bda1d5fff63fe55ed",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-interval-02-v1/calls.jsonl": "2f799c0741baf27da3ed0b0aabb4514dfc81efd78089d705e09ac69a86dc772e",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-interval-02-v1/result.json": "856f96b9b51f89793aa6841b26d184cabfbb93add112a6b1d498ba135bd6edca",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-east-01-v1/calls.jsonl": "6edc3cb3339087e16f43667fcdf721b49aa4d8699b63e192668621c3637c5b35",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-east-01-v1/result.json": "e4300e60805c98538b5c42fa375db5433077bc83e2871bd0bc5d2f7419d793f9",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-west-01-v1/calls.jsonl": "fd57b640284d15edec44cf871e421340e9d82235b4318ec1f99662c7dfb8e754",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-west-01-v1/result.json": "3b7e84f38632e2e49f6e1eeedd91938e1b4518df641e30f955fc264b784304e7",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-paraphrase-01-v1/calls.jsonl": "d93dd148589cbca4d410ce298560c4fbbfd6c657edd1cbd1ad20aec920010a15",
+    "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d/day-7-heldout-paraphrase-01-v1/result.json": "4b99f29d95e65ef4357ee736be26b20d9138cb099b979a73892e54717427a7ce"
+  },
+  "datasets": [
+    {
+      "split": "development",
+      "source": "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613",
+      "originalOverall": {
+        "passed": 0,
+        "total": 5,
+        "failedRequests": 5
+      },
+      "counts": {
+        "envelopeValidity": {
+          "passed": 5,
+          "failed": 0,
+          "not_reached": 0,
+          "not_observable": 0,
+          "gradingDenominator": 5,
+          "totalCases": 5,
+          "ungraded": []
+        },
+        "outcomeCorrectness": {
+          "passed": 5,
+          "failed": 0,
+          "not_reached": 0,
+          "not_observable": 0,
+          "gradingDenominator": 5,
+          "totalCases": 5,
+          "ungraded": []
+        }
+      },
+      "cases": [
+        {
+          "caseId": "day-7-august-net-revenue-v1",
+          "split": "development",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}; visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}",
+              "mismatches": [
+                {
+                  "field": "limit",
+                  "reason": "limit: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+                },
+                {
+                  "field": "visualization",
+                  "reason": "visualization: expected absent operation kind none; received {\"kind\":\"unspecified\"}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-august-net-revenue-paraphrase-v1",
+          "split": "development",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "fail",
+              "reason": "QueryPlan business-rule validation failed"
+            },
+            "planMeaning": {
+              "status": "not_reached",
+              "reason": "No validated QueryPlan available to grade"
+            }
+          }
+        },
+        {
+          "caseId": "day-7-september-net-revenue-v1",
+          "split": "development",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "fail",
+              "reason": "QueryPlan business-rule validation failed"
+            },
+            "planMeaning": {
+              "status": "not_reached",
+              "reason": "No validated QueryPlan available to grade"
+            }
+          }
+        },
+        {
+          "caseId": "day-7-august-north-net-revenue-v1",
+          "split": "development",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+              "mismatches": [
+                {
+                  "field": "dimensions",
+                  "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+                },
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-august-south-net-revenue-v1",
+          "split": "development",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+              "mismatches": [
+                {
+                  "field": "dimensions",
+                  "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+                },
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"South\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "split": "held_out",
+      "source": "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d",
+      "originalOverall": {
+        "passed": 0,
+        "total": 5,
+        "failedRequests": 5
+      },
+      "counts": {
+        "envelopeValidity": {
+          "passed": 5,
+          "failed": 0,
+          "not_reached": 0,
+          "not_observable": 0,
+          "gradingDenominator": 5,
+          "totalCases": 5,
+          "ungraded": []
+        },
+        "outcomeCorrectness": {
+          "passed": 4,
+          "failed": 1,
+          "not_reached": 0,
+          "not_observable": 0,
+          "gradingDenominator": 5,
+          "totalCases": 5,
+          "ungraded": []
+        }
+      },
+      "cases": [
+        {
+          "caseId": "day-7-heldout-interval-01-v1",
+          "split": "held_out",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"order_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"customer_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"gross_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"eq\",\"value\":0}]}",
+              "mismatches": [
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"order_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"customer_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"gross_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"eq\",\"value\":0}]}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-heldout-interval-02-v1",
+          "split": "held_out",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"category\",\"operator\":\"eq\",\"value\":\"Electronics\"}]}",
+              "mismatches": [
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"category\",\"operator\":\"eq\",\"value\":\"Electronics\"}]}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-heldout-east-01-v1",
+          "split": "held_out",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+              "mismatches": [
+                {
+                  "field": "dimensions",
+                  "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+                },
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-heldout-west-01-v1",
+          "split": "held_out",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "query_plan",
+          "extractionReason": null,
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "pass",
+            "reason": "Expected extraction outcome query_plan; observed query_plan"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "pass",
+              "reason": "Recorded extraction passed strict envelope and plan schemas"
+            },
+            "businessRuleValidation": {
+              "status": "pass",
+              "reason": "QueryPlan business rules passed"
+            },
+            "planMeaning": {
+              "status": "fail",
+              "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"gte\",\"value\":0}]}",
+              "mismatches": [
+                {
+                  "field": "dimensions",
+                  "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+                },
+                {
+                  "field": "filters",
+                  "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"gte\",\"value\":0}]}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "caseId": "day-7-heldout-paraphrase-01-v1",
+          "split": "held_out",
+          "expectedOutcome": "query_plan",
+          "observedOutcome": "clarification_required",
+          "extractionReason": "The requested date range includes the start date but excludes the end date, which contradicts standard interval notation [start, end). Clarify whether the range should be inclusive of both dates or if the current specification is intentional.",
+          "envelopeValidity": {
+            "status": "pass",
+            "reason": "Existing strict extraction envelope schema passed"
+          },
+          "outcomeCorrectness": {
+            "status": "fail",
+            "reason": "Expected extraction outcome query_plan; observed clarification_required"
+          },
+          "originalPlanChecks": {
+            "schemaValidation": {
+              "status": "not_reached",
+              "reason": "Extraction returned clarification_required: The requested date range includes the start date but excludes the end date, which contradicts standard interval notation [start, end). Clarify whether the range should be inclusive of both dates or if the current specification is intentional."
+            },
+            "businessRuleValidation": {
+              "status": "not_reached",
+              "reason": "No structurally valid QueryPlan available"
+            },
+            "planMeaning": {
+              "status": "not_reached",
+              "reason": "No validated QueryPlan available to grade"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

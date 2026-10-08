@@ -1,0 +1,56 @@
+{
+  "version": "day-7-extraction-outcomes-v1",
+  "heldoutDatasetSha256": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365",
+  "expectations": [
+    {
+      "caseId": "day-7-august-net-revenue-v1",
+      "split": "development",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-august-net-revenue-paraphrase-v1",
+      "split": "development",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-september-net-revenue-v1",
+      "split": "development",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-august-north-net-revenue-v1",
+      "split": "development",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-august-south-net-revenue-v1",
+      "split": "development",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "split": "held_out",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "split": "held_out",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "split": "held_out",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "split": "held_out",
+      "expectedOutcome": "query_plan"
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "split": "held_out",
+      "expectedOutcome": "query_plan"
+    }
+  ]
+}

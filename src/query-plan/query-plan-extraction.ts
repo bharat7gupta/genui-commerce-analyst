@@ -21,10 +21,15 @@ import {
   QUERY_PLAN_EXTRACTION_V2_PROMPT_VERSION,
   type QueryPlanExtractionExample,
 } from "./query-plan-extraction-v2-prompt.js";
+import {
+  QUERY_PLAN_EXTRACTION_V3_PROMPT_PACKAGE,
+  QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION,
+} from "./query-plan-extraction-v3-prompt.js";
 
 export type QueryPlanExtractionPromptVersion =
   | typeof QUERY_PLAN_EXTRACTION_V1_PROMPT_VERSION
-  | typeof QUERY_PLAN_EXTRACTION_V2_PROMPT_VERSION;
+  | typeof QUERY_PLAN_EXTRACTION_V2_PROMPT_VERSION
+  | typeof QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION;
 
 const NO_EXAMPLES: readonly QueryPlanExtractionExample[] = Object.freeze([]);
 const QUERY_PLAN_EXTRACTION_PROMPT_PACKAGES = Object.freeze({
@@ -35,6 +40,8 @@ const QUERY_PLAN_EXTRACTION_PROMPT_PACKAGES = Object.freeze({
   }),
   [QUERY_PLAN_EXTRACTION_V2_PROMPT_VERSION]:
     QUERY_PLAN_EXTRACTION_V2_PROMPT_PACKAGE,
+  [QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION]:
+    QUERY_PLAN_EXTRACTION_V3_PROMPT_PACKAGE,
 });
 
 export const QUERY_PLAN_OUTPUT_SCHEMA_VERSION =

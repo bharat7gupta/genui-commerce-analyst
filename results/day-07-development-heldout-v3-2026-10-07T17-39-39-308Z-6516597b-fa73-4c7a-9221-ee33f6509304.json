@@ -1,0 +1,570 @@
+{
+  "timestamp": "2026-10-07T17:39:39.308Z",
+  "label": "Performance on different datasets with the same frozen extractor-v3; not a measured prompt improvement or regression",
+  "sources": {
+    "development": "results/day-07-five-cases-query-plan-extractor-v3-2026-10-07T17-21-47-825Z-8c8aac1b-68b9-4469-a2c5-8a8bfa0bf613",
+    "held_out": "results/day-07-five-cases-held_out-query-plan-extractor-v3-2026-10-07T17-37-48-897Z-c434a973-dbc1-4b00-b41e-32924180bb4d"
+  },
+  "configuration": {
+    "model": "qwen3.5:4b",
+    "reasoningEffort": "none",
+    "routerVersion": "router-v3",
+    "extractionPromptVersion": "query-plan-extractor-v3",
+    "routing": {
+      "temperature": 0,
+      "maxTokens": 8
+    },
+    "extraction": {
+      "temperature": 0,
+      "maxTokens": 1024
+    }
+  },
+  "datasetSha256": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365",
+  "preflight": {
+    "status": "pass",
+    "seedSha256": "18f4ddd475ab0274ebe904412519d049e10f3850d42ca0fca0f70a78ab52ced2",
+    "relevantInterval": "[2025-08-01, 2025-10-01)",
+    "matchedRowCount": 30,
+    "comparison": "All columns, ordered by order_id",
+    "rowsSha256": "c2d4c4b3284c45e3a3e9b580e69da1698edbb0bd084b747520d592e408172abf",
+    "references": [
+      {
+        "caseId": "day-7-heldout-interval-01-v1",
+        "rows": [
+          {
+            "net_revenue": "3155.00"
+          }
+        ]
+      },
+      {
+        "caseId": "day-7-heldout-interval-02-v1",
+        "rows": [
+          {
+            "net_revenue": "4025.00"
+          }
+        ]
+      },
+      {
+        "caseId": "day-7-heldout-east-01-v1",
+        "rows": [
+          {
+            "net_revenue": "1950.00"
+          }
+        ]
+      },
+      {
+        "caseId": "day-7-heldout-west-01-v1",
+        "rows": [
+          {
+            "net_revenue": "1855.00"
+          }
+        ]
+      },
+      {
+        "caseId": "day-7-heldout-paraphrase-01-v1",
+        "rows": [
+          {
+            "net_revenue": "3155.00"
+          }
+        ]
+      }
+    ],
+    "split": "held_out",
+    "datasetSha256": "c4929a7c3140879ebd643dfe682eaa5a59880fce74d55395cb347a2f7e373365"
+  },
+  "overall": {
+    "development": {
+      "passed": 0,
+      "total": 5,
+      "failedRequests": 5
+    },
+    "held_out": {
+      "passed": 0,
+      "total": 5,
+      "failedRequests": 5
+    }
+  },
+  "checkCounts": {
+    "development": {
+      "routing": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "schemaValidation": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "businessRuleValidation": {
+        "passed": 3,
+        "failed": 2,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "3/5",
+        "totalCases": 5
+      },
+      "planMeaning": {
+        "passed": 0,
+        "failed": 3,
+        "not_reached": 2,
+        "not_observable": 0,
+        "gradingDenominator": 3,
+        "passFraction": "0/3",
+        "totalCases": 5
+      },
+      "compilation": {
+        "passed": 0,
+        "failed": 3,
+        "not_reached": 2,
+        "not_observable": 0,
+        "gradingDenominator": 3,
+        "passFraction": "0/3",
+        "totalCases": 5
+      },
+      "databaseExecution": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "numericalResult": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      }
+    },
+    "held_out": {
+      "routing": {
+        "passed": 5,
+        "failed": 0,
+        "not_reached": 0,
+        "not_observable": 0,
+        "gradingDenominator": 5,
+        "passFraction": "5/5",
+        "totalCases": 5
+      },
+      "schemaValidation": {
+        "passed": 4,
+        "failed": 0,
+        "not_reached": 1,
+        "not_observable": 0,
+        "gradingDenominator": 4,
+        "passFraction": "4/4",
+        "totalCases": 5
+      },
+      "businessRuleValidation": {
+        "passed": 4,
+        "failed": 0,
+        "not_reached": 1,
+        "not_observable": 0,
+        "gradingDenominator": 4,
+        "passFraction": "4/4",
+        "totalCases": 5
+      },
+      "planMeaning": {
+        "passed": 0,
+        "failed": 4,
+        "not_reached": 1,
+        "not_observable": 0,
+        "gradingDenominator": 4,
+        "passFraction": "0/4",
+        "totalCases": 5
+      },
+      "compilation": {
+        "passed": 0,
+        "failed": 4,
+        "not_reached": 1,
+        "not_observable": 0,
+        "gradingDenominator": 4,
+        "passFraction": "0/4",
+        "totalCases": 5
+      },
+      "databaseExecution": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      },
+      "numericalResult": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 5,
+        "not_observable": 0,
+        "gradingDenominator": 0,
+        "passFraction": "0/0",
+        "totalCases": 5
+      }
+    }
+  },
+  "metadata": {
+    "development": {
+      "routing": {
+        "calls": 5,
+        "totalLatencyMs": 13980,
+        "inputTokens": 1879,
+        "outputTokens": 10
+      },
+      "extraction": {
+        "calls": 5,
+        "totalLatencyMs": 39105,
+        "inputTokens": 3379,
+        "outputTokens": 782
+      }
+    },
+    "held_out": {
+      "routing": {
+        "calls": 5,
+        "totalLatencyMs": 14105,
+        "inputTokens": 1873,
+        "outputTokens": 10
+      },
+      "extraction": {
+        "calls": 5,
+        "totalLatencyMs": 35316,
+        "inputTokens": 3373,
+        "outputTokens": 728
+      }
+    }
+  },
+  "cases": [
+    {
+      "caseId": "day-7-heldout-interval-01-v1",
+      "interpretation": {
+        "status": "fail",
+        "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"order_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"customer_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"gross_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"eq\",\"value\":0}]}",
+        "mismatches": [
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"order_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"customer_id\",\"operator\":\"eq\",\"value\":\"unspecified\"},{\"field\":\"gross_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"eq\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"eq\",\"value\":0}]}"
+          }
+        ]
+      },
+      "extractionOutcome": "query_plan",
+      "extractionReason": "Recorded extraction passed strict envelope and plan schemas",
+      "compilerRestriction": {
+        "status": "fail",
+        "reason": "QueryPlanCompilationError [UNSUPPORTED_LIMIT]: This compiler slice requires an explicit limit value of none"
+      },
+      "execution": {
+        "status": "not_reached",
+        "reason": "Compilation failed before database execution"
+      },
+      "numerical": {
+        "status": "not_reached",
+        "reason": "No database rows returned"
+      },
+      "overall": {
+        "status": "fail",
+        "reason": "One or more required checks did not pass"
+      },
+      "actualRows": null,
+      "pipelineLatencyMs": 17650,
+      "providerMetadata": [
+        {
+          "stage": "routing",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 372,
+              "outputTokens": 2,
+              "totalTokens": 374
+            },
+            "latencyMs": 8746,
+            "requestId": null
+          },
+          "error": null
+        },
+        {
+          "stage": "extraction",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 672,
+              "outputTokens": 185,
+              "totalTokens": 857
+            },
+            "latencyMs": 8888,
+            "requestId": null
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "caseId": "day-7-heldout-interval-02-v1",
+      "interpretation": {
+        "status": "fail",
+        "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"category\",\"operator\":\"eq\",\"value\":\"Electronics\"}]}",
+        "mismatches": [
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"North\"},{\"field\":\"category\",\"operator\":\"eq\",\"value\":\"Electronics\"}]}"
+          }
+        ]
+      },
+      "extractionOutcome": "query_plan",
+      "extractionReason": "Recorded extraction passed strict envelope and plan schemas",
+      "compilerRestriction": {
+        "status": "fail",
+        "reason": "QueryPlanCompilationError [UNSUPPORTED_LIMIT]: This compiler slice requires an explicit limit value of none"
+      },
+      "execution": {
+        "status": "not_reached",
+        "reason": "Compilation failed before database execution"
+      },
+      "numerical": {
+        "status": "not_reached",
+        "reason": "No database rows returned"
+      },
+      "overall": {
+        "status": "fail",
+        "reason": "One or more required checks did not pass"
+      },
+      "actualRows": null,
+      "pipelineLatencyMs": 8205,
+      "providerMetadata": [
+        {
+          "stage": "routing",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 375,
+              "outputTokens": 2,
+              "totalTokens": 377
+            },
+            "latencyMs": 1340,
+            "requestId": null
+          },
+          "error": null
+        },
+        {
+          "stage": "extraction",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 675,
+              "outputTokens": 143,
+              "totalTokens": 818
+            },
+            "latencyMs": 6861,
+            "requestId": null
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "caseId": "day-7-heldout-east-01-v1",
+      "interpretation": {
+        "status": "fail",
+        "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}",
+        "mismatches": [
+          {
+            "field": "dimensions",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+          },
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"East\"},{\"field\":\"status\",\"operator\":\"in\",\"values\":[\"completed\",\"partially_refunded\",\"refunded\"]},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0}]}"
+          }
+        ]
+      },
+      "extractionOutcome": "query_plan",
+      "extractionReason": "Recorded extraction passed strict envelope and plan schemas",
+      "compilerRestriction": {
+        "status": "fail",
+        "reason": "QueryPlanCompilationError [UNSUPPORTED_DIMENSIONS]: This compiler slice requires explicitly specified empty dimensions"
+      },
+      "execution": {
+        "status": "not_reached",
+        "reason": "Compilation failed before database execution"
+      },
+      "numerical": {
+        "status": "not_reached",
+        "reason": "No database rows returned"
+      },
+      "overall": {
+        "status": "fail",
+        "reason": "One or more required checks did not pass"
+      },
+      "actualRows": null,
+      "pipelineLatencyMs": 9146,
+      "providerMetadata": [
+        {
+          "stage": "routing",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 379,
+              "outputTokens": 2,
+              "totalTokens": 381
+            },
+            "latencyMs": 1323,
+            "requestId": null
+          },
+          "error": null
+        },
+        {
+          "stage": "extraction",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 679,
+              "outputTokens": 166,
+              "totalTokens": 845
+            },
+            "latencyMs": 7819,
+            "requestId": null
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "caseId": "day-7-heldout-west-01-v1",
+      "interpretation": {
+        "status": "fail",
+        "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}; filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"gte\",\"value\":0}]}",
+        "mismatches": [
+          {
+            "field": "dimensions",
+            "reason": "dimensions: expected {\"kind\":\"specified\",\"values\":[]}; received {\"kind\":\"specified\",\"values\":[\"region\"]}"
+          },
+          {
+            "field": "filters",
+            "reason": "filters: expected {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"}]}; received {\"kind\":\"specified\",\"items\":[{\"field\":\"region\",\"operator\":\"eq\",\"value\":\"West\"},{\"field\":\"gross_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"discount_amount\",\"operator\":\"gte\",\"value\":0},{\"field\":\"refund_amount\",\"operator\":\"gte\",\"value\":0}]}"
+          }
+        ]
+      },
+      "extractionOutcome": "query_plan",
+      "extractionReason": "Recorded extraction passed strict envelope and plan schemas",
+      "compilerRestriction": {
+        "status": "fail",
+        "reason": "QueryPlanCompilationError [UNSUPPORTED_DIMENSIONS]: This compiler slice requires explicitly specified empty dimensions"
+      },
+      "execution": {
+        "status": "not_reached",
+        "reason": "Compilation failed before database execution"
+      },
+      "numerical": {
+        "status": "not_reached",
+        "reason": "No database rows returned"
+      },
+      "overall": {
+        "status": "fail",
+        "reason": "One or more required checks did not pass"
+      },
+      "actualRows": null,
+      "pipelineLatencyMs": 9132,
+      "providerMetadata": [
+        {
+          "stage": "routing",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 371,
+              "outputTokens": 2,
+              "totalTokens": 373
+            },
+            "latencyMs": 1350,
+            "requestId": null
+          },
+          "error": null
+        },
+        {
+          "stage": "extraction",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 671,
+              "outputTokens": 170,
+              "totalTokens": 841
+            },
+            "latencyMs": 7778,
+            "requestId": null
+          },
+          "error": null
+        }
+      ]
+    },
+    {
+      "caseId": "day-7-heldout-paraphrase-01-v1",
+      "interpretation": {
+        "status": "not_reached",
+        "reason": "No validated QueryPlan available to grade"
+      },
+      "extractionOutcome": "clarification_required",
+      "extractionReason": "Extraction returned clarification_required: The requested date range includes the start date but excludes the end date, which contradicts standard interval notation [start, end). Clarify whether the range should be inclusive of both dates or if the current specification is intentional.",
+      "compilerRestriction": {
+        "status": "not_reached",
+        "reason": "Executor was not invoked"
+      },
+      "execution": {
+        "status": "not_reached",
+        "reason": "Executor was not invoked"
+      },
+      "numerical": {
+        "status": "not_reached",
+        "reason": "No database rows returned"
+      },
+      "overall": {
+        "status": "fail",
+        "reason": "One or more required checks did not pass"
+      },
+      "actualRows": null,
+      "pipelineLatencyMs": 5321,
+      "providerMetadata": [
+        {
+          "stage": "routing",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 376,
+              "outputTokens": 2,
+              "totalTokens": 378
+            },
+            "latencyMs": 1346,
+            "requestId": null
+          },
+          "error": null
+        },
+        {
+          "stage": "extraction",
+          "metadata": {
+            "model": "qwen3.5:4b",
+            "tokenUsage": {
+              "inputTokens": 676,
+              "outputTokens": 64,
+              "totalTokens": 740
+            },
+            "latencyMs": 3970,
+            "requestId": null
+          },
+          "error": null
+        }
+      ]
+    }
+  ],
+  "limitations": "No live SQL query was reached. The four plan interpretations failed case meaning and compilation independently. First two compiler errors were UNSUPPORTED_LIMIT; region cases were UNSUPPORTED_DIMENSIONS. The paraphrase claimed [start,end) boundaries were contradictory and returned clarification_required. Validated clarification envelope does not contain a QueryPlan; plan schema/business/meaning checks were not_reached.",
+  "datasetStatus": "Evaluated once and now exposed; preserve as an audit/regression set, not an unseen final test for subsequent prompt tuning."
+}

@@ -16,6 +16,11 @@ import {
   QUERY_PLAN_EXTRACTION_V2_SYSTEM_PROMPT,
 } from "./query-plan-extraction-v2-prompt.js";
 import {
+  QUERY_PLAN_EXTRACTION_V3_EXAMPLES,
+  QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION,
+  QUERY_PLAN_EXTRACTION_V3_SYSTEM_PROMPT,
+} from "./query-plan-extraction-v3-prompt.js";
+import {
   BUSINESS_RULE_INVALID_QUERY_PLAN_OUTPUT,
   MALFORMED_QUERY_PLAN_OUTPUT,
   STRUCTURALLY_INVALID_QUERY_PLAN_OUTPUT,
@@ -81,6 +86,33 @@ test("selects extraction-v2 with exactly two examples", async () => {
   assert.deepEqual(request.messages.at(-1), {
     role: "user",
     content: "A fresh scalar question",
+  });
+});
+
+test("v3 adds only the date instruction and preserves roles, schema, and settings", async () => {
+  const instruction = "- Interval boundaries must be date-only YYYY-MM-DD strings, never timestamps or timezone-bearing values.\n";
+  assert.equal(QUERY_PLAN_EXTRACTION_V3_SYSTEM_PROMPT,
+    QUERY_PLAN_EXTRACTION_V2_SYSTEM_PROMPT.replace("- Use comparison none", `${instruction}- Use comparison none`));
+  assert.deepEqual(QUERY_PLAN_EXTRACTION_V3_EXAMPLES, QUERY_PLAN_EXTRACTION_V2_EXAMPLES);
+  const requests: ModelRequest[] = [];
+  const result = await extractQueryPlan(
+    createFakeProvider(VALID_QUERY_PLAN_OUTPUT, (request) => { requests.push(request); }),
+    "A fresh scalar question",
+    QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION,
+  );
+  assert.equal(result.outcome, "query_plan");
+  assert.equal(result.promptVersion, QUERY_PLAN_EXTRACTION_V3_PROMPT_VERSION);
+  const request = requests[0];
+  assert.ok(request);
+  assert.deepEqual(request.messages, [
+    { role: "system", content: QUERY_PLAN_EXTRACTION_V3_SYSTEM_PROMPT },
+    ...QUERY_PLAN_EXTRACTION_V2_EXAMPLES.flatMap(({ user, assistant }) => [user, assistant]),
+    { role: "user", content: "A fresh scalar question" },
+  ]);
+  assert.equal(request.temperature, 0);
+  assert.equal(request.maxTokens, 1024);
+  assert.deepEqual(request.responseFormat, {
+    type: "json_schema", name: "query_plan_output_v1", schema: queryPlanOutputJsonSchema, strict: true,
   });
 });
 
