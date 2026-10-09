@@ -29,6 +29,7 @@
     "experiment:day-7-supported-cases": "node --import tsx src/experiments/day-07-one-case-evaluation.ts",
     "experiment:day-7-supported-cases-v3": "node --import tsx src/experiments/day-07-one-case-evaluation.ts query-plan-extractor-v3",
     "experiment:day-7-heldout-cases-v3": "node --import tsx src/experiments/day-07-one-case-evaluation.ts query-plan-extractor-v3 held_out",
+    "experiment:keyword-retrieval": "node --import tsx src/experiments/day-08-keyword-retrieval.ts",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
     "query-plan:extract": "tsx src/query-plan/query-plan-cli.ts",
     "tool:metric-definition": "tsx src/application/metric-definition-tool-workflow-cli.ts",
