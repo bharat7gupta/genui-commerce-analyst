@@ -1,0 +1,620 @@
+{
+  "experiment": "day-08-retrieval-development-evaluation-v1",
+  "labelStatus": "draft_for_human_review",
+  "corpusSize": 32,
+  "queryCount": 8,
+  "embeddingModel": "all-minilm:latest",
+  "embeddingDimension": 384,
+  "bm25Parameters": {
+    "k1": 1.2,
+    "b": 0.75
+  },
+  "topK": 3,
+  "summary": {
+    "overall": {
+      "keyword": {
+        "hitAt1": 0.75,
+        "hitAt3": 0.875,
+        "recallAt3": 0.539583
+      },
+      "bm25": {
+        "hitAt1": 0.5,
+        "hitAt3": 0.875,
+        "recallAt3": 0.570833
+      },
+      "embedding": {
+        "hitAt1": 1,
+        "hitAt3": 1,
+        "recallAt3": 0.633333
+      }
+    },
+    "direct": {
+      "keyword": {
+        "hitAt1": 0.75,
+        "hitAt3": 1,
+        "recallAt3": 0.641667
+      },
+      "bm25": {
+        "hitAt1": 0.5,
+        "hitAt3": 1,
+        "recallAt3": 0.641667
+      },
+      "embedding": {
+        "hitAt1": 1,
+        "hitAt3": 1,
+        "recallAt3": 0.641667
+      }
+    },
+    "paraphrase": {
+      "keyword": {
+        "hitAt1": 0.75,
+        "hitAt3": 0.75,
+        "recallAt3": 0.4375
+      },
+      "bm25": {
+        "hitAt1": 0.5,
+        "hitAt3": 0.75,
+        "recallAt3": 0.5
+      },
+      "embedding": {
+        "hitAt1": 1,
+        "hitAt3": 1,
+        "recallAt3": 0.625
+      }
+    }
+  },
+  "queries": [
+    {
+      "id": "retrieval-dev-direct-01",
+      "group": "direct",
+      "query": "How is total gross revenue calculated, and are refunded orders included unless I filter by status?",
+      "relevantDocumentIds": [
+        "demo-commerce-gross-revenue",
+        "demo-commerce-metric-gross-vs-net-revenue",
+        "demo-commerce-metric-status-inclusion",
+        "demo-commerce-metric-discounts-and-revenue",
+        "demo-commerce-metric-fully-refunded-orders"
+      ],
+      "rationale": "The gross-revenue definition supplies the calculation and its default status scope. The comparison and status-inclusion documents clarify that refunded orders are not removed without a filter. The new discount document restates the gross calculation and all-status rule, while the fully-refunded-order document directly explains how those orders still contribute to gross revenue.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-gross-revenue",
+          "excerpt": "Its implemented metric name is `total_gross_revenue`, and its calculation is `SUM(gross_amount)`."
+        },
+        {
+          "document_id": "demo-commerce-metric-gross-vs-net-revenue",
+          "excerpt": "Neither metric excludes refunded or partially refunded orders automatically;"
+        },
+        {
+          "document_id": "demo-commerce-metric-status-inclusion",
+          "excerpt": "A status is excluded only when an explicit supported status filter requests that restriction."
+        },
+        {
+          "document_id": "demo-commerce-metric-discounts-and-revenue",
+          "excerpt": "Discounts affect net revenue but not total gross revenue. Gross revenue sums `gross_amount`."
+        },
+        {
+          "document_id": "demo-commerce-metric-fully-refunded-orders",
+          "excerpt": "A fully refunded order is not automatically removed from revenue calculations. Its gross amount still contributes to total gross revenue"
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-metric-refunds-affect-net-revenue",
+            "demo-commerce-gross-revenue",
+            "demo-commerce-metric-gross-vs-net-revenue"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 1,
+          "recallAt3": 0.4
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-metric-refunds-affect-net-revenue",
+            "demo-commerce-gross-revenue",
+            "demo-commerce-metric-status-inclusion"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 1,
+          "recallAt3": 0.4
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-metric-status-inclusion",
+            "demo-commerce-metric-refunds-affect-net-revenue",
+            "demo-commerce-metric-gross-vs-net-revenue"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.4
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-direct-02",
+      "group": "direct",
+      "query": "Which values can the order status field contain, and what refund_amount relationship does each status require?",
+      "relevantDocumentIds": [
+        "demo-commerce-field-order-status",
+        "demo-commerce-refunds"
+      ],
+      "rationale": "The field document defines the complete status allowlist and the database constraint for each value. The refunds document also directly describes how zero, partial, and full post-discount refunds correspond to those statuses.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-field-order-status",
+          "excerpt": "The required `status` field allows `completed`, `partially_refunded`, or `refunded`."
+        },
+        {
+          "document_id": "demo-commerce-refunds",
+          "excerpt": "completed orders have zero refunds, partially refunded orders have a positive refund smaller than their post-discount amount"
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-field-order-status",
+            "demo-commerce-field-refund-granularity",
+            "demo-commerce-faq-refund-completion-data"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-field-order-date",
+            "demo-commerce-field-currency-tax-shipping",
+            "demo-commerce-field-order-status"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-field-order-status",
+            "demo-commerce-metric-status-inclusion",
+            "demo-commerce-field-refund-granularity"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-direct-03",
+      "group": "direct",
+      "query": "Under the demo refund eligibility policy, how many days after delivery can a customer request a refund, and are final-sale items eligible?",
+      "relevantDocumentIds": [
+        "demo-commerce-policy-refund-eligibility",
+        "demo-commerce-policy-final-sale-items",
+        "demo-commerce-policy-order-number-verification"
+      ],
+      "rationale": "The original eligibility policy defines both the 30-day request window and final-sale exclusion. The new final-sale policy directly confirms that final-sale items remain ineligible inside that window, and the order-verification policy explicitly carries both rules into the verification step.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-policy-refund-eligibility",
+          "excerpt": "For this fictional tenant, a customer may request a refund within 30 calendar days after delivery when they can provide the order number. Items marked final sale are not eligible."
+        },
+        {
+          "document_id": "demo-commerce-policy-final-sale-items",
+          "excerpt": "For this fictional tenant, an item clearly marked final sale before purchase is not eligible for a refund."
+        },
+        {
+          "document_id": "demo-commerce-policy-order-number-verification",
+          "excerpt": "Verification alone does not approve a refund: the 30-day window, final-sale exclusion, and any partial-refund review still apply."
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-refund-eligibility",
+            "demo-commerce-faq-discounted-item-refund",
+            "demo-commerce-policy-final-sale-items"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.666667
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-refund-eligibility",
+            "demo-commerce-policy-final-sale-items",
+            "demo-commerce-faq-discounted-item-refund"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.666667
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-refund-eligibility",
+            "demo-commerce-policy-final-sale-items",
+            "demo-commerce-policy-refund-processing-time"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.666667
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-direct-04",
+      "group": "direct",
+      "query": "According to the demo FAQ, where is refunded money sent if the original payment method cannot accept it?",
+      "relevantDocumentIds": [
+        "demo-commerce-faq-refund-destination",
+        "demo-commerce-policy-store-credit-fallback",
+        "demo-commerce-faq-alternate-refund-card"
+      ],
+      "rationale": "The original destination FAQ specifies the store-credit fallback. The new store-credit policy directly defines that fallback as non-default, and the alternate-card FAQ answers the same destination question while ruling out a different customer-selected card.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-faq-refund-destination",
+          "excerpt": "If that method cannot accept a refund, the support desk contacts the customer before issuing demo store credit."
+        },
+        {
+          "document_id": "demo-commerce-policy-store-credit-fallback",
+          "excerpt": "If that method cannot accept the refund, the support desk contacts the customer before issuing demo store credit instead."
+        },
+        {
+          "document_id": "demo-commerce-faq-alternate-refund-card",
+          "excerpt": "If the original method cannot accept funds, support contacts the customer before using the fictional demo store-credit fallback."
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-destination",
+            "demo-commerce-faq-alternate-refund-card",
+            "demo-commerce-policy-store-credit-fallback"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-destination",
+            "demo-commerce-faq-alternate-refund-card",
+            "demo-commerce-policy-store-credit-fallback"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-destination",
+            "demo-commerce-faq-alternate-refund-card",
+            "demo-commerce-policy-store-credit-fallback"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-paraphrase-01",
+      "group": "paraphrase",
+      "query": "How do I calculate what remains from sales after discounts and customer reimbursements?",
+      "relevantDocumentIds": [
+        "demo-commerce-net-revenue",
+        "demo-commerce-metric-gross-vs-net-revenue",
+        "demo-commerce-metric-refunds-affect-net-revenue",
+        "demo-commerce-metric-discounts-and-revenue"
+      ],
+      "rationale": "The question paraphrases net revenue without naming it. The original three documents define the formula, distinguish it from gross revenue, and explain the refund subtraction. The new discount document directly states that both discounts and refunds are subtracted from gross amount for matching orders.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-net-revenue",
+          "excerpt": "Net revenue is gross revenue after subtracting discounts and refunds."
+        },
+        {
+          "document_id": "demo-commerce-metric-gross-vs-net-revenue",
+          "excerpt": "Net revenue sums each order's gross amount after subtracting its `discount_amount` and `refund_amount`."
+        },
+        {
+          "document_id": "demo-commerce-metric-refunds-affect-net-revenue",
+          "excerpt": "The implemented net calculation is `SUM(gross_amount - discount_amount - refund_amount)`"
+        },
+        {
+          "document_id": "demo-commerce-metric-discounts-and-revenue",
+          "excerpt": "Net revenue subtracts both `discount_amount` and `refund_amount` from gross amount for every matching order."
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-business-days",
+            "demo-commerce-faq-discounted-item-refund",
+            "demo-commerce-policy-damaged-item-adjustments"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "recallAt3": 0
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-business-days",
+            "demo-commerce-policy-damaged-item-adjustments",
+            "demo-commerce-policy-refund-processing-time"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 0,
+          "recallAt3": 0
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-metric-discounts-and-revenue",
+            "demo-commerce-net-revenue",
+            "demo-commerce-gross-revenue"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-paraphrase-02",
+      "group": "paraphrase",
+      "query": "Which stored date decides whether a purchase appears in a reporting window, and can the data tell me when its reimbursement finished?",
+      "relevantDocumentIds": [
+        "demo-commerce-field-order-date",
+        "demo-commerce-date-ranges",
+        "demo-commerce-faq-refund-completion-data",
+        "demo-commerce-field-refund-granularity"
+      ],
+      "rationale": "The original field and date-range documents identify the reporting date and its interval predicates. The new completion-data FAQ directly says settlement timing is unavailable, while the refund-granularity document enumerates the missing request, approval, and settlement timestamps.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-field-order-date",
+          "excerpt": "analytics intervals filter this field. The dataset does not contain separate refund-request, approval, payment, shipment, or refund-completion dates."
+        },
+        {
+          "document_id": "demo-commerce-date-ranges",
+          "excerpt": "The SQL compiler implements this as `order_date >= start` and `order_date < end`."
+        },
+        {
+          "document_id": "demo-commerce-faq-refund-completion-data",
+          "excerpt": "The demo-commerce analytics dataset records the order date, a refund amount, and the order's refund-related status, but not request, approval, submission, or settlement timestamps."
+        },
+        {
+          "document_id": "demo-commerce-field-refund-granularity",
+          "excerpt": "It does not store separate refund transactions, refund identifiers, line-item allocations, reasons, request timestamps, approval timestamps, or settlement timestamps."
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-completion-data",
+            "demo-commerce-metric-empty-result",
+            "demo-commerce-faq-refunds-and-revenue"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.25
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refunds-and-revenue",
+            "demo-commerce-faq-refund-completion-data",
+            "demo-commerce-field-order-date"
+          ],
+          "hitAt1": 0,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-completion-data",
+            "demo-commerce-field-order-date",
+            "demo-commerce-policy-refund-processing-time"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-paraphrase-03",
+      "group": "paraphrase",
+      "query": "A shopper keeps some items and accepts a price adjustment for damage. Can the demo rules reimburse only part of the purchase?",
+      "relevantDocumentIds": [
+        "demo-commerce-policy-partial-refunds",
+        "demo-commerce-policy-refund-eligibility",
+        "demo-commerce-policy-damaged-item-adjustments"
+      ],
+      "rationale": "The original partial-refund and eligibility policies establish that approval may cover only part of an order. The new damaged-item policy directly covers the question's retained damaged item and price-adjustment scenario.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-policy-partial-refunds",
+          "excerpt": "An approved request may receive a partial refund when the customer keeps part of an order or accepts a price adjustment for a damaged item."
+        },
+        {
+          "document_id": "demo-commerce-policy-refund-eligibility",
+          "excerpt": "A request must be reviewed before any refund is approved, and approval may cover all or only part of an order."
+        },
+        {
+          "document_id": "demo-commerce-policy-damaged-item-adjustments",
+          "excerpt": "When an eligible customer keeps a damaged item, support may approve a partial refund as a price adjustment."
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-partial-refunds",
+            "demo-commerce-policy-damaged-item-adjustments",
+            "demo-commerce-policy-refund-eligibility"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-partial-refunds",
+            "demo-commerce-policy-damaged-item-adjustments",
+            "demo-commerce-policy-refund-eligibility"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-policy-damaged-item-adjustments",
+            "demo-commerce-policy-partial-refunds",
+            "demo-commerce-policy-refund-eligibility"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 1
+        }
+      }
+    },
+    {
+      "id": "retrieval-dev-paraphrase-04",
+      "group": "paraphrase",
+      "query": "Who should a shopper ask to learn whether an approved return has been sent for payment or completed?",
+      "relevantDocumentIds": [
+        "demo-commerce-faq-refund-status",
+        "demo-commerce-faq-refund-completion-data"
+      ],
+      "rationale": "The original refund-status FAQ identifies the support desk and relevant workflow stages. The new completion-data FAQ independently directs customers to support with an order number for status information when analytics cannot show completion.",
+      "evidence": [
+        {
+          "document_id": "demo-commerce-faq-refund-status",
+          "excerpt": "A customer should contact the fictional support desk with their order number to ask whether a request is awaiting review, approved, submitted for processing, or settled."
+        },
+        {
+          "document_id": "demo-commerce-faq-refund-completion-data",
+          "excerpt": "In the fictional workflow, a customer must contact support with the order number for status information"
+        }
+      ],
+      "methods": {
+        "keyword": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-status",
+            "demo-commerce-faq-refund-destination",
+            "demo-commerce-policy-refund-eligibility"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        },
+        "bm25": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-status",
+            "demo-commerce-faq-refund-destination",
+            "demo-commerce-policy-refund-eligibility"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        },
+        "embedding": {
+          "topThreeDocumentIds": [
+            "demo-commerce-faq-refund-status",
+            "demo-commerce-policy-refund-eligibility",
+            "demo-commerce-faq-refund-destination"
+          ],
+          "hitAt1": 1,
+          "hitAt3": 1,
+          "recallAt3": 0.5
+        }
+      }
+    }
+  ],
+  "illustrativeCases": [
+    {
+      "id": "retrieval-dev-paraphrase-01",
+      "query": "How do I calculate what remains from sales after discounts and customer reimbursements?",
+      "expectedDocumentIds": [
+        "demo-commerce-net-revenue",
+        "demo-commerce-metric-gross-vs-net-revenue",
+        "demo-commerce-metric-refunds-affect-net-revenue",
+        "demo-commerce-metric-discounts-and-revenue"
+      ],
+      "retrievedDocumentIds": {
+        "keyword": [
+          "demo-commerce-faq-business-days",
+          "demo-commerce-faq-discounted-item-refund",
+          "demo-commerce-policy-damaged-item-adjustments"
+        ],
+        "bm25": [
+          "demo-commerce-faq-business-days",
+          "demo-commerce-policy-damaged-item-adjustments",
+          "demo-commerce-policy-refund-processing-time"
+        ],
+        "embedding": [
+          "demo-commerce-metric-discounts-and-revenue",
+          "demo-commerce-net-revenue",
+          "demo-commerce-gross-revenue"
+        ]
+      },
+      "relevantExcerpts": [
+        {
+          "document_id": "demo-commerce-net-revenue",
+          "excerpt": "Net revenue is gross revenue after subtracting discounts and refunds."
+        },
+        {
+          "document_id": "demo-commerce-metric-gross-vs-net-revenue",
+          "excerpt": "Net revenue sums each order's gross amount after subtracting its `discount_amount` and `refund_amount`."
+        },
+        {
+          "document_id": "demo-commerce-metric-refunds-affect-net-revenue",
+          "excerpt": "The implemented net calculation is `SUM(gross_amount - discount_amount - refund_amount)`"
+        },
+        {
+          "document_id": "demo-commerce-metric-discounts-and-revenue",
+          "excerpt": "Net revenue subtracts both `discount_amount` and `refund_amount` from gross amount for every matching order."
+        }
+      ],
+      "observation": "Keyword overlap and BM25 retrieved no labeled document in their top three. Embeddings ranked the newly added, labeled discount-and-revenue document first and the existing net-revenue document second, retrieving two of four labeled documents.",
+      "possibleExplanation": "A possible explanation is the vocabulary shift from refunds and net revenue to reimbursements and what remains from sales. The new policy and FAQ documents contain incidental words such as customer, discounts, and after, which can attract lexical methods without answering the revenue-calculation question. Embeddings connected the paraphrase to two metric documents."
+    },
+    {
+      "id": "retrieval-dev-direct-02",
+      "query": "Which values can the order status field contain, and what refund_amount relationship does each status require?",
+      "expectedDocumentIds": [
+        "demo-commerce-field-order-status",
+        "demo-commerce-refunds"
+      ],
+      "retrievedDocumentIds": {
+        "keyword": [
+          "demo-commerce-field-order-status",
+          "demo-commerce-field-refund-granularity",
+          "demo-commerce-faq-refund-completion-data"
+        ],
+        "bm25": [
+          "demo-commerce-field-order-date",
+          "demo-commerce-field-currency-tax-shipping",
+          "demo-commerce-field-order-status"
+        ],
+        "embedding": [
+          "demo-commerce-field-order-status",
+          "demo-commerce-metric-status-inclusion",
+          "demo-commerce-field-refund-granularity"
+        ]
+      },
+      "relevantExcerpts": [
+        {
+          "document_id": "demo-commerce-field-order-status",
+          "excerpt": "The required `status` field allows `completed`, `partially_refunded`, or `refunded`."
+        },
+        {
+          "document_id": "demo-commerce-refunds",
+          "excerpt": "completed orders have zero refunds, partially refunded orders have a positive refund smaller than their post-discount amount"
+        }
+      ],
+      "observation": "Keyword overlap and embeddings ranked the labeled order-status document first, while BM25 placed it third. Every method retrieved only one of the two labeled documents; newly added field or FAQ documents occupied other top-three positions.",
+      "possibleExplanation": "A possible explanation is that the new refund-granularity, refund-completion, and currency-limitation documents share field, order, refund, or amount vocabulary with the query. They discuss adjacent schema concerns but do not define the complete status-to-refund relationship."
+    }
+  ]
+}

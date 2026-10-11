@@ -1,0 +1,149 @@
+[
+  {
+    "id": "retrieval-dev-direct-01",
+    "query": "How is total gross revenue calculated, and are refunded orders included unless I filter by status?",
+    "relevant_document_ids": [
+      "demo-commerce-gross-revenue",
+      "demo-commerce-metric-gross-vs-net-revenue",
+      "demo-commerce-metric-status-inclusion"
+    ],
+    "rationale": "The gross-revenue definition supplies the calculation and its default status scope. The comparison document independently clarifies that gross revenue does not subtract refunds and does not automatically exclude refunded orders. The status-inclusion document directly explains the explicit-filter rule across metrics.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-gross-revenue",
+        "excerpt": "Its implemented metric name is `total_gross_revenue`, and its calculation is `SUM(gross_amount)`."
+      },
+      {
+        "document_id": "demo-commerce-metric-gross-vs-net-revenue",
+        "excerpt": "Neither metric excludes refunded or partially refunded orders automatically;"
+      },
+      {
+        "document_id": "demo-commerce-metric-status-inclusion",
+        "excerpt": "A status is excluded only when an explicit supported status filter requests that restriction."
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-direct-02",
+    "query": "Which values can the order status field contain, and what refund_amount relationship does each status require?",
+    "relevant_document_ids": [
+      "demo-commerce-field-order-status",
+      "demo-commerce-refunds"
+    ],
+    "rationale": "The field document defines the complete status allowlist and the database constraint for each value. The refunds document also directly describes how zero, partial, and full post-discount refunds correspond to those statuses.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-field-order-status",
+        "excerpt": "The required `status` field allows `completed`, `partially_refunded`, or `refunded`."
+      },
+      {
+        "document_id": "demo-commerce-refunds",
+        "excerpt": "completed orders have zero refunds, partially refunded orders have a positive refund smaller than their post-discount amount"
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-direct-03",
+    "query": "Under the demo refund eligibility policy, how many days after delivery can a customer request a refund, and are final-sale items eligible?",
+    "relevant_document_ids": [
+      "demo-commerce-policy-refund-eligibility"
+    ],
+    "rationale": "The synthetic eligibility policy is the only document that defines both the request window and the final-sale exclusion. Other refund documents discuss processing, partial amounts, or reporting rather than initial eligibility.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-policy-refund-eligibility",
+        "excerpt": "For this fictional tenant, a customer may request a refund within 30 calendar days after delivery when they can provide the order number. Items marked final sale are not eligible."
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-direct-04",
+    "query": "According to the demo FAQ, where is refunded money sent if the original payment method cannot accept it?",
+    "relevant_document_ids": [
+      "demo-commerce-faq-refund-destination"
+    ],
+    "rationale": "The refund-destination FAQ directly specifies the normal destination and the fallback when the original payment method cannot accept a refund. Timing and status documents do not supply the destination rule.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-faq-refund-destination",
+        "excerpt": "If that method cannot accept a refund, the support desk contacts the customer before issuing demo store credit."
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-paraphrase-01",
+    "query": "How do I calculate what remains from sales after discounts and customer reimbursements?",
+    "relevant_document_ids": [
+      "demo-commerce-net-revenue",
+      "demo-commerce-metric-gross-vs-net-revenue",
+      "demo-commerce-metric-refunds-affect-net-revenue"
+    ],
+    "rationale": "The question paraphrases net revenue without naming it. The net-revenue document provides the authoritative formula, the comparison document distinguishes the remaining amount from gross revenue, and the refund-impact document explicitly shows how the reimbursed amount is subtracted.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-net-revenue",
+        "excerpt": "Net revenue is gross revenue after subtracting discounts and refunds."
+      },
+      {
+        "document_id": "demo-commerce-metric-gross-vs-net-revenue",
+        "excerpt": "Net revenue sums each order's gross amount after subtracting its `discount_amount` and `refund_amount`."
+      },
+      {
+        "document_id": "demo-commerce-metric-refunds-affect-net-revenue",
+        "excerpt": "The implemented net calculation is `SUM(gross_amount - discount_amount - refund_amount)`"
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-paraphrase-02",
+    "query": "Which stored date decides whether a purchase appears in a reporting window, and can the data tell me when its reimbursement finished?",
+    "relevant_document_ids": [
+      "demo-commerce-field-order-date",
+      "demo-commerce-date-ranges"
+    ],
+    "rationale": "The order-date field document identifies the stored date used by analytics and states that refund-completion timing is absent. The date-range document supplies the implemented inclusion and exclusion predicates that decide whether that date falls in a reporting window.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-field-order-date",
+        "excerpt": "analytics intervals filter this field. The dataset does not contain separate refund-request, approval, payment, shipment, or refund-completion dates."
+      },
+      {
+        "document_id": "demo-commerce-date-ranges",
+        "excerpt": "The SQL compiler implements this as `order_date >= start` and `order_date < end`."
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-paraphrase-03",
+    "query": "A shopper keeps some items and accepts a price adjustment for damage. Can the demo rules reimburse only part of the purchase?",
+    "relevant_document_ids": [
+      "demo-commerce-policy-partial-refunds",
+      "demo-commerce-policy-refund-eligibility"
+    ],
+    "rationale": "The partial-refund policy directly covers retained items, damaged-item adjustments, and the amount ceiling. The broader eligibility policy confirms that an approval may cover only part of an order, while leaving the specific customer-service reasons to the partial-refund document.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-policy-partial-refunds",
+        "excerpt": "An approved request may receive a partial refund when the customer keeps part of an order or accepts a price adjustment for a damaged item."
+      },
+      {
+        "document_id": "demo-commerce-policy-refund-eligibility",
+        "excerpt": "A request must be reviewed before any refund is approved, and approval may cover all or only part of an order."
+      }
+    ]
+  },
+  {
+    "id": "retrieval-dev-paraphrase-04",
+    "query": "Who should a shopper ask to learn whether an approved return has been sent for payment or completed?",
+    "relevant_document_ids": [
+      "demo-commerce-faq-refund-status"
+    ],
+    "rationale": "The refund-status FAQ identifies the fictional support desk and names the submitted and settled stages. The processing policy provides a timing target but does not answer whom the shopper should contact for status.",
+    "evidence": [
+      {
+        "document_id": "demo-commerce-faq-refund-status",
+        "excerpt": "A customer should contact the fictional support desk with their order number to ask whether a request is awaiting review, approved, submitted for processing, or settled."
+      }
+    ]
+  }
+]

@@ -20,7 +20,7 @@ const queriesUrl = new URL(
   import.meta.url,
 );
 const resultsUrl = new URL(
-  "../../experiments/retrieval/results.dev.json",
+  "../../experiments/retrieval/results.dev.32-docs.json",
   import.meta.url,
 );
 
@@ -120,14 +120,14 @@ const results = {
     illustrativeCase(
       evaluatedQueries,
       "retrieval-dev-paraphrase-01",
-      "Keyword overlap retrieved no labeled document in its top three. BM25 found one labeled document at rank two, while embeddings placed that same document first; all three methods missed two other labeled documents.",
-      "A possible explanation is the vocabulary shift from refunds and net revenue to reimbursements and what remains from sales. Embeddings connected that paraphrase to the primary net-revenue document, while lexical matches favored documents containing incidental shared words. The three overlapping relevance labels also make full Recall@3 demanding.",
+      "Keyword overlap and BM25 retrieved no labeled document in their top three. Embeddings ranked the newly added, labeled discount-and-revenue document first and the existing net-revenue document second, retrieving two of four labeled documents.",
+      "A possible explanation is the vocabulary shift from refunds and net revenue to reimbursements and what remains from sales. The new policy and FAQ documents contain incidental words such as customer, discounts, and after, which can attract lexical methods without answering the revenue-calculation question. Embeddings connected the paraphrase to two metric documents.",
     ),
     illustrativeCase(
       evaluatedQueries,
       "retrieval-dev-direct-02",
-      "Keyword overlap and embeddings ranked a labeled order-status document first. BM25 ranked the unlabeled order-date field document first; only embeddings retrieved both labeled documents in the top three.",
-      "A possible explanation is that the order-date document shares field, order, refund, and amount vocabulary with the query. BM25's rarity, frequency, and length weighting can favor that lexical combination even though the document does not define allowed status values.",
+      "Keyword overlap and embeddings ranked the labeled order-status document first, while BM25 placed it third. Every method retrieved only one of the two labeled documents; newly added field or FAQ documents occupied other top-three positions.",
+      "A possible explanation is that the new refund-granularity, refund-completion, and currency-limitation documents share field, order, refund, or amount vocabulary with the query. They discuss adjacent schema concerns but do not define the complete status-to-refund relationship.",
     ),
   ],
 };
@@ -359,7 +359,7 @@ function validateInputs(
   corpus: readonly RetrievalDocument[],
   developmentQueries: readonly DevelopmentQuery[],
 ): void {
-  if (corpus.length !== 16) throw new Error(`Expected 16 documents, received ${corpus.length}`);
+  if (corpus.length !== 32) throw new Error(`Expected 32 documents, received ${corpus.length}`);
   const ids = new Set(corpus.map(({ documentId }) => documentId));
   for (const item of developmentQueries) {
     for (const id of item.relevant_document_ids) {
