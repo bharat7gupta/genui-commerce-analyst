@@ -33,6 +33,9 @@
     "experiment:bm25-retrieval": "node --import tsx src/experiments/day-08-bm25-retrieval.ts",
     "experiment:embedding-retrieval": "node --import tsx src/experiments/day-08-embedding-retrieval.ts",
     "experiment:retrieval-evaluation": "node --import tsx src/experiments/day-08-retrieval-evaluation.ts",
+    "example:document-chunking": "node --import tsx src/experiments/day-09-document-chunking.ts",
+    "example:document-ingestion": "node --import tsx src/experiments/day-09-document-ingestion.ts",
+    "example:document-reindexing": "node --import tsx src/experiments/day-09-document-reindexing.ts",
     "experiment:smoke": "tsx src/experiments/day-01-smoke.ts",
     "query-plan:extract": "tsx src/query-plan/query-plan-cli.ts",
     "tool:metric-definition": "tsx src/application/metric-definition-tool-workflow-cli.ts",
@@ -47,6 +50,8 @@
     "test:evals": "node --import tsx --test src/evals/scalar-numerical-grader.test.ts src/evals/plan-meaning-grader.test.ts src/evals/supported-analytics-cases.test.ts src/evals/extraction-outcome-grader.test.ts",
     "test:ui": "node --import tsx --test src/ui/kpi-specification.test.ts src/ui/display-selection.test.ts src/ui/model-display-request.test.ts",
     "test:provider": "node --import tsx --test src/ai/qwen-provider.test.ts src/ai/qwen-provider-stream.test.ts",
+    "test:document-chunking": "node --import tsx --test src/retrieval/document-chunker.test.ts",
+    "test:document-ingestion": "node --import tsx --test src/retrieval/in-memory-document-store.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

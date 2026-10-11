@@ -523,3 +523,42 @@
   Artifacts: [final labels](../experiments/retrieval/queries.dev.json),
   [32-document label snapshot](../experiments/retrieval/queries.dev.32-docs.json),
   and [60-document results](../experiments/retrieval/results.dev.60-docs.json).
+
+## Day 9 — Deterministic document chunking
+
+- Implemented pure paragraph-aware chunking plus an in-memory, tenant-scoped
+  document store with insert/replace, delete, ordered chunk listing, and
+  explicit re-indexing. Chunk IDs deterministically include tenant, document
+  identity, source version, content, chunking configuration, and chunk index;
+  replacement chunks are generated before current state changes.
+- `npm run example:document-chunking` kept the 601-character Day 8 sample whole
+  and split the 952-character refund fixture into two ordered chunks at the
+  700-character boundary while preserving metadata and all non-whitespace
+  source text. The refund rule and its exception landed in separate chunks.
+- `npm run example:document-ingestion` inserted those two version-1 chunks,
+  repeated the same upsert with identical IDs and count, replaced them with one
+  version-2 chunk whose current metadata was preserved and whose two old IDs
+  were absent, inserted the same document ID for `other-shop`, and then deleted
+  only the `demo-commerce` copy; `other-shop` retained its chunk.
+- `npm run example:document-reindexing` ingested version 1 as two chunks with
+  `maxCharacters = 700`, then re-indexed the retained source as one chunk with
+  `maxCharacters = 1200`. The combined chunk contained both the refund rule and
+  exception, both prior IDs were absent, and source version 1 and metadata were
+  unchanged. Repeating the 1,200-character re-index produced the same single
+  chunk ID with no duplicate.
+- Source version describes a source-content revision; chunking configuration
+  describes how that source is indexed. Re-indexing can therefore change chunk
+  boundaries and IDs without changing the source version or source metadata.
+  The 700- and 1,200-character sizes demonstrate this boundary behavior only;
+  neither has been evaluated as optimal for retrieval.
+- Verification passed with `npm run typecheck`,
+  `npm run test:document-chunking` (five checks), and
+  `npm run test:document-ingestion` (four checks), covering repeatability,
+  metadata and text preservation, complete replacement, tenant/document
+  isolation, missing-source reporting, and preservation of current state when
+  replacement generation fails.
+- Limitations: storage is process-local and in memory; overlap is fixed at
+  zero; sizing uses JavaScript characters rather than model tokens; and chunks
+  are not integrated with keyword, BM25, embedding, or vector retrieval. The
+  existing Day 8 metrics remain document-level development results and do not
+  validate either Day 9 chunking policy.
