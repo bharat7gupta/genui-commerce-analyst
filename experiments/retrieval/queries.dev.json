@@ -7,9 +7,10 @@
       "demo-commerce-metric-gross-vs-net-revenue",
       "demo-commerce-metric-status-inclusion",
       "demo-commerce-metric-discounts-and-revenue",
-      "demo-commerce-metric-fully-refunded-orders"
+      "demo-commerce-metric-fully-refunded-orders",
+      "demo-commerce-metric-fully-discounted-orders"
     ],
-    "rationale": "The gross-revenue definition supplies the calculation and its default status scope. The comparison and status-inclusion documents clarify that refunded orders are not removed without a filter. The new discount document restates the gross calculation and all-status rule, while the fully-refunded-order document directly explains how those orders still contribute to gross revenue.",
+    "rationale": "The gross-revenue definition supplies the calculation and its default status scope. The comparison and status-inclusion documents clarify that refunded orders are not removed without a filter. The discount document restates the gross calculation and all-status rule, while the fully-refunded-order document directly explains how those orders still contribute to gross revenue. The fully-discounted edge-case document also confirms that a row allowed to carry refunded status still contributes its gross amount.",
     "evidence": [
       {
         "document_id": "demo-commerce-gross-revenue",
@@ -30,6 +31,10 @@
       {
         "document_id": "demo-commerce-metric-fully-refunded-orders",
         "excerpt": "A fully refunded order is not automatically removed from revenue calculations. Its gross amount still contributes to total gross revenue"
+      },
+      {
+        "document_id": "demo-commerce-metric-fully-discounted-orders",
+        "excerpt": "The order still contributes its gross amount to gross revenue but zero to net revenue and refund totals."
       }
     ]
   },
@@ -38,9 +43,10 @@
     "query": "Which values can the order status field contain, and what refund_amount relationship does each status require?",
     "relevant_document_ids": [
       "demo-commerce-field-order-status",
-      "demo-commerce-refunds"
+      "demo-commerce-refunds",
+      "demo-commerce-metric-fully-discounted-orders"
     ],
-    "rationale": "The field document defines the complete status allowlist and the database constraint for each value. The refunds document also directly describes how zero, partial, and full post-discount refunds correspond to those statuses.",
+    "rationale": "The field document defines the complete status allowlist and the database constraint for each value. The refunds document also directly describes how zero, partial, and full post-discount refunds correspond to those statuses. The fully-discounted document supplies a necessary schema edge case: a zero refund can satisfy both completed and refunded status rules when the post-discount amount is zero.",
     "evidence": [
       {
         "document_id": "demo-commerce-field-order-status",
@@ -49,6 +55,10 @@
       {
         "document_id": "demo-commerce-refunds",
         "excerpt": "completed orders have zero refunds, partially refunded orders have a positive refund smaller than their post-discount amount"
+      },
+      {
+        "document_id": "demo-commerce-metric-fully-discounted-orders",
+        "excerpt": "The status check permits either `completed` or `refunded` in this edge case because a zero refund both satisfies the completed rule and equals the zero post-discount amount."
       }
     ]
   },
@@ -58,9 +68,14 @@
     "relevant_document_ids": [
       "demo-commerce-policy-refund-eligibility",
       "demo-commerce-policy-final-sale-items",
-      "demo-commerce-policy-order-number-verification"
+      "demo-commerce-policy-order-number-verification",
+      "demo-commerce-policy-refund-request-withdrawal",
+      "demo-commerce-policy-return-shipping-authorization",
+      "demo-commerce-policy-cumulative-refund-cap",
+      "demo-commerce-policy-damaged-item-evidence",
+      "demo-commerce-faq-refund-versus-exchange"
     ],
-    "rationale": "The original eligibility policy defines both the 30-day request window and final-sale exclusion. The new final-sale policy directly confirms that final-sale items remain ineligible inside that window, and the order-verification policy explicitly carries both rules into the verification step.",
+    "rationale": "The eligibility policy defines both the 30-day request window and final-sale exclusion. The final-sale and order-verification documents confirm those rules in specific review contexts. The withdrawal, return-shipping, cumulative-cap, damaged-evidence, and exchange documents directly preserve the same 30-day window, final-sale exclusion, or both, so they supply answer-bearing policy evidence rather than merely sharing the refund topic.",
     "evidence": [
       {
         "document_id": "demo-commerce-policy-refund-eligibility",
@@ -73,6 +88,26 @@
       {
         "document_id": "demo-commerce-policy-order-number-verification",
         "excerpt": "Verification alone does not approve a refund: the 30-day window, final-sale exclusion, and any partial-refund review still apply."
+      },
+      {
+        "document_id": "demo-commerce-policy-refund-request-withdrawal",
+        "excerpt": "Withdrawing a request does not extend the original 30-day eligibility window or make a final-sale order refundable."
+      },
+      {
+        "document_id": "demo-commerce-policy-return-shipping-authorization",
+        "excerpt": "Mailing an item without authorization does not approve the refund, waive the 30-day request window, or override the final-sale exclusion."
+      },
+      {
+        "document_id": "demo-commerce-policy-cumulative-refund-cap",
+        "excerpt": "The rule prevents repeated requests from returning more money than the customer paid and does not extend the original 30-day eligibility window."
+      },
+      {
+        "document_id": "demo-commerce-policy-damaged-item-evidence",
+        "excerpt": "Supplying evidence helps the review but does not guarantee approval, override the final-sale exclusion, or extend the 30-day eligibility window."
+      },
+      {
+        "document_id": "demo-commerce-faq-refund-versus-exchange",
+        "excerpt": "an eligible refund request is still reviewed under the 30-day window, final-sale exclusion, and order-number requirement."
       }
     ]
   },
@@ -82,9 +117,11 @@
     "relevant_document_ids": [
       "demo-commerce-faq-refund-destination",
       "demo-commerce-policy-store-credit-fallback",
-      "demo-commerce-faq-alternate-refund-card"
+      "demo-commerce-faq-alternate-refund-card",
+      "demo-commerce-faq-split-refund-destinations",
+      "demo-commerce-policy-store-credit-expiration"
     ],
-    "rationale": "The original destination FAQ specifies the store-credit fallback. The new store-credit policy directly defines that fallback as non-default, and the alternate-card FAQ answers the same destination question while ruling out a different customer-selected card.",
+    "rationale": "The destination FAQ specifies the store-credit fallback. The fallback policy defines it as non-default, and the alternate-card FAQ rules out a different customer-selected card. The split-destination FAQ explicitly says an unavailable original method may lead to store credit, while the expiration policy identifies store credit as the unavailable-payment-method fallback before explaining its later lifecycle.",
     "evidence": [
       {
         "document_id": "demo-commerce-faq-refund-destination",
@@ -97,6 +134,14 @@
       {
         "document_id": "demo-commerce-faq-alternate-refund-card",
         "excerpt": "If the original method cannot accept funds, support contacts the customer before using the fictional demo store-credit fallback."
+      },
+      {
+        "document_id": "demo-commerce-faq-split-refund-destinations",
+        "excerpt": "The refund goes to the original payment method; if that method is unavailable, support may issue store credit under the existing fallback policy."
+      },
+      {
+        "document_id": "demo-commerce-policy-store-credit-expiration",
+        "excerpt": "Store credit issued under the unavailable-payment-method fallback expires 12 months after its issue date."
       }
     ]
   },
@@ -107,9 +152,11 @@
       "demo-commerce-net-revenue",
       "demo-commerce-metric-gross-vs-net-revenue",
       "demo-commerce-metric-refunds-affect-net-revenue",
-      "demo-commerce-metric-discounts-and-revenue"
+      "demo-commerce-metric-discounts-and-revenue",
+      "demo-commerce-analytics-discount-total-limitation",
+      "demo-commerce-metric-net-revenue-nonnegative"
     ],
-    "rationale": "The question paraphrases net revenue without naming it. The original three documents define the formula, distinguish it from gross revenue, and explain the refund subtraction. The new discount document directly states that both discounts and refunds are subtracted from gross amount for matching orders.",
+    "rationale": "The question paraphrases net revenue without naming it. The original documents define the formula, distinguish it from gross revenue, and explain the discount and refund subtractions. The discount-total limitation explicitly says net revenue subtracts both components, and the nonnegative-net document repeats the exact implemented arithmetic while explaining the seeded constraints.",
     "evidence": [
       {
         "document_id": "demo-commerce-net-revenue",
@@ -126,6 +173,14 @@
       {
         "document_id": "demo-commerce-metric-discounts-and-revenue",
         "excerpt": "Net revenue subtracts both `discount_amount` and `refund_amount` from gross amount for every matching order."
+      },
+      {
+        "document_id": "demo-commerce-analytics-discount-total-limitation",
+        "excerpt": "Gross revenue ignores discounts, while net revenue subtracts them together with refunds."
+      },
+      {
+        "document_id": "demo-commerce-metric-net-revenue-nonnegative",
+        "excerpt": "Because net revenue sums `gross_amount - discount_amount - refund_amount`, every stored row contributes zero or more under this schema."
       }
     ]
   },
@@ -136,9 +191,10 @@
       "demo-commerce-field-order-date",
       "demo-commerce-date-ranges",
       "demo-commerce-faq-refund-completion-data",
-      "demo-commerce-field-refund-granularity"
+      "demo-commerce-field-refund-granularity",
+      "demo-commerce-faq-refund-request-analytics"
     ],
-    "rationale": "The original field and date-range documents identify the reporting date and its interval predicates. The new completion-data FAQ directly says settlement timing is unavailable, while the refund-granularity document enumerates the missing request, approval, and settlement timestamps.",
+    "rationale": "The field and date-range documents identify the reporting date and its interval predicates. The completion-data FAQ directly says settlement timing is unavailable, while the refund-granularity document enumerates the missing request, approval, and settlement timestamps. The refund-request analytics FAQ adds that no request, approval, or payment-provider timestamps are stored, directly supporting the timing limitation.",
     "evidence": [
       {
         "document_id": "demo-commerce-field-order-date",
@@ -155,6 +211,10 @@
       {
         "document_id": "demo-commerce-field-refund-granularity",
         "excerpt": "It does not store separate refund transactions, refund identifiers, line-item allocations, reasons, request timestamps, approval timestamps, or settlement timestamps."
+      },
+      {
+        "document_id": "demo-commerce-faq-refund-request-analytics",
+        "excerpt": "the dataset has no request, approval, or payment-provider timestamp fields."
       }
     ]
   },
@@ -187,9 +247,11 @@
     "query": "Who should a shopper ask to learn whether an approved return has been sent for payment or completed?",
     "relevant_document_ids": [
       "demo-commerce-faq-refund-status",
-      "demo-commerce-faq-refund-completion-data"
+      "demo-commerce-faq-refund-completion-data",
+      "demo-commerce-policy-refund-bank-delay-escalation",
+      "demo-commerce-faq-refund-submission-confirmation"
     ],
-    "rationale": "The original refund-status FAQ identifies the support desk and relevant workflow stages. The new completion-data FAQ independently directs customers to support with an order number for status information when analytics cannot show completion.",
+    "rationale": "The refund-status FAQ identifies the support desk and relevant workflow stages. The completion-data FAQ independently directs customers to support with an order number when analytics cannot show completion. The bank-delay policy names support and the bank after confirmed submission, while the submission-confirmation FAQ explains that support confirms submission and distinguishes it from approval.",
     "evidence": [
       {
         "document_id": "demo-commerce-faq-refund-status",
@@ -198,6 +260,14 @@
       {
         "document_id": "demo-commerce-faq-refund-completion-data",
         "excerpt": "In the fictional workflow, a customer must contact support with the order number for status information"
+      },
+      {
+        "document_id": "demo-commerce-policy-refund-bank-delay-escalation",
+        "excerpt": "the customer should contact support with the order number and also ask the bank to trace the credit."
+      },
+      {
+        "document_id": "demo-commerce-faq-refund-submission-confirmation",
+        "excerpt": "Support sends a confirmation after an approved refund is submitted to the payment provider."
       }
     ]
   }

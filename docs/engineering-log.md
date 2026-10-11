@@ -487,3 +487,39 @@
   No fixes were implemented during consolidation. See the
   [40-case report](evals/day-7-final-report.md) for inventory, denominators, and
   saved evidence.
+
+## Day 8 — Retrieval baselines
+
+- Built a 60-document Markdown corpus for the fictional `demo-commerce` tenant.
+  Repository-backed metric, dataset, and query-behavior documents are separated
+  from explicitly marked synthetic policy and FAQ fixtures. The final answer key
+  contains eight draft development questions; the 32-document labels are
+  preserved separately, and every final evidence excerpt was verified against
+  its referenced document.
+- Compared three unchanged Top-3 baselines: distinct keyword overlap; BM25 with
+  `k1 = 1.2` and `b = 0.75`; and in-memory cosine similarity using the local
+  `all-minilm:latest` 384-dimensional embedding model. Document vectors were
+  embedded once and reused for all queries. No vector database was needed for
+  60 documents.
+- Overall Keyword results were Hit@1 **0.625**, Hit@3 **0.875**, and Recall@3
+  **0.402083**. BM25 scored **0.500**, **0.875**, and **0.395833**. Embeddings
+  scored **1.000**, **1.000**, and **0.514583**. For paraphrases, embedding
+  Recall@3 was **0.650000**, versus **0.425000** for keyword and **0.412500**
+  for BM25. All three methods had the same direct-question Recall@3 of
+  **0.379166**, although embeddings ranked a relevant document first on every
+  direct question.
+- With six, three, eight, five, six, five, three, and four relevant labels per
+  query, the maximum possible average Recall@3 is **0.665625**. Multipart
+  evidence review found that every method's Top 3 collectively covered both
+  parts of the gross-revenue/status question. For the reporting-date/refund-
+  completion question, BM25 and embeddings covered both parts; keyword covered
+  completion timing but did not retrieve clear evidence that `order_date`
+  controls reporting-window inclusion.
+- Decision: retain all three as small, reproducible baselines without tuning.
+  The embedding result is strongest on this development set, particularly for
+  paraphrases, but it is not production-readiness evidence. Limitations include
+  only eight development queries, synthetic content, overlapping and partial-
+  answer labels, a Top-3 recall ceiling below one, and no held-out evaluation.
+  Artifacts: [final labels](../experiments/retrieval/queries.dev.json),
+  [32-document label snapshot](../experiments/retrieval/queries.dev.32-docs.json),
+  and [60-document results](../experiments/retrieval/results.dev.60-docs.json).

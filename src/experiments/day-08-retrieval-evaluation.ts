@@ -20,7 +20,7 @@ const queriesUrl = new URL(
   import.meta.url,
 );
 const resultsUrl = new URL(
-  "../../experiments/retrieval/results.dev.32-docs.json",
+  "../../experiments/retrieval/results.dev.60-docs.json",
   import.meta.url,
 );
 
@@ -116,20 +116,6 @@ const results = {
     ),
   },
   queries: evaluatedQueries,
-  illustrativeCases: [
-    illustrativeCase(
-      evaluatedQueries,
-      "retrieval-dev-paraphrase-01",
-      "Keyword overlap and BM25 retrieved no labeled document in their top three. Embeddings ranked the newly added, labeled discount-and-revenue document first and the existing net-revenue document second, retrieving two of four labeled documents.",
-      "A possible explanation is the vocabulary shift from refunds and net revenue to reimbursements and what remains from sales. The new policy and FAQ documents contain incidental words such as customer, discounts, and after, which can attract lexical methods without answering the revenue-calculation question. Embeddings connected the paraphrase to two metric documents.",
-    ),
-    illustrativeCase(
-      evaluatedQueries,
-      "retrieval-dev-direct-02",
-      "Keyword overlap and embeddings ranked the labeled order-status document first, while BM25 placed it third. Every method retrieved only one of the two labeled documents; newly added field or FAQ documents occupied other top-three positions.",
-      "A possible explanation is that the new refund-granularity, refund-completion, and currency-limitation documents share field, order, refund, or amount vocabulary with the query. They discuss adjacent schema concerns but do not define the complete status-to-refund relationship.",
-    ),
-  ],
 };
 
 await writeFile(resultsUrl, `${JSON.stringify(results, null, 2)}\n`, "utf8");
@@ -251,29 +237,6 @@ function summarize(items: readonly EvaluatedQuery[]) {
   ) as Record<Method, QueryMetrics>;
 }
 
-function illustrativeCase(
-  items: readonly EvaluatedQuery[],
-  id: string,
-  observation: string,
-  possibleExplanation: string,
-) {
-  const item = items.find((candidate) => candidate.id === id);
-  if (!item) throw new Error(`Missing illustrative query ${id}`);
-  return {
-    id: item.id,
-    query: item.query,
-    expectedDocumentIds: item.relevantDocumentIds,
-    retrievedDocumentIds: {
-      keyword: item.methods.keyword.topThreeDocumentIds,
-      bm25: item.methods.bm25.topThreeDocumentIds,
-      embedding: item.methods.embedding.topThreeDocumentIds,
-    },
-    relevantExcerpts: item.evidence,
-    observation,
-    possibleExplanation,
-  };
-}
-
 function average(values: readonly number[]): number {
   return round(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
@@ -359,7 +322,7 @@ function validateInputs(
   corpus: readonly RetrievalDocument[],
   developmentQueries: readonly DevelopmentQuery[],
 ): void {
-  if (corpus.length !== 32) throw new Error(`Expected 32 documents, received ${corpus.length}`);
+  if (corpus.length !== 60) throw new Error(`Expected 60 documents, received ${corpus.length}`);
   const ids = new Set(corpus.map(({ documentId }) => documentId));
   for (const item of developmentQueries) {
     for (const id of item.relevant_document_ids) {
