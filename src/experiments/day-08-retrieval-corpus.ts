@@ -1,15 +1,9 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 
 const CORPUS_DIRECTORY = new URL(
   "../../experiments/retrieval/corpus/",
   import.meta.url,
 );
-const CORPUS_FILES = Object.freeze([
-  "gross-revenue.md",
-  "net-revenue.md",
-  "refunds.md",
-  "date-ranges.md",
-]);
 const PREVIEW_LENGTH = 140;
 
 export type RetrievalDocument = Readonly<{
@@ -23,7 +17,10 @@ export type RetrievalDocument = Readonly<{
 export async function loadRetrievalCorpus(): Promise<
   readonly RetrievalDocument[]
 > {
-  const documents = await Promise.all(CORPUS_FILES.map(loadDocument));
+  const fileNames = (await readdir(CORPUS_DIRECTORY))
+    .filter((fileName) => fileName.endsWith(".md"))
+    .sort();
+  const documents = await Promise.all(fileNames.map(loadDocument));
   const ids = documents.map(({ documentId }) => documentId);
 
   if (new Set(ids).size !== ids.length) {
