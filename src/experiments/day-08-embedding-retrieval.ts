@@ -1,17 +1,12 @@
+import { cosineSimilarity } from "../retrieval/cosine-similarity.js";
+import { embed, EMBEDDING_MODEL } from "../ai/ollama-embedding.js";
 import {
   loadRetrievalCorpus,
   preview,
   type RetrievalDocument,
 } from "./day-08-retrieval-corpus.js";
 
-const OLLAMA_BASE_URL = "http://127.0.0.1:11434";
-const EMBEDDING_MODEL = "all-minilm:latest";
 const MAX_RESULTS = 3;
-
-type EmbeddingResponse = Readonly<{
-  model: string;
-  embeddings: readonly (readonly number[])[];
-}>;
 
 type EmbeddingResult = Readonly<{
   document: RetrievalDocument;
@@ -74,52 +69,6 @@ if (query.length === 0) {
   }
 }
 
-async function embed(input: readonly string[]): Promise<readonly number[][]> {
-  const response = await fetch(`${OLLAMA_BASE_URL}/api/embed`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ model: EMBEDDING_MODEL, input }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Ollama embedding request failed with HTTP ${response.status}: ${await response.text()}`,
-    );
-  }
-
-  const payload: unknown = await response.json();
-  if (!isEmbeddingResponse(payload)) {
-    throw new Error("Ollama returned an invalid embedding response");
-  }
-
-  return payload.embeddings.map((embedding) => [...embedding]);
-}
-
-function cosineSimilarity(
-  left: readonly number[],
-  right: readonly number[],
-): number {
-  let dotProduct = 0;
-  let leftSquaredMagnitude = 0;
-  let rightSquaredMagnitude = 0;
-
-  for (let index = 0; index < left.length; index += 1) {
-    const leftValue = left[index]!;
-    const rightValue = right[index]!;
-    dotProduct += leftValue * rightValue;
-    leftSquaredMagnitude += leftValue * leftValue;
-    rightSquaredMagnitude += rightValue * rightValue;
-  }
-
-  const denominator =
-    Math.sqrt(leftSquaredMagnitude) * Math.sqrt(rightSquaredMagnitude);
-  if (denominator === 0) {
-    throw new Error("Cannot compute cosine similarity for a zero vector");
-  }
-
-  return dotProduct / denominator;
-}
-
 function assertEmbeddingBatch(
   embeddings: readonly (readonly number[])[],
   expectedCount: number,
@@ -142,21 +91,4 @@ function assertSameDimension(
   if (embeddings.some((embedding) => embedding.length !== dimension)) {
     throw new Error("Ollama returned embeddings with inconsistent dimensions");
   }
-}
-
-function isEmbeddingResponse(value: unknown): value is EmbeddingResponse {
-  if (!isRecord(value) || typeof value.model !== "string") return false;
-  if (!Array.isArray(value.embeddings)) return false;
-
-  return value.embeddings.every(
-    (embedding) =>
-      Array.isArray(embedding) &&
-      embedding.every(
-        (item) => typeof item === "number" && Number.isFinite(item),
-      ),
-  );
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
 }

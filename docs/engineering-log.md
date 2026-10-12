@@ -562,3 +562,120 @@
   are not integrated with keyword, BM25, embedding, or vector retrieval. The
   existing Day 8 metrics remain document-level development results and do not
   validate either Day 9 chunking policy.
+
+## Day 10 — Chunk embedding record
+
+- Added a validated chunk embedding record carrying the existing chunk, vector,
+  model identifier, explicit embedding revision, and dimension. Embedding
+  revision is independent of source-document version; the model identifier
+  alone is rejected as a revision. Callers must supply an immutable model
+  revision or artifact digest; local validation cannot verify its provenance.
+- Validation rejects empty, non-finite, sparse, zero-magnitude, and
+  dimension-mismatched vectors, plus invalid dimensions or empty identifiers.
+  Non-zero detection avoids squaring, preserving tiny finite components.
+- Type checking and all seven synthetic-vector checks passed with
+  `npm run test:chunk-embedding`. No model calls, retrieval integration, or
+  database changes were made; Day 8 artifacts remain unchanged.
+
+## Day 10 — Live two-chunk embedding demonstration
+
+- Extracted Day 8's private embedding transport into an importable Ollama
+  module without changing its endpoint, model, request body, or validation.
+  Added `npm run example:chunk-embedding` using the existing long refund
+  fixture, `maxCharacters=700`, and zero overlap. Each request embeds only one
+  chunk's text; both validated records remain in memory.
+- Resolved `all-minilm:latest` through the matching `name` in Ollama's
+  `GET /api/tags` response, requiring its full SHA-256 `digest`. The installed
+  revision was
+  `sha256:1b226e2802dbb772b5fc32a58f103ca1804ef7501331012de126ab22f67475ef`.
+  Metadata checks after each call returned the same digest. Missing, ambiguous,
+  or malformed revision metadata fails rather than substituting a model tag.
+  Checks around requests detect observed tag changes, but do not atomically pin
+  a concurrent model update; no model installation/update was performed here.
+- The live run returned dimension 384 for both chunks. Text lengths were 493
+  and 457 characters; per-request embedding latencies were 573.548 ms and
+  14.026 ms, excluding metadata checks. The first call is a cold-start
+  candidate, not a representative latency estimate. Output contained IDs and
+  metadata only, with no vector values.
+- Type checking, seven existing chunk-record tests, and three mocked adapter
+  tests passed. Adapter checks run with
+  `node --import tsx --test src/ai/ollama-embedding.test.ts`.
+  The sandbox initially blocked local connectivity before any embedding call;
+  the authorized live run then completed two calls without retries. Day 8
+  artifacts remain unchanged; no search, database, or ingestion integration.
+
+## Day 10 — Exact retrieval over two refund chunks
+
+- Added `npm run example:exact-chunk-retrieval` for the fixed query “What
+  happens if the original payment method is closed?” Reused the prior demo's
+  chunk embedding setup and extracted Day 8's cosine implementation unchanged.
+  Shared vector validation supports query records without inventing a source
+  document. All records must match model, immutable revision, and dimension
+  before any comparison; ties sort deterministically by chunk ID.
+- The live run used unchanged 700-character, zero-overlap chunking, text-only
+  inputs, and the same adapter defaults for three embedding calls without
+  retries. Query and chunks matched `all-minilm:latest`, dimension 384, and
+  `sha256:1b226e2802dbb772b5fc32a58f103ca1804ef7501331012de126ab22f67475ef`.
+  Ollama metadata checks surrounded chunk/query embedding as in the prior demo.
+- The exception chunk ranked first with cosine similarity
+  `0.5630380875566526`; the general refund rule ranked second with
+  `0.37013314959827565`. The first chunk directly states the closed-payment-
+  method fallback and its conditions. Query embedding took 9.223 ms; in-memory
+  search took 0.597 ms including validation, scoring, and sorting. Both complete
+  chunk texts were printed. This single query is a demonstration, not a retrieval
+  quality evaluation or a representative latency estimate.
+- Type checking, five synthetic search checks, and all seven existing embedding
+  record checks passed. Day 8 artifacts remain unchanged; no query/chunk tuning,
+  database changes, or ingestion-store integration was added.
+
+## Day 10 — Chunk retrieval development evaluation
+
+- Evaluated the unchanged 60-document corpus and eight Day 8 development
+  queries with 700-character, zero-overlap chunks. Preserved source metadata;
+  chunked Day 8's `title + newline + body` representation without repeating
+  titles on later chunks. Embedded all 70 chunks once, reused them for every
+  query, and embedded each query once (nine calls total, no retries).
+- Ranked every chunk with exact cosine similarity after embedding identity
+  validation, deduplicated by tenant plus parent ID in ranked order, then took
+  three parents. Day 10 document-level Hit@1 and Hit@3 were both **8/8**,
+  unchanged from the saved Day 8 embedding baseline;
+  mean Recall@3 was **0.493750**, versus saved Day 8 embedding **0.514583**.
+  Direct-query recall stayed **0.379166**; paraphrase recall was **0.608333**
+  versus **0.650000**. The only recall decrease was paraphrase 01: gross revenue
+  displaced net revenue in Top 3, reducing labeled recall from 3/6 to 2/6.
+  The retrieved gross-revenue chunk states that discounts/refunds are not
+  subtracted, rather than giving the requested net calculation. Other changes
+  were order swaps or a same-relevance parent replacement.
+- Saved-artifact inspection of paraphrase 01 found gross revenue at parent rank
+  3 (chunk rank 3), scoring **0.496479**, above net revenue at parent rank 4
+  (chunk rank 5), scoring **0.492680**. Both documents had two chunks. The
+  correct net-revenue chunk retained the full answer-bearing formula
+  `SUM(gross_amount - discount_amount - refund_amount)`; its exclusion from
+  Top 3 was a ranking error, not loss of the formula at a chunk boundary.
+  The gross-revenue chunk supplied topical contrast rather than the requested
+  calculation. Day 8 ranked net revenue third; its artifact saved neither
+  scores nor ranks beyond Top 3, so gross revenue's exact historical rank is
+  unavailable. Shorter context changing term/negation weighting is a hypothesis,
+  not an established cause; the historical model revision is also unverified.
+- Recorded `all-minilm:latest`, dimension 384, and installed revision
+  `sha256:1b226e2802dbb772b5fc32a58f103ca1804ef7501331012de126ab22f67475ef`.
+  The saved Day 8 baseline lacks an immutable revision, so identical historical
+  weights cannot be established. Metadata checks matched around each call;
+  frozen corpus, labels, baseline, and implementation checksums matched before
+  and after. Independently recomputed metrics matched both reported summaries.
+- Results preserve the development-only, overlapping/partial-answer judgments
+  and documented inconsistency. Document-level success does not establish chunk
+  evidence completeness, production readiness, or an optimal chunk size.
+  No tuning was performed. Chunking showed no measured improvement on this
+  development set: Hit@1/Hit@3 stayed unchanged and Recall@3 decreased. This
+  observation does not establish that chunking caused the decrease or that
+  chunking generally harms retrieval. No database, ANN, generated answers, or
+  ingestion integration.
+- Type checking and 15 focused checks passed, including parent deduplication
+  before Top 3 and tenant identity. Reproduce with
+  `npm run experiment:day-10-retrieval-evaluation`; each run creates new files.
+  [Saved report](../results/day-10-retrieval-development-2026-10-12T16-38-51-321Z/report.json)
+  includes all parent comparisons and complete chunk rankings; its directory
+  also preserves the frozen protocol and per-invocation records. Day 8 artifacts
+  remain unchanged. The follow-up inspection and log update made no
+  implementation/configuration/label changes and reran no experiments.

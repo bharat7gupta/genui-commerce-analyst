@@ -1,0 +1,472 @@
+{
+  "id": "retrieval-dev-paraphrase-01",
+  "query": "How do I calculate what remains from sales after discounts and customer reimbursements?",
+  "group": "paraphrase",
+  "relevantDocumentIds": [
+    "demo-commerce-net-revenue",
+    "demo-commerce-metric-gross-vs-net-revenue",
+    "demo-commerce-metric-refunds-affect-net-revenue",
+    "demo-commerce-metric-discounts-and-revenue",
+    "demo-commerce-analytics-discount-total-limitation",
+    "demo-commerce-metric-net-revenue-nonnegative"
+  ],
+  "day10": {
+    "parents": [
+      {
+        "tenant": "demo-commerce",
+        "parentDocumentId": "demo-commerce-metric-discounts-and-revenue",
+        "firstChunkId": "chunk-b844575d7aaf3a75e73505e76e5245376ee2df2a201e74f4a39ef9fa3e4b1540",
+        "score": 0.5423959353921258
+      },
+      {
+        "tenant": "demo-commerce",
+        "parentDocumentId": "demo-commerce-analytics-discount-total-limitation",
+        "firstChunkId": "chunk-6f2187bd91e349d76b8efc2c89c2095e8bf514790109f525ce6c23d19ba49fae",
+        "score": 0.5403807942530275
+      },
+      {
+        "tenant": "demo-commerce",
+        "parentDocumentId": "demo-commerce-gross-revenue",
+        "firstChunkId": "chunk-47c37fd69d57de393d953fba3d666dc20e78327105beda39d968383cd2890dcc",
+        "score": 0.4964789646998935
+      }
+    ],
+    "hitAt1": 1,
+    "hitAt3": 1,
+    "recallAt3": 0.333333
+  },
+  "day8Embedding": {
+    "hitAt1": 1,
+    "hitAt3": 1,
+    "recallAt3": 0.5,
+    "topThreeDocumentIds": [
+      "demo-commerce-analytics-discount-total-limitation",
+      "demo-commerce-metric-discounts-and-revenue",
+      "demo-commerce-net-revenue"
+    ]
+  },
+  "queryEmbeddingLatencyMs": 7.439624999999978,
+  "searchLatencyMs": 0.3693340000002081,
+  "chunkRanking": [
+    {
+      "chunkId": "chunk-b844575d7aaf3a75e73505e76e5245376ee2df2a201e74f4a39ef9fa3e4b1540",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-discounts-and-revenue",
+      "score": 0.5423959353921258
+    },
+    {
+      "chunkId": "chunk-6f2187bd91e349d76b8efc2c89c2095e8bf514790109f525ce6c23d19ba49fae",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-discount-total-limitation",
+      "score": 0.5403807942530275
+    },
+    {
+      "chunkId": "chunk-47c37fd69d57de393d953fba3d666dc20e78327105beda39d968383cd2890dcc",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-gross-revenue",
+      "score": 0.4964789646998935
+    },
+    {
+      "chunkId": "chunk-334df21340de0ad8b7e1039c6c0be6f28c0a97a7d94dbcb1cd2900bd8129f492",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-discount-total-limitation",
+      "score": 0.4931602209542471
+    },
+    {
+      "chunkId": "chunk-11a6c30e0c5f56dad71dc939a360cdbf079b46c323a6e313e3846d9907ebdaea",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-net-revenue",
+      "score": 0.49268040044680467
+    },
+    {
+      "chunkId": "chunk-f1f371bab6630312cacb9d9386d854c3e1d6245aa0e074f856c4feac95aa942b",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-discounted-item-refund",
+      "score": 0.4741947016993692
+    },
+    {
+      "chunkId": "chunk-f5a084372337e959433cb878d49f2450ab01fdcbca3a0c93f6a95c3ae08853b0",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-coupon-restoration",
+      "score": 0.47222921726377365
+    },
+    {
+      "chunkId": "chunk-7a461255fdb2cde1ea3be66e3ec4db9bce906d5dfb50cc549036ea1fb987f384",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-profit-not-defined",
+      "score": 0.4695720043718108
+    },
+    {
+      "chunkId": "chunk-dcc97c79dca169b69b62e3a125a46a62a928d1722c0665f7a3a4ac38e36eb2d9",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-refunds",
+      "score": 0.46432962711934106
+    },
+    {
+      "chunkId": "chunk-c5d3639d62cc0d749392b7084d4945981a0e319b7dd63052e320b96b4bd234ae",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-monetary-amounts",
+      "score": 0.45041857948441366
+    },
+    {
+      "chunkId": "chunk-9bc1186e52d4e49633fc62ff2143caf9d9a645db647aba203654f375a2da75c9",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-fully-discounted-orders",
+      "score": 0.4489173966946426
+    },
+    {
+      "chunkId": "chunk-5f1172931487dc8e1e78e9448a7e999708fd53c7354a978d439095246327dc8b",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-refunds-affect-net-revenue",
+      "score": 0.4419735851151906
+    },
+    {
+      "chunkId": "chunk-b35d06f3b3819546a432b35219fd128aa036f6276f46f5741f8cbb27378cd1df",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-gross-vs-net-revenue",
+      "score": 0.4371691679228273
+    },
+    {
+      "chunkId": "chunk-b5c444c64474ca8fe287a7c5568c0fd2441f2529705c39534b1e1dcdcd424ba8",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-fully-refunded-orders",
+      "score": 0.4332090410708513
+    },
+    {
+      "chunkId": "chunk-d076c40baabf4e1f68df1b0b9434aaafcca188ec4a0fee99d375932afa00d0ed",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-cumulative-refund-cap",
+      "score": 0.4197551684229883
+    },
+    {
+      "chunkId": "chunk-edc8868dcb2130203a7409751f86ec1f37928f71befcee7d9b6cfdbbedaeb1c1",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-refunds",
+      "score": 0.41130461901688237
+    },
+    {
+      "chunkId": "chunk-848f31313660316feb6b33cf4013af749917f8057ea57c56f1d498a5320f75ac",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-status-inclusion",
+      "score": 0.4092034592622627
+    },
+    {
+      "chunkId": "chunk-148f2ad27dbe7788f861370adcdce57c27d0fc02677718430f401ee7ab17d19d",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refunds-and-revenue",
+      "score": 0.4055221767590124
+    },
+    {
+      "chunkId": "chunk-6d4e7398ee863341522d9249fdd84d551fd177dd3606ed8edb55ddedc7999d3f",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-damaged-item-adjustments",
+      "score": 0.4047114693538894
+    },
+    {
+      "chunkId": "chunk-b526957caa311723f0caa622969c7136965792d6d5e327ae28d5b50a2810aa52",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-supported-metric-boundary",
+      "score": 0.40214534805540986
+    },
+    {
+      "chunkId": "chunk-4acaa445c26fd1de36da709d22e292e62033ae47716812a62d379ec44f25a2fc",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-refund-eligibility",
+      "score": 0.3816158424076699
+    },
+    {
+      "chunkId": "chunk-10fa02f0662c94ff9ecf87be91ae94b36241c8ed52508851be6cf24ea4cebc51",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-partial-refunds",
+      "score": 0.3695908236582634
+    },
+    {
+      "chunkId": "chunk-61d5c1534898006e31f8891232448e45e9fc03b59ed99b5d0c548ae3332ebba9",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-amount-filters",
+      "score": 0.36575831423324523
+    },
+    {
+      "chunkId": "chunk-42b415710b0f0120728f988fc689e79264cc70508feafc7c6efb12a6829f4622",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-completion-data",
+      "score": 0.34770149840889275
+    },
+    {
+      "chunkId": "chunk-5ee4b6e09fd644db0609d2feb60c3bc3e84aa9dea23df903a88a25339a4bc30a",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-empty-result",
+      "score": 0.347123345845142
+    },
+    {
+      "chunkId": "chunk-1cb5ccdf803ab77a42be0b302c4a3ca40f846b5555fe7bfcc9a0fc5d3633f29b",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-final-sale-items",
+      "score": 0.34361663638826107
+    },
+    {
+      "chunkId": "chunk-8a8bfaf454d9c9a1187eda22fbf19748260743c3a426af5e61b53d8e517de27c",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-request-analytics",
+      "score": 0.33843915026401283
+    },
+    {
+      "chunkId": "chunk-330bba73bc2e486b38023fb1015884995a6d2e8cb30597b8502adc763f7ef39a",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-gross-revenue",
+      "score": 0.33214708215246375
+    },
+    {
+      "chunkId": "chunk-9ae2f571f05b9c57ac0a359fc71d239e6ffb2be0d8d03b48e5e99c89df1924ce",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-refund-processing-time",
+      "score": 0.33010600878176033
+    },
+    {
+      "chunkId": "chunk-a929613978ed5f13566347187c63c221fd3414d757d2a27a80aa95bd7935af43",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-net-revenue-nonnegative",
+      "score": 0.32962867786521316
+    },
+    {
+      "chunkId": "chunk-d30489f9652e2b66c6e4c72f4bd896c335eb3aca4211daf4cdb4343fa0cc454b",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-request-analytics",
+      "score": 0.32934063075529957
+    },
+    {
+      "chunkId": "chunk-e4bee7dcf390d51a3c81eaf7c86a2e3ac660fc687e54dad48f846d77301e84ee",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-net-revenue",
+      "score": 0.3276345443649542
+    },
+    {
+      "chunkId": "chunk-ba910f16f51dce3b4eafb25e0dd958d5bcf0d3864d16b79e64d14216697ab1d1",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-order-status",
+      "score": 0.32268533998371773
+    },
+    {
+      "chunkId": "chunk-61c915297e5e06f5020223bf963abdc97851e7adecd0850607f674ccc13d9111",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-destination",
+      "score": 0.3224869706607409
+    },
+    {
+      "chunkId": "chunk-de84957ee2f015b7a9f5506cc587ab4a5119c5e468fdef065b142f523423823e",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-store-credit-fallback",
+      "score": 0.3196604298752243
+    },
+    {
+      "chunkId": "chunk-9e86e2a778e88e3d87c7e72fbf2c68448d82018e9bd6e101535ebd18db988a6f",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-status-inclusion",
+      "score": 0.3158508160956532
+    },
+    {
+      "chunkId": "chunk-fca3f9c267f316aa905f130e00c2d6133184882a06b62a0bc090c8f9d7e47360",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-refund-granularity",
+      "score": 0.30638770060163256
+    },
+    {
+      "chunkId": "chunk-1be81b42348ab5819567629fe7d74e9f7130bb1d291968cba1bfdcaf1ee98631",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-business-days",
+      "score": 0.3053413477460629
+    },
+    {
+      "chunkId": "chunk-bc1c78425ad39f88dc26d5bcd3e0298dd5791238cafac0d4f9dd76a2eb2536b0",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-multi-metric-requests",
+      "score": 0.3027954315928171
+    },
+    {
+      "chunkId": "chunk-0bc566788fc3215b682d23268127093fa5a53f17d22f1d1040103ff9f2ec5939",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-alternate-refund-card",
+      "score": 0.30271501902150444
+    },
+    {
+      "chunkId": "chunk-c7f44af87bb3522a1c01a7ddc4216d32924625a29c1cac5ad24824cd6291142b",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-status",
+      "score": 0.2934532360063568
+    },
+    {
+      "chunkId": "chunk-c6549c61a0ac2868fd3f4400260641e61a5a7a07a0cb1bf26d34aa2e9ddcea93",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-currency-tax-shipping",
+      "score": 0.2899962955992008
+    },
+    {
+      "chunkId": "chunk-c5fa75ba2df2ab6c4ab3af530cc36d18f29950265139c3d9a637401c017cad6c",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-store-credit-expiration",
+      "score": 0.2638012873721564
+    },
+    {
+      "chunkId": "chunk-4a6c805a119cf5b4e1f1adf222ad493a51910b8fe21caa68414f083fb7227a64",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-date-ranges",
+      "score": 0.26232815252168795
+    },
+    {
+      "chunkId": "chunk-d6f1bdc288c85a67a3d4a0f09bbcf563dca8268c661e069d69546a7d684b06db",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-refund-request-withdrawal",
+      "score": 0.26091062774968926
+    },
+    {
+      "chunkId": "chunk-ee6c5e4e6041e51e6a904d7bd7496152e986814263f3cf9d4645ae576c5155e2",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-metric-additive-disjoint-scopes",
+      "score": 0.25809744582312216
+    },
+    {
+      "chunkId": "chunk-166eea8e848661fcefcfca93b343ddd472b100507e6c6f891b5282288678e5ef",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-order-date",
+      "score": 0.25520792155829053
+    },
+    {
+      "chunkId": "chunk-c85c3e648fd2ba4a9e5de4cc57f222fefd86944ffd22b4004c38184f70f56aca",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-status",
+      "score": 0.25074791153918335
+    },
+    {
+      "chunkId": "chunk-1a1ddb10eaa8ff2ffaa0c1d5c8a1f9a53ca527602e81e856a7e9f338de639506",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-versus-exchange",
+      "score": 0.24992725879984046
+    },
+    {
+      "chunkId": "chunk-4b37054b7b35c3329c2bd1f7317433875b42e9f4dab4be192f196f109af8732e",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-refund-bank-delay-escalation",
+      "score": 0.24078504069445836
+    },
+    {
+      "chunkId": "chunk-cd87d4fd3ba70c10373266260ce23c894bcbd7fcf23924e26a653dcece2d8b4c",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-order-number-verification",
+      "score": 0.22735703099934584
+    },
+    {
+      "chunkId": "chunk-fa84b674e4311582debfc36387ac17640ca886753396c3eb194110e62610848e",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-multi-metric-requests",
+      "score": 0.21870795395924508
+    },
+    {
+      "chunkId": "chunk-95cb873f797605ff0a7960a964c65ce560060d1099a913d9765a843cc2747604",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-return-shipping-authorization",
+      "score": 0.21783743592054905
+    },
+    {
+      "chunkId": "chunk-2929e2d919901dfac901c5881ac60f78d7d2f5355908f99f68408abf978b678a",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-split-refund-destinations",
+      "score": 0.21642517596849853
+    },
+    {
+      "chunkId": "chunk-a6e0f9c858a660a8a495c0629229b6be32fa876d24fa5d60169d58d39fc66386",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-refund-submission-confirmation",
+      "score": 0.1915739722088862
+    },
+    {
+      "chunkId": "chunk-510f49e5f6b893e1ec58b3f2c862b03e05fca2fb0c3a418dac119c3bd78192ca",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-return-shipping-authorization",
+      "score": 0.18836029969558715
+    },
+    {
+      "chunkId": "chunk-22cfeaf19e2c2e87afcef5d4e2ca2392b37641a466e567b53a67f5fecbbc0d59",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-preview-does-not-execute",
+      "score": 0.1873569154645217
+    },
+    {
+      "chunkId": "chunk-123b807a8291a3a4c55a3960646aedf3466411bdc44d9d11ced8d5492b4136e1",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-faq-customer-id-order-number",
+      "score": 0.1821818243437499
+    },
+    {
+      "chunkId": "chunk-a4756e0007b2e47eccfa3ee59971968317bee357d77378604da1ffe868a0d5f0",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-policy-damaged-item-evidence",
+      "score": 0.16712036627536672
+    },
+    {
+      "chunkId": "chunk-e9d8145950bcd68798202d1bee56fe7b68c63842512a114726d4007b92a4dff6",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-dataset-seed-coverage",
+      "score": 0.14900594754657687
+    },
+    {
+      "chunkId": "chunk-c4d1358756e81dd76ba39469c20199beeec52086b3bec55145a3e717da0eccba",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-execution-safeguards",
+      "score": 0.13001542411139164
+    },
+    {
+      "chunkId": "chunk-f739768e664d879dbcc7b7ac98e43d367484f465c1c08e08f130ef54e413e853",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-region-filter-execution",
+      "score": 0.10049732326272043
+    },
+    {
+      "chunkId": "chunk-8ab6b3f3f66c4f7aa152b6f516783077a0c966b8b9d88e3b847afe7c1dd4e708",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-date-comparison-compiler-limit",
+      "score": 0.09410390380007255
+    },
+    {
+      "chunkId": "chunk-4bbee7664e8afb44185581894726f06dc1da903872c12390b9d3f1dd043d6336",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-ordering-limit-rules",
+      "score": 0.09166676095497643
+    },
+    {
+      "chunkId": "chunk-b1b1ddbbae092241f82a7482b496d439c7a09769b7b0a848fbee47e40e73b9de",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-categorical-filters",
+      "score": 0.08900010801603135
+    },
+    {
+      "chunkId": "chunk-6b4cdb7ed3c496fd7c67563a7587052f00f26600e96c7f4d7400d504611252a4",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-date-ranges",
+      "score": 0.08866331129642159
+    },
+    {
+      "chunkId": "chunk-35bb1fe17c1253156b5a3f0086dfe0215661749c873fdaa340da3a1c767ce0d0",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-analytics-grouping-compiler-limit",
+      "score": 0.07319954125517882
+    },
+    {
+      "chunkId": "chunk-80f4f57da313817f34f89c21edd74282330191133ed3828649246f5c88cb43cc",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-order-identifiers",
+      "score": 0.02526699129226519
+    },
+    {
+      "chunkId": "chunk-c8b4023104357284fd14412c3afe25839f5754771fd0046010573ed31bda5ae9",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-query-contradictory-filters",
+      "score": 0.000610005996796609
+    },
+    {
+      "chunkId": "chunk-fd5931fe606ad99f4362ac85c00f5bfbe2fe68d3fd831fbf42db3d9e09f30360",
+      "tenant": "demo-commerce",
+      "parentDocumentId": "demo-commerce-field-region-and-category",
+      "score": -0.02893047441006639
+    }
+  ]
+}
