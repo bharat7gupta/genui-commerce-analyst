@@ -1,0 +1,376 @@
+{
+  "label": "development revision; estimator-only policy change, not unchanged baseline",
+  "sourceReport": "report.json",
+  "inputEstimator": {
+    "version": "comparison-input-reservation-v2-approx",
+    "kind": "approximate",
+    "asciiBytesPerToken": 3,
+    "nonAsciiBytesPerToken": 1,
+    "proportionalAllowance": 0.2,
+    "perMessageAllowance": 32,
+    "fixedAllowance": 128,
+    "method": "Serialize provider-neutral messages/tools as compact JSON. Estimate ASCII bytes / 3 plus non-ASCII UTF-8 bytes, rounded up; add ceil(20% of that estimate), 32 per message and 128 fixed.",
+    "uncertainty": "Heuristic for English prose and JSON, not a model tokenizer or hard token guarantee. Code, identifiers, multilingual text and the provider chat/tool template can differ. Allowances are policy choices, not calibrated error bounds; not fitted to recorded usage. Actual reported usage alone is charged, including repeated input."
+  },
+  "countingAvailability": {
+    "provider": "Ollama 0.35.0",
+    "checkedBeforeGeneration": true,
+    "endpoints": {
+      "/api/tokenize": 404,
+      "/tokenize": 404,
+      "/v1/tokenize": 404,
+      "/v1/messages/count_tokens": 404
+    },
+    "matchingTokenizerRuntimeFound": false,
+    "metadataTemplate": "{{ .Prompt }}",
+    "noGenerationProbes": true
+  },
+  "reviewMethod": "Existing exact scalar grader on observations and manually extracted answer table. Reference values previously independently verified on the real seeded database in Day 15; exact decimal reconciliation. Manual inspection of citation, causal/currency claims and omitted overall evidence. No new evaluation harness.",
+  "estimateVersusReported": [
+    {
+      "turn": 1,
+      "inputTokenReservation": 2093,
+      "reportedInputTokens": 1191,
+      "excessReservation": 902,
+      "reportedOutputTokens": 129,
+      "maxOutputTokens": 512,
+      "modelLatencyMs": 16164,
+      "cumulativeActualTokens": 1320
+    },
+    {
+      "turn": 2,
+      "inputTokenReservation": 2885,
+      "reportedInputTokens": 1673,
+      "excessReservation": 1212,
+      "reportedOutputTokens": 323,
+      "maxOutputTokens": 512,
+      "modelLatencyMs": 14180,
+      "cumulativeActualTokens": 3316
+    }
+  ],
+  "toolTrajectory": [
+    {
+      "name": "get_metric_definition",
+      "callId": "call_6bj43x10",
+      "rawArguments": "{\"metric\":\"net_revenue\"}",
+      "validatedArguments": {
+        "metric": "net_revenue"
+      },
+      "observation": {
+        "success": true,
+        "data": {
+          "definition": {
+            "metric": "net_revenue",
+            "meaning": "Net revenue after discounts and refunds.",
+            "calculation": "SUM(gross_amount - discount_amount - refund_amount)",
+            "relevantExclusions": [
+              "No order statuses are excluded unless an explicit supported status filter is applied."
+            ]
+          },
+          "sourceId": "src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue",
+          "sourceVersion": null
+        }
+      }
+    },
+    {
+      "name": "compare_net_revenue_by_region",
+      "callId": "call_yvfu7784",
+      "rawArguments": "{\"baseline\":{\"end\":\"2025-09-01\",\"start\":\"2025-08-01\"},\"target\":{\"end\":\"2025-10-01\",\"start\":\"2025-09-01\"}}",
+      "validatedArguments": {
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        }
+      },
+      "observation": {
+        "success": true,
+        "data": {
+          "metric": "net_revenue",
+          "dimension": "region",
+          "baseline": {
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "target": {
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "segments": [
+            {
+              "region": "East",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "2020.00",
+              "targetValue": "2320.00",
+              "absoluteChange": "300.00"
+            },
+            {
+              "region": "North",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "2275.00",
+              "targetValue": "2850.00",
+              "absoluteChange": "575.00"
+            },
+            {
+              "region": "South",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "1900.00",
+              "targetValue": "1900.00",
+              "absoluteChange": "0.00"
+            },
+            {
+              "region": "West",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "1030.00",
+              "targetValue": "1225.00",
+              "absoluteChange": "195.00"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "checks": {
+    "periodIntent": {
+      "status": "pass",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      }
+    },
+    "regionalObservations": {
+      "status": "pass",
+      "numericalChecks": [
+        {
+          "region": "East",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2020.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2320.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 300.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2275.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2850.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 575.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 0.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1030.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1225.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 195.00 exactly"
+        }
+      ]
+    },
+    "regionalContributionsInAnswer": {
+      "status": "pass",
+      "numericalChecks": [
+        {
+          "region": "East",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2020.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2320.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 300.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2275.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2850.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 575.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 0.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1030.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1225.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 195.00 exactly"
+        }
+      ]
+    },
+    "regionalReconciliation": {
+      "status": "pass",
+      "auditOnly": {
+        "baselineValue": "7225.00",
+        "targetValue": "8295.00",
+        "absoluteChange": "1070.00"
+      }
+    },
+    "overallNumbers": {
+      "status": "fail",
+      "reason": "Final answer omits baseline/target totals, overall increase and percentage; compare_periods was not selected. Regional audit sums are not evidence that the answer reported these."
+    },
+    "definitionSourceCitedInAnswer": {
+      "status": "pass",
+      "sourceId": "src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue",
+      "sourceVersion": null
+    },
+    "noUnsupportedCausalClaims": {
+      "status": "pass",
+      "evidence": "Answer explicitly states regional contributions do not establish business causes."
+    },
+    "noUnsupportedCurrencyClaims": {
+      "status": "pass",
+      "evidence": "Bare decimal values; no inferred currency symbols or labels."
+    },
+    "actualAccounting": {
+      "status": "pass",
+      "reportedInputTokens": 2864,
+      "reportedOutputTokens": 452,
+      "cumulativeTokens": 3316,
+      "reservationsDeducted": false
+    },
+    "frozenControls": {
+      "status": "pass",
+      "promptAndToolsUnchanged": true,
+      "limitsUnchanged": true,
+      "previousRunsUnchanged": true
+    }
+  },
+  "omittedEvidence": [
+    "No compare_periods scalar/percentage observation",
+    "Final answer omits overall 7225.00 to 8295.00, increase 1070.00, and approximately 14.81%"
+  ],
+  "finalAnswer": "**Metric Definition**\n*   **Metric:** net_revenue\n*   **Meaning:** Net revenue after discounts and refunds.\n*   **Calculation:** SUM(gross_amount - discount_amount - refund_amount)\n*   **Source:** src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue\n\n**Regional Comparison: August 2025 vs September 2025**\nThe following table shows the net revenue for each region in August 2025 (baseline) and September 2025 (target), along with the absolute change.\n\n| Region | Baseline (Aug 2025) | Target (Sep 2025) | Absolute Change |\n| :--- | :--- | :--- | :--- |\n| East | 2020.00 | 2320.00 | +300.00 |\n| North | 2275.00 | 2850.00 | +575.00 |\n| South | 1900.00 | 1900.00 | 0.00 |\n| West | 1030.00 | 1225.00 | +195.00 |\n\n**Note on Regional Contributions:** The data above shows the absolute change in net revenue by region. These contributions describe the magnitude of the change but do not establish business causes for why these changes occurred.",
+  "termination": {
+    "reason": "answer",
+    "completed": true,
+    "answerClaimsVerified": false
+  },
+  "allRequestedAnswerChecksPassed": false,
+  "telemetry": {
+    "model": "qwen3.5:4b",
+    "reasoningEffort": "none",
+    "promptVersion": "comparison-agent-v3",
+    "modelTurns": 2,
+    "toolExecutions": 2,
+    "sqlExecutions": 2,
+    "totalLatencyMs": 30473.446292,
+    "totalModelLatencyMs": 30344,
+    "cumulativeInputTokens": 2864,
+    "cumulativeOutputTokens": 452,
+    "cumulativeTokens": 3316,
+    "apiCost": {
+      "status": "unavailable",
+      "usd": null,
+      "reason": "API pricing is not configured"
+    }
+  },
+  "retries": 0,
+  "postRunTuning": false
+}

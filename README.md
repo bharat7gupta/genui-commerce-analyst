@@ -3,6 +3,82 @@
 Minimal Day 1 foundation for calling a local Qwen model through an
 OpenAI-compatible endpoint.
 
+## Day 16 — One model-selected comparison tool
+
+`npm run experiment:compare-periods-tool` sends the fixed September-against-
+August net-revenue request once through the existing provider adapter. The
+model chooses whether to call the read-only `compare_periods` tool and supplies
+its arguments. The strict schema requires explicit net_revenue, baseline, and
+target; existing QueryPlan/compiler/date-limit checks run before execution.
+
+`runComparePeriodsToolOnce(provider, question, executor?)` preserves assistant
+text, raw tool arguments, and call ID, then appends a tool-result message with
+the same ID to provider-neutral conversation history. It makes at most one
+model request and executes at most one tool call. It stops after appending the
+tool result: no follow-up model answer or agent loop. Multiple calls, missing
+IDs, unsupported tools, malformed/invalid arguments, no-call responses,
+refusals, provider errors, and execution failures are recorded without retries.
+
+The live example creates a new results directory with protocol/checksums,
+immediate raw-call JSONL, validated arguments, result, full conversation,
+existing model telemetry, and SQL count. It requires the model configuration
+and the existing seeded database. `npm run test:compare-periods-tool` uses fake
+providers and executors; Day 4 and adapter protocol tests remain reusable.
+
+### Bounded comparison agent
+
+`npm run experiment:compare-periods-agent` uses the same runner with `--agent`.
+`runComparePeriodsAgent` lives in the existing comparison workflow module and
+offers only compare_periods. It returns preserved history to the model after
+tool execution, with maximum three model turns, two tool executions, 6000
+cumulative provider-reported tokens including repeated input, and a 90-second
+overall deadline. A separately versioned agent prompt adds final-answer
+instructions while the earlier single-call prompt remains unchanged.
+
+Before each request, application code uses `comparison-input-reservation-v2-approx`:
+compact messages/tools JSON, ceil(ASCII bytes / 3 + non-ASCII UTF-8 bytes),
+plus ceil(20% of the estimate), 32 per message and 128 fixed. This approximate
+reservation is not a tokenizer or hard token guarantee; identifiers, code,
+multilingual input and chat/tool templates can differ. Output is capped at the
+smaller of 512 or the remaining estimated input/output capacity. Reservations
+are never deducted as actual usage. Every reported turn's usage is charged; missing or
+invalid usage stops the loop. Deadline cancellation reaches model fetch and
+DuckDB interruption. Strictly validated arguments are normalized before repeat
+checking, so whitespace and JSON key order cannot bypass the duplicate stop.
+
+Results include explicit stop reason, turn/tool traces, cumulative usage, and
+total latency. Budget, timeout, repeat, and validation failures have
+`completed: false`. A normal `answer` stop means the loop produced a response
+after observing a successful comparison, with `answerClaimsVerified: false`;
+it does not establish correct dates, figures, currency, or interpretation.
+No retries or separate evaluation harness are added. Existing workflow tests
+include scripted repeated-call, budget, missing-usage, and cancellation stops.
+
+`npm run experiment:compare-periods-agent-v2` selects the development revision
+`compare-periods-agent-v2` / `compare-periods-tool-definition-v2` using the same
+runner and bounded loop. It spells out [start, end) boundaries and the first
+day of the following month as a full month's exclusive end, with February 2032
+as the example. Currency symbols/labels require result currency metadata;
+current results supply none. Valid explicit partial periods remain supported
+without correction. V1 prompts/descriptions and previous run artifacts are
+preserved; this is an exposed-case development revision, not an unchanged
+baseline. Period intent, numerical agreement with tool values, and unsupported
+currency claims are reviewed separately.
+
+`npm run experiment:comparison-investigation-agent` uses the same loop/runner
+with three independently callable read-only tools: compare_periods,
+compare_net_revenue_by_region, and get_metric_definition. The latter reuses the
+existing definition validator and adds its repository source ID and nullable
+version to the observation. No fixed workflow is exposed as a tool and no tool
+order is prescribed. The versioned comparison-agent-v3 protocol permits five
+model turns and four tool executions, retaining the 6000-token budget,
+90-second cancellation deadline, and normalized repeated-call stops.
+
+The earlier live development run obtained definition and correct regional observations
+but stopped at the conservative input-reservation budget before another model
+turn. It produced no final answer; a normal full investigation was not completed.
+Available observations and missing answer evidence are reviewed separately.
+
 ## Setup
 
 ```sh

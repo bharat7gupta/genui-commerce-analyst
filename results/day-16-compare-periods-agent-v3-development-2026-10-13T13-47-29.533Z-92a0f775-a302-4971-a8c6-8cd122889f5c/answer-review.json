@@ -1,0 +1,140 @@
+{
+  "label": "development revision",
+  "sourceReport": "report.json",
+  "reviewMethod": "Recorded observations checked with frozen Day 15 reference and existing exact numerical grader; no SQL/model rerun",
+  "checks": {
+    "periodIntent": {
+      "status": "pass",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      }
+    },
+    "regionalObservations": {
+      "status": "pass",
+      "numericalChecks": [
+        {
+          "region": "East",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2020.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2320.00 exactly"
+        },
+        {
+          "region": "East",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 300.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 2275.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 2850.00 exactly"
+        },
+        {
+          "region": "North",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 575.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1900.00 exactly"
+        },
+        {
+          "region": "South",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 0.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 1030.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 1225.00 exactly"
+        },
+        {
+          "region": "West",
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 195.00 exactly"
+        }
+      ]
+    },
+    "overallNumbers": {
+      "status": "not_reached",
+      "reason": "compare_periods was not selected and no final answer was produced",
+      "auditOnlyRegionalReconciliation": {
+        "baselineValue": "7225.00",
+        "targetValue": "8295.00",
+        "absoluteChange": "1070.00"
+      }
+    },
+    "definitionProvenanceAvailable": {
+      "status": "pass",
+      "sourceId": "src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue",
+      "sourceVersion": null
+    },
+    "regionalContributionsInAnswer": {
+      "status": "not_reached",
+      "reason": "No final answer"
+    },
+    "definitionSourceCitedInAnswer": {
+      "status": "not_reached",
+      "reason": "No final answer"
+    },
+    "noUnsupportedCausalClaims": {
+      "status": "not_reached",
+      "reason": "No final answer to inspect; none generated"
+    },
+    "noUnsupportedCurrencyClaims": {
+      "status": "not_reached",
+      "reason": "No final answer to inspect; none generated"
+    }
+  },
+  "omittedEvidence": [
+    "No scalar compare_periods observation or percentage-change observation",
+    "No final answer containing overall comparison, regional contributions, definition citation, or descriptive-versus-causal distinction"
+  ],
+  "termination": {
+    "reason": "token_budget",
+    "reportedTokens": 1320,
+    "remainingTokens": 4680,
+    "nextInputTokenReservation": 8282,
+    "explanation": "Application preflight reservation exceeded remaining budget; actual reported usage had not reached 6000. This is a conservative-reservation stop, not evidence of model inability to produce the answer."
+  },
+  "allRequestedAnswerChecksPassed": false,
+  "newModelCalls": 0,
+  "newSqlExecutions": 0,
+  "previousRunsUnchanged": true
+}

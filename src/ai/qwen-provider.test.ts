@@ -314,6 +314,21 @@ async function generateWithMockedTransport(
   }
 }
 
+test("propagates application cancellation to fetch without serializing the signal", async () => {
+  const originalFetch = globalThis.fetch;
+  const controller = new AbortController();
+  controller.abort(new Error("Application deadline"));
+  globalThis.fetch = async (_input, init) => {
+    assert.equal(init?.signal, controller.signal);
+    assert.equal(Object.hasOwn(JSON.parse(String(init?.body)), "signal"), false);
+    throw controller.signal.reason;
+  };
+  try {
+    const provider = new QwenProvider({ baseUrl: "http://model.test/v1", model: "qwen-test", reasoningEffort: "none" });
+    await assert.rejects(provider.generate({ messages: [], signal: controller.signal }), /Application deadline/);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
 function completionResponse(
   message: Record<string, unknown>,
   finishReason = "stop",

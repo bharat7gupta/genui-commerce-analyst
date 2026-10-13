@@ -32,6 +32,8 @@ export type ModelRequest = {
   temperature?: number;
   maxTokens?: number;
   responseFormat?: JsonSchemaResponseFormat;
+  /** Application-owned cancellation; never serialized as a model argument. */
+  signal?: AbortSignal;
 };
 
 export type JsonSchemaResponseFormat = {

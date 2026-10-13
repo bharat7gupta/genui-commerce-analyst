@@ -17,7 +17,7 @@ export type TableCell = string | number | boolean | null;
 export type TableRow = Readonly<Record<string, TableCell>>;
 
 export interface QueryPlanExecutor {
-  execute(plan: QueryPlan): Promise<readonly TableRow[]>;
+  execute(plan: QueryPlan, options?: Readonly<{ signal?: AbortSignal }>): Promise<readonly TableRow[]>;
 }
 
 type NonPlanExtractionResult = Exclude<

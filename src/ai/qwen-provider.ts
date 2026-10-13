@@ -61,6 +61,7 @@ export class QwenProvider implements StreamingModelProvider {
     try {
       response = await fetch(`${this.config.baseUrl}/chat/completions`, {
         method: "POST",
+        ...(request.signal === undefined ? {} : { signal: request.signal }),
         headers: { "content-type": "application/json", ...(this.config.apiKey ? { authorization: `Bearer ${this.config.apiKey}` } : {}) },
         body: JSON.stringify({
           model: this.config.model, reasoning_effort: this.config.reasoningEffort,
@@ -101,6 +102,7 @@ export class QwenProvider implements StreamingModelProvider {
     try {
       response = await fetch(`${this.config.baseUrl}/chat/completions`, {
         method: "POST",
+        ...(request.signal === undefined ? {} : { signal: request.signal }),
         headers: {
           "content-type": "application/json",
           ...(this.config.apiKey

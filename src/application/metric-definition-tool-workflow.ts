@@ -323,7 +323,7 @@ function executeToolCall(
   }
 }
 
-function validateToolCallBatch(
+export function validateToolCallBatch(
   toolCalls: readonly ModelToolCall[],
   priorCallIds: ReadonlySet<string>,
 ): Extract<
@@ -352,7 +352,7 @@ function validateToolCallBatch(
   return null;
 }
 
-type ProviderCallAttempt =
+export type ProviderCallAttempt =
   | Readonly<{
       success: true;
       result: ModelResult;
@@ -364,7 +364,7 @@ type ProviderCallAttempt =
       telemetry: WorkflowModelCall;
     }>;
 
-async function callProvider(
+export async function callProvider(
   provider: ModelProvider,
   requestIndex: number,
   request: ModelRequest,

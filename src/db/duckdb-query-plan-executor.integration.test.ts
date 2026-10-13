@@ -211,6 +211,16 @@ test("rejects an explicit interval one day beyond the maximum before opening Duc
   );
 });
 
+test("external application cancellation interrupts DuckDB and retains its abort reason", { timeout: 15_000 }, async () => {
+  const executor = new DuckDBQueryPlanExecutor({ databasePath: expensiveDatabasePath, executionDeadlineMs: 2000 });
+  const controller = new AbortController();
+  const reason = new Error("Overall agent deadline");
+  const timer = setTimeout(() => controller.abort(reason), 30);
+  try {
+    await assert.rejects(executor.execute(makePlan(), { signal: controller.signal }), (error) => error === reason);
+  } finally { clearTimeout(timer); }
+});
+
 test(
   "interrupts an expensive query and permits a subsequent invocation",
   { timeout: 15_000 },

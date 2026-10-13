@@ -85,7 +85,8 @@ export class DuckDBQueryPlanExecutor implements QueryPlanExecutor {
     }
   }
 
-  async execute(plan: QueryPlan): Promise<readonly TableRow[]> {
+  async execute(plan: QueryPlan, options: Readonly<{ signal?: AbortSignal }> = {}): Promise<readonly TableRow[]> {
+    options.signal?.throwIfAborted();
     const compiled = compileQueryPlan(plan);
     enforceExplicitDateIntervalLimit(
       plan,
@@ -97,12 +98,15 @@ export class DuckDBQueryPlanExecutor implements QueryPlanExecutor {
     let connection: Awaited<ReturnType<DuckDBInstance["connect"]>> | undefined;
 
     try {
+      options.signal?.throwIfAborted();
       connection = await instance.connect();
+      options.signal?.throwIfAborted();
       const reader = await runWithExecutionDeadline(
         connection,
         compiled.sql,
         compiled.parameters,
         this.executionDeadlineMs,
+        options.signal,
       );
       return toTableRows(reader.getRowObjectsJson());
     } finally {
@@ -136,7 +140,9 @@ async function runWithExecutionDeadline(
   sql: string,
   parameters: readonly string[],
   deadlineMs: number,
+  signal?: AbortSignal,
 ): Promise<DuckDBResultReader> {
+  signal?.throwIfAborted();
   let deadlineExpired = false;
   let interruptError: unknown;
   const deadlineTimer = setTimeout(() => {
@@ -147,9 +153,14 @@ async function runWithExecutionDeadline(
       interruptError = error;
     }
   }, deadlineMs);
+  const abortQuery = () => {
+    try { connection.interrupt(); } catch (error) { interruptError = error; }
+  };
+  signal?.addEventListener("abort", abortQuery, { once: true });
 
   try {
     const reader = await connection.runAndReadAll(sql, [...parameters]);
+    signal?.throwIfAborted();
     if (deadlineExpired) {
       throw new DuckDBExecutionTimeoutError(
         deadlineMs,
@@ -159,6 +170,7 @@ async function runWithExecutionDeadline(
     }
     return reader;
   } catch (error) {
+    signal?.throwIfAborted();
     if (deadlineExpired && !(error instanceof DuckDBExecutionTimeoutError)) {
       throw new DuckDBExecutionTimeoutError(
         deadlineMs,
@@ -173,6 +185,7 @@ async function runWithExecutionDeadline(
     throw error;
   } finally {
     clearTimeout(deadlineTimer);
+    signal?.removeEventListener("abort", abortQuery);
   }
 }
 

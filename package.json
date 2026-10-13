@@ -4,6 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "experiment:comparison-investigation-agent": "node --import tsx src/experiments/day-16-compare-periods-tool.ts --agent-v3",
+    "experiment:compare-periods-agent-v2": "node --import tsx src/experiments/day-16-compare-periods-tool.ts --agent-v2",
+    "experiment:compare-periods-agent": "node --import tsx src/experiments/day-16-compare-periods-tool.ts --agent",
+    "experiment:compare-periods-tool": "node --import tsx src/experiments/day-16-compare-periods-tool.ts",
+    "test:compare-periods-tool": "node --import tsx --test src/application/compare-periods-tool-once.test.ts",
     "experiment:investigation-development": "node --import tsx src/experiments/day-15-investigation-development.ts",
     "experiment:investigation-input": "node --import tsx src/experiments/day-15-natural-language-investigation.ts",
     "test:investigation-input": "node --import tsx --test src/application/natural-language-investigation.test.ts",

@@ -835,3 +835,255 @@
   SHA-256 checks matched for 155 protected source/artifact files, including the
   earlier three-run report. See the
   [contract review and both grading versions](evals/day-15-investigation-contract-review.md).
+
+## Day 16 — One model-selected compare_periods execution
+
+- Inspected Day 4's tool workflow and reused its provider-call telemetry and
+  tool-call ID validation helpers. Exposed the existing scalar comparison as
+  read-only compare_periods, with strict net_revenue/baseline/target arguments
+  and existing calendar, non-overlap, compiler and date-cap validation before
+  execution. Adapter and deterministic comparison logic are unchanged.
+- Froze compare-periods-tool-v1, temperature 0, output cap 512, and reasoning
+  effort none. Sent “Compare net revenue in September 2025 against August
+  2025.” once to qwen3.5:4b, without forced tool choice, retries, or tuning.
+  The model selected compare_periods with call ID call_ca18zyh4 and correct
+  baseline [2025-08-01, 2025-09-01), target [2025-09-01, 2025-10-01).
+- One valid tool execution made two read-only DuckDB queries: 7225.00 → 8295.00,
+  absolute change 1070.00, percentage 14.81. Preserved empty assistant text and
+  raw tool-call arguments/ID, then appended the success tool-result message
+  with matching toolCallId. History ends at system → user → assistant tool
+  call → tool result; no second model request or final answer was generated.
+- Existing telemetry: model latency 13147 ms, 523 input / 110 output / 633
+  total tokens, finish reason tool_calls, request ID unavailable. API cost
+  unavailable because pricing is not configured; local total cost unmeasured.
+  This first-call observation does not establish reliability or warm latency.
+- Type checking and 28 focused Day 4/adapter/comparison/one-call checks passed.
+  Frozen checksums matched before and after; Day 15 artifacts remain intact.
+  [Saved report](../results/day-16-compare-periods-tool-2026-10-13T11-13-54.029Z-280fbac2-5ee8-4f89-b33c-cc5119cce972/report.json)
+  includes validated arguments, actual result, conversation and metadata;
+  protocol.json and calls.jsonl preserve the frozen inputs and immediate raw
+  invocation. Reproduce with `npm run experiment:compare-periods-tool` (one
+  real model call). No agent loop or investigation orchestration was added.
+
+## Day 16 — Minimal bounded comparison agent
+
+- Extended the existing workflow, scripted tests, and runner rather than adding
+  another evaluation harness. Only compare_periods is offered. Reused Day 4
+  telemetry/ID checks and preserved assistant calls and matching tool results
+  across requests. New compare-periods-agent-v1 adds final-answer instructions;
+  the evaluated single-call prompt stays unchanged.
+- Enforced maximum three model turns, two tool executions, and 6000 cumulative
+  reported tokens, charging repeated input each turn. Preflight reserves input
+  UTF-8 bytes plus framing allowance (conservative, not an exact tokenizer),
+  then caps output within remaining budget. Missing/invalid usage halts.
+  A 90-second shared abort signal reaches provider fetch and DuckDB interruption.
+  Normalized duplicate calls stop before another execution. Explicit budget,
+  repeat, timeout and failure reasons are never completed answers.
+- One frozen live run of the same September-against-August question, no tuning
+  or retries: stopReason answer, two model turns, one tool execution, two SQL
+  queries, total latency 16301.853 ms. Turn 1: 13052 ms, 591 input / 110 output
+  tokens; turn 2: 3201 ms, 818 input / 64 output. Cumulative 1409 input + 174
+  output = 1583 tokens. Each request's output cap was 512.
+- Model call call_mdrm7mpp used [2025-08-01, 2025-08-31) and
+  [2025-09-01, 2025-09-30), valid but incorrect full-month boundaries. Tool
+  returned 7225.00 → 8035.00, change 810.00 (11.21%). The answer repeated those
+  values and added dollar symbols, without evidence of a currency definition.
+  The correct previously verified full-month September result is 8295.00,
+  change 1070.00 (14.81%); excluding September 30 loses the 260.00 seed order.
+  This is incorrect period interpretation, not faulty SQL arithmetic. Normal
+  loop termination is not user-task success; answerClaimsVerified remains false.
+- Type checking and 44 focused scripted/Day 4/adapter/comparison/executor checks
+  passed, including actual DuckDB cancellation. Frozen live checksums matched.
+  API cost unavailable; total local cost unmeasured. Earlier recorded runs are
+  preserved. No post-run prompt or implementation tuning and no replay.
+- [Saved agent report](../results/day-16-compare-periods-agent-2026-10-13T11-50-27.193Z-365d012f-b656-4773-9c89-7f829e46c685/report.json)
+  preserves full turn trace, raw calls, validated intervals, tool history,
+  unverified final answer, stop reason, latency and cumulative tokens; the
+  same directory holds frozen protocol.json and immediate calls.jsonl.
+
+## Day 16 — Explicit date/currency interface development revision
+
+- Inspection: v1 tool description already states start-inclusive/end-exclusive
+  intervals and full-month intent; the v1 system prompt also says inclusive
+  starts/exclusive ends. Neither spells out the next month's first day, the
+  schema date fields have no descriptions, and neither supplies a currency
+  metadata rule. The execution path already uses [start, end) SQL predicates.
+- Added compare-periods-agent-v2 / compare-periods-tool-definition-v2 with
+  date-field descriptions, explicit next-month-first-day semantics, and a
+  February 2032 example unrelated to the exposed August/September request.
+  Currency symbols/labels require currency metadata; the current result has
+  none. Runtime validators/compiler/executor are unchanged: valid explicit
+  partial periods remain accepted, with no hard-coded month correction.
+- Same request ran once with qwen3.5:4b, temperature 0, reasoning none, no
+  retries. Call call_e8arx5ho selected baseline [2025-08-01, 2025-09-01), target
+  [2025-09-01, 2025-10-01). Tool result 7225.00 → 8295.00, change 1070.00
+  (14.81%). Stop answer after two model turns, one tool execution, two SQL
+  queries; total latency 18125.858 ms. Turn latencies 14484/3517 ms, usage
+  786/110 then 1014/67, cumulative 1800 input + 177 output = 1977 tokens.
+  Output caps were 512 then 313 under the unchanged cumulative-budget policy.
+- Separate review: period intent passed; numerical agreement with observed tool
+  values and increase direction passed via manual extraction and the existing
+  exact scalar grader. Unsupported currency failed: the final answer used
+  dollar signs despite absent currency metadata. Preserve that answer unchanged
+  and keep answerClaimsVerified false; normal termination is not full task
+  correctness. API cost unavailable, total local cost unmeasured.
+- This is a development revision influenced by exposed failures, not an
+  unchanged-baseline result or generalization evidence. Prompt and tool wording
+  changed together; this single run cannot isolate their effects. Earlier runs
+  remain byte-for-byte unchanged and frozen run checksums matched. Type checking
+  and 14 existing/extended workflow tests passed, including partial periods.
+  Reused the bounded runner; no new evaluation harness or post-run tuning.
+- [Saved development report](../results/day-16-compare-periods-agent-v2-development-2026-10-13T13-26-12.378Z-8d83153d-87ad-40fd-b5bf-a1f5fa193cc3/report.json)
+  records raw calls/history and telemetry. Separate
+  [answer review](../results/day-16-compare-periods-agent-v2-development-2026-10-13T13-26-12.378Z-8d83153d-87ad-40fd-b5bf-a1f5fa193cc3/answer-review.json)
+  preserves the three independent checks without modifying the recorded call
+  or original report.
+
+## Day 16 — Three independent read-only agent capabilities
+
+- Added compare_net_revenue_by_region and get_metric_definition alongside
+  compare_periods in the existing bounded loop/runner. Reused Day 15 regional
+  comparison, date validation, exact decimals, and the existing definition tool
+  validator. Definition observation carries the repository source ID and null
+  source version. No fixed investigation workflow tool or prescribed ordering.
+- New comparison-agent-v3 protocol permits five model turns and four total tool
+  executions; existing 6000-token, 90-second, normalization and call-ID controls
+  remain in place. Earlier revisions keep their original 3/2 limits. Extended
+  existing scripted tests for chosen order, provenance, argument rejection,
+  regional repeats and four-tool stops; type checking and 45 checks passed.
+- One frozen live run of the requested August-to-September investigation,
+  qwen3.5:4b, temperature 0, reasoning none, no retries/tuning. The model chose
+  get_metric_definition (call_k3yqqfx2, net_revenue), then regional comparison
+  (call_lq7ui5q6) with correct [2025-08-01, 2025-09-01) baseline and
+  [2025-09-01, 2025-10-01) target. Both observations succeeded, with matching
+  tool-result IDs. Regional changes: East 300.00, North 575.00, South 0.00,
+  West 195.00. Auditor-only sums reconcile to 7225.00 → 8295.00, change 1070.00.
+- compare_periods was not selected. After two tools/two SQL queries in the first
+  model turn, the application stopped token_budget before a second turn. Actual
+  usage was 1191 input + 129 output = 1320 tokens; initial reservation 5776,
+  output cap 224. The stop reflects the conservative serialized-input reservation
+  of 8282 exceeding the remaining 4680 tokens, not actual exhaustion of 6000 reported
+  tokens or evidence that the model could not answer.
+  Model latency 16109 ms; total latency 16272.149 ms.
+- No final answer: scalar/percentage observation, answer-level overall/regional
+  reporting, definition citation, and causal/currency checks are not reached.
+  Available regional dates/numbers and definition provenance passed observation
+  checks. Do not count lack of causal/currency claims without an answer as a
+  successful requested response. completed is false; no automatic retries or
+  post-run adjustment. API cost unavailable; total local execution cost unmeasured.
+- [Saved three-tool report](../results/day-16-compare-periods-agent-v3-development-2026-10-13T13-47-29.533Z-92a0f775-a302-4971-a8c6-8cd122889f5c/report.json)
+  preserves raw choices, arguments, observations/history and telemetry. Its
+  [answer/evidence review](../results/day-16-compare-periods-agent-v3-development-2026-10-13T13-47-29.533Z-92a0f775-a302-4971-a8c6-8cd122889f5c/answer-review.json)
+  separates omitted evidence from verified observations. Frozen checksums and
+  all previous run artifacts matched before/after. Development evidence only;
+  no new evaluation harness.
+
+## Day 16 — Input reservation estimator development revision
+
+- Before generation, inspected the configured local Ollama 0.35.0 provider:
+  /api/tokenize, /tokenize, /v1/tokenize and /v1/messages/count_tokens returned
+  404. The adapter exposes generation usage, not preflight counting. No matching
+  tokenizer runtime/package or cached tokenizer/chat template was found;
+  /api/show reports Qwen35 tokenizer metadata and placeholder {{ .Prompt }}.
+  Embedded model metadata is not a callable counter. No tokenizer subsystem,
+  dependencies, provider transport changes or generation probes were added.
+- Freeze comparison-input-reservation-v2-approx before the one requested run:
+  compact provider-neutral messages/tools JSON; ceil(ASCII bytes / 3 + non-ASCII
+  UTF-8 bytes), then ceil(20% of the estimate) + 32/message + 128 fixed. This is
+  a prose/JSON heuristic with explicitly chosen allowances, not a Qwen tokenizer,
+  fitted ratio, validated error bound or hard token guarantee. Identifiers,
+  code, multilingual input and the actual chat/tool template can differ.
+- Only the input-reservation policy and recording/version metadata changed.
+  comparison-agent-v3 prompt/tool definitions, 6000-token actual cumulative
+  accounting, 512 maximum output (capped to estimated remaining capacity),
+  five model turns/four executions and 90-second deadline remain unchanged.
+  Existing scripted checks verify reservations are never deducted, repeated
+  actual inputs are charged, and insufficient estimated capacity stops before
+  dispatch. Typecheck and all 18 focused workflow tests passed before generation.
+- One live run, no retry/tuning, unchanged qwen3.5:4b / reasoning none /
+  temperature 0: reservations 2093 and 2885 versus reported inputs 1191 and
+  1673. Both output caps were 512; outputs 129 and 323. Actual cumulative usage
+  2864 input + 452 output = 3316; no reservation was charged. Model latency
+  30344 ms combined; total latency 30473.446 ms. API cost unavailable; total
+  local execution cost unmeasured. Prompt/tools/limits matched the prior v3
+  protocol; frozen run inputs and all earlier artifacts remained unchanged.
+- Model chose definition then regions in turn one (correct calendar boundaries),
+  then answered in turn two: answer stop, two tools/two SQL queries. Regional
+  values/contributions passed the existing exact grader, reconciling to
+  7225.00 -> 8295.00 and 1070.00. Definition source was cited and the answer
+  distinguished descriptive contributions from established causes; no inferred
+  currency. It omitted overall totals/increase/percentage and never selected
+  compare_periods: full task success failed despite normal termination. Keep
+  answerClaimsVerified false; estimator correction does not resolve evidence
+  completeness or establish estimation accuracy beyond this development run.
+- [Recorded run](../results/day-16-compare-periods-agent-v3-development-2026-10-13T16-02-52.920Z-e6641ef5-37ee-4c3d-bb91-cc424a15623b/report.json)
+  and [separate answer review](../results/day-16-compare-periods-agent-v3-development-2026-10-13T16-02-52.920Z-e6641ef5-37ee-4c3d-bb91-cc424a15623b/answer-review.json)
+  retain raw messages/calls, estimator policy/version, estimated-versus-reported
+  input per turn, observations, accounting checks and omitted overall evidence.
+
+## Day 16 — Frozen Day 15 tasks, agent/workflow development comparison
+
+- Reused the existing Day 16 runner/recorder with --day15-development, the
+  frozen development-v1 cases and SQL-verified references, existing exact
+  scalar/development graders, and investigation-contract-review-v2. Ran the
+  current comparison-agent-v3 once per 14 eligible tasks, preserving supported-05
+  as an excluded equal-period task/contract mismatch with no new invocation.
+  Prompt/tools, v2 approximate reservation, 6000 tokens, 512 output maximum,
+  five turns/four executions and 90-second deadline remained unchanged.
+  Typecheck and 18 focused workflow tests passed; no retries/tuning/new harness.
+- Reviewed user-task successes: recorded Day 15 workflow 10/14 versus current
+  agent 1/14. By category: supported 3/5 vs 0/5; ambiguous 4/4 vs 0/4;
+  unsupported 2/3 vs 1/3; misleading 1/2 vs 0/2. Original Day 15 grades and
+  reviewed grades remain intact. Agent exact structured extraction is unavailable;
+  selected tool arguments and answer intent are separate diagnostics.
+- Agent produced ten normal answers, three invalid-argument stops, and one
+  answer_without_tool_result. No eligible analytical answer was complete:
+  regional-only choices omitted overall totals/percentage and net-revenue
+  definition/citation/cause caveat. Six answers inferred dollars. Supported-03
+  correctly handled reversed direction (Day 15 unnecessarily clarified), but
+  supported-04 inverted “against” in both configurations. Misleading-01 corrected
+  the false decline, yet omitted required evidence. Misleading-02 and two
+  unsupported requests generated identical periods and were blocked before SQL;
+  that is not successful rejection or evidence compliance.
+- All four ambiguous tasks executed SQL: assumed net revenue, invented 2032
+  dates, or bypassed the missing dimension. Unsupported-02 alone passed the
+  minimal reviewed rejection rule (named total_refund_amount, rejected the
+  regional request, zero SQL). Its unsupported availability/aggregation claims
+  remain an evidence diagnostic failure; native loop completion remains false.
+- Across eligible tasks, Day 15: 14 model calls, 15 deterministic read-only
+  operations, 20 SQL queries, 6960 tokens and 80.525 seconds. Agent: 25 model
+  calls, 11 executed tools, 20 SQL queries, 35659 tokens and 164.325 seconds.
+  Agent omitted SQL/evidence on analytical tasks but added eight SQL queries
+  where clarification required zero. API cost unavailable; total local cost
+  unmeasured. No complete task improved in this run; some partial intent/direction
+  checks improved. First-call and warm-state effects are not controlled.
+- [Full per-case comparison and failure inspection](../results/day-16-compare-periods-agent-v3-day15-development-comparison-2026-10-13T16-13-52.158Z-69cf01c0-ee99-45d7-8cf5-4035ef23909b/comparison.json)
+  accompanies raw case reports, immediate calls.jsonl and frozen protocol.
+  All prior Day 15/16 artifacts and frozen inputs matched before/after. This
+  compares two recorded development configurations with different interfaces,
+  prompts and summary generation; it is not controlled proof that agents are
+  better/worse or evidence of generalization.
+
+## Day 16 — Summary and interpretation
+
+- Premature stopping: correct regional observations did not become complete
+  analytical answers. The agent accepted a regional-only answer before obtaining
+  and reporting the overall comparison and definition evidence.
+- Unjustified assumptions: all four ambiguous requests executed SQL instead of
+  clarifying missing metric, periods or dimension, or ambiguous revenue. Tool
+  argument validity did not establish that the user supplied those inputs.
+- Intent errors persisted: adaptive tool selection did not reliably resolve
+  comparison direction. The reversed “from” case improved, but “August against
+  September” still used the wrong baseline and target.
+- Example contamination: the missing-period case invented January/February 2032,
+  matching the year/month used by the generic prompt/tool example. This is
+  consistent with example leakage into action arguments; the recorded runs do
+  not independently establish the causal mechanism.
+- Normal termination did not mean success: `answer` describes how execution
+  stopped, not answer quality, completeness or evidence correctness. Keep native
+  termination, reviewed task success and diagnostic grades separate.
+- Decision: retain this as development evidence. Before another agent revision,
+  address explicit-input checks, requested intent and evidence completeness in
+  application safeguards. Additional adaptive turns alone are not evidence that
+  these failures will improve. No prompt/tool/limit tuning follows this comparison;
+  preserve the original workflow, agent records and equal-period mismatch.

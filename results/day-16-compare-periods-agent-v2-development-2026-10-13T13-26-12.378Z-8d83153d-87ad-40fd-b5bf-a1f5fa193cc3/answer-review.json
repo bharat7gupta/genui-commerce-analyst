@@ -1,0 +1,77 @@
+{
+  "label": "development revision",
+  "promptVersion": "compare-periods-agent-v2",
+  "toolDefinitionVersion": "compare-periods-tool-definition-v2",
+  "sourceReport": "report.json",
+  "reviewMethod": "Manual answer inspection; existing exact scalar numerical grader",
+  "originalAnswer": "Net revenue in September 2025 was $8,295.00, compared to $7,225.00 in August 2025. This represents an absolute increase of $1,070.00 and a percentage change of 14.81%.",
+  "checks": {
+    "periodIntent": {
+      "status": "pass",
+      "expected": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        }
+      },
+      "observed": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        }
+      }
+    },
+    "numericalAgreementWithTool": {
+      "status": "pass",
+      "manuallyExtractedAnswerValues": {
+        "baselineValue": "7225.00",
+        "targetValue": "8295.00",
+        "absoluteChange": "1070.00",
+        "percentageChange": "14.81"
+      },
+      "exactChecks": [
+        {
+          "field": "baselineValue",
+          "pass": true,
+          "reason": "baselineValue equals 7225.00 exactly"
+        },
+        {
+          "field": "targetValue",
+          "pass": true,
+          "reason": "targetValue equals 8295.00 exactly"
+        },
+        {
+          "field": "absoluteChange",
+          "pass": true,
+          "reason": "absoluteChange equals 1070.00 exactly"
+        },
+        {
+          "field": "percentageChange",
+          "pass": true,
+          "reason": "percentageChange equals 14.81 exactly"
+        }
+      ],
+      "direction": "increase, matching positive tool change"
+    },
+    "unsupportedCurrency": {
+      "status": "fail",
+      "observedSymbol": "$",
+      "currencyMetadata": null,
+      "reason": "The final answer asserts a currency using dollar symbols, but the tool result contains no currency metadata."
+    }
+  },
+  "allApplicableChecksPass": false,
+  "newModelCalls": 0,
+  "previousRunsUnchanged": true,
+  "interpretation": "The revised request selected correct dates and repeated the tool values, but still violated the currency rule. One exposed-case development run does not establish reliability or generalization."
+}
