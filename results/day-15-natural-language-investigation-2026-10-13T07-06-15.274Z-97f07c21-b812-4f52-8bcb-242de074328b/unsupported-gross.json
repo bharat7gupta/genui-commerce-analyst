@@ -1,0 +1,48 @@
+{
+  "id": "unsupported-gross",
+  "question": "Compare gross revenue in September 2025 against August 2025 by region.",
+  "sqlExecutionCount": 0,
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  },
+  "outcome": "unsupported",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"total_gross_revenue\",\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": []\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 389,
+        "outputTokens": 118,
+        "totalTokens": 507
+      },
+      "latencyMs": 5969,
+      "requestId": null
+    },
+    "latencyMs": 5969,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "unsupported",
+    "fields": {
+      "metric": "total_gross_revenue",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "dimension": "region",
+      "unresolvedQuestions": []
+    },
+    "reason": "Unsupported metric: total_gross_revenue. Only net_revenue executes."
+  },
+  "investigation": null
+}

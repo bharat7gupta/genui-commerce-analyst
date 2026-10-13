@@ -1,0 +1,106 @@
+{
+  "id": "unsupported-02",
+  "category": "unsupported",
+  "question": "Investigate total refund amount from August 2025 to September 2025, broken down by region.",
+  "expectedOutcome": "unsupported",
+  "expectedInputs": {
+    "metric": "total_refund_amount",
+    "baseline": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "target": {
+      "start": "2025-09-01",
+      "end": "2025-10-01"
+    },
+    "dimension": "region"
+  },
+  "expectUnresolvedQuestions": false,
+  "numericalReference": null,
+  "requireEvidence": false,
+  "note": "",
+  "label": "development baseline",
+  "outcome": "unsupported",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"total_refund_amount\",\n  \"baseline\": null,\n  \"target\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": []\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 394,
+        "outputTokens": 81,
+        "totalTokens": 475
+      },
+      "latencyMs": 4504,
+      "requestId": null
+    },
+    "latencyMs": 4504,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "unsupported",
+    "fields": {
+      "metric": "total_refund_amount",
+      "baseline": null,
+      "target": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "dimension": "region",
+      "unresolvedQuestions": []
+    },
+    "reason": "Unsupported metric: total_refund_amount. Only net_revenue executes."
+  },
+  "investigation": null,
+  "grades": {
+    "outcome": {
+      "status": "pass",
+      "reason": "Expected unsupported; observed unsupported"
+    },
+    "extraction": {
+      "status": "fail",
+      "reason": "Mismatch: baseline, target"
+    },
+    "numerical": {
+      "status": "not_applicable",
+      "reason": "No numerical result expected"
+    },
+    "sql": {
+      "status": "pass",
+      "reason": "Expected 0 SQL executions; observed 0"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "fail",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 0,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "unsupported",
+      "elapsedMs": 4504
+    }
+  ],
+  "querySteps": [],
+  "totalLatencyMs": 4505.833291999996,
+  "modelLatencyMs": 4504,
+  "tokens": {
+    "inputTokens": 394,
+    "outputTokens": 81,
+    "totalTokens": 475
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}

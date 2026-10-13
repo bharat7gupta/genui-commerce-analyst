@@ -679,3 +679,159 @@
   also preserves the frozen protocol and per-invocation records. Day 8 artifacts
   remain unchanged. The follow-up inspection and log update made no
   implementation/configuration/label changes and reran no experiments.
+
+## Day 15 — Deterministic period comparison
+
+- Existing QueryPlan validation already represents two non-overlapping periods;
+  the SQL compiler still rejects direct comparison plans. Added `comparePeriods`
+  to validate that contract and execute two supported scalar plans through the
+  unchanged compiler and read-only DuckDB executor, with the existing date cap
+  and deadlines. No model calls or database recreation.
+- Extracted the existing exact decimal parser for shared use with numerical
+  grading. Changes use BigInt cents in application code; percentages use
+  `(target - baseline) / baseline * 100`, rounded to two decimal places, half
+  away from zero. Zero baseline returns null percentage; SQL NULL remains
+  distinct from zero and makes both changes null.
+- `npm run example:compare-periods` verified the real seeded database:
+  August `[2025-08-01, 2025-09-01)` = `7225.00`, September
+  `[2025-09-01, 2025-10-01)` = `8295.00`, signed absolute change = `1070.00`,
+  percentage change = `14.81%`. Type checking, six comparison tests, and eleven
+  existing numerical-grader checks passed.
+- Scope remains scalar `net_revenue` across all orders. Other schema-known
+  metrics and grouped region/category/status breakdowns do not compile;
+  investigation orchestration is not connected. This provides the aggregate
+  comparison step, not driver attribution or a causal explanation.
+
+## Day 15 — Net revenue comparison by region
+
+- Chose region after checking seed and live schema: it is non-null, constrained
+  to East/North/South/West, and present on every order. Extended the existing
+  compiler to allow exactly region grouping, using the unchanged metric
+  definition directly on orders, without joins, with deterministic region
+  ordering. Existing validator and executor safeguards remain in use.
+- Added `compareNetRevenueByRegion`, sharing period-plan preparation and exact
+  decimal/cents handling with scalar comparison. Results union regions across
+  both periods; presence flags distinguish absence from present SQL NULL.
+  Absence contributes zero only to change arithmetic; present NULL produces
+  null change. Returned absent values stay null and genuine zeros stay `0.00`.
+- Real seeded results (August → September; signed change): East
+  `2020.00 → 2320.00; 300.00`, North `2275.00 → 2850.00; 575.00`, South
+  `1900.00 → 1900.00; 0.00`, West `1030.00 → 1225.00; 195.00`.
+  Independently written conditional-aggregation SQL matched all segment
+  values and changes; separate reference totals and the scalar function
+  matched exact segment sums `7225.00` and `8295.00`. Changes sum to `1070.00`.
+- Reproduce with `npm run example:compare-net-revenue-by-region`. Type checking,
+  compiler/comparison unit checks, numerical-grader regression checks, and
+  real-executor checks passed, including half-open boundaries and a region
+  absent in the target fixture. Category/status grouping remains unsupported.
+  No model calls, orchestration, database recreation, or frozen-artifact edits.
+
+## Day 15 — Fixed metric-change investigation workflow
+
+- Added `investigateMetricChange` accepting explicit metric, baseline/target
+  intervals, and dimension, limited to net_revenue/region. Fixed stages validate
+  inputs, call scalar comparison, call regional comparison, retrieve the
+  existing metric definition, and produce a deterministic reconciled summary.
+  Attempted stages report status and elapsed milliseconds; failures identify
+  the stage and stop later work without retries.
+- Missing inputs return clarification before SQL or definition lookup.
+  Unsupported choices and malformed dates are rejected before execution.
+  Summary generation verifies exact period and change reconciliation, cites
+  `src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue`, and states
+  that business causes are not established. The definition tool has no version
+  metadata; returned sourceVersion is null rather than an invented version.
+- Real August/September run completed all five stages and four read-only SQL
+  executions: 7225.00 → 8295.00, increase 1070.00 (14.81%); regional contributions
+  East 300.00, North 575.00, South 0.00, West 195.00. The missing-metric demo
+  returned clarification_required with only validation in the trace and zero
+  SQL executions. Reproduce with `npm run example:investigate-metric-change`.
+- Type checking and eight focused workflow tests passed, covering stage order,
+  early clarification/rejection, SQL and definition failure stops, reconciliation
+  failure, and no matching data. No model calls, adaptive planning, database
+  recreation, or frozen-artifact changes.
+
+## Day 15 — Natural-language investigation input
+
+- Added narrow five-field structured extraction using the existing Qwen adapter
+  and Zod/native JSON Schema pattern. Application code derives executable,
+  clarification, or unsupported outcomes and calls the fixed workflow only for
+  complete validated net_revenue/region inputs with no unresolved questions.
+  No SQL generation, default metric/date/dimension substitution, retries, or
+  model-generated summary. Structural validity alone does not verify meaning.
+- Froze investigation-extractor-v1, investigation-input-v1, temperature 0,
+  max output tokens 512, and reasoning effort none. Ran the three user requests
+  once each with qwen3.5:4b; no prompt changes after the calls. All source/seed
+  checksums matched before and after. Model tag was recorded; immutable model
+  weight revision was not established.
+- Explicit net revenue August → September by region extracted the correct
+  periods and completed with four SQL executions: 7225.00 → 8295.00, increase
+  1070.00 (14.81%); regional changes 300.00/575.00/0.00/195.00 reconcile. The
+  unchanged summary cites the definition and denies established business causes.
+  Usage 395 input / 116 output tokens; model latency 15250 ms.
+- “Why did revenue change?” returned all four input fields null with questions
+  about metric and periods; application clarification additionally identifies
+  missing dimension. Outcome clarification_required, zero SQL; usage 374/81,
+  latency 4919 ms. Explicit gross revenue preserved total_gross_revenue and the
+  correct periods/region, then returned unsupported, zero SQL; usage 389/118,
+  latency 5969 ms.
+- API pricing was not configured: cost unavailable for every call. Total local
+  execution cost is unmeasured, not zero. First-call latency is a cold-start
+  candidate; these three calls do not establish reliability or representative
+  latency. Type checking and four fake-provider input checks passed.
+- [Saved report](../results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/report.json)
+  preserves raw extraction, validated outcomes, metadata, SQL counts, and traces;
+  the same directory contains protocol.json and immediate calls.jsonl records.
+  Reproduce with `npm run experiment:investigation-input` (three real calls).
+
+## Day 15 — Frozen investigation development baseline
+
+- Declared 15 cases and expected inputs/outcomes before calls: six supported
+  analytical intents, four ambiguous, three unsupported, two misleading.
+  Independent reference SQL verified every declared scalar and regional result;
+  all 30 live rows matched the seed. Equal periods deliberately expect zero
+  change while retaining the predeclared non-overlap capability gap.
+- Used unchanged investigation-extractor-v1 and prior model settings for one
+  call per case, without tuning/retries. Extracted the existing immediate
+  recorder for reuse by both runners; prior three-run artifacts remain
+  byte-for-byte unchanged. Frozen run checksums matched before/after.
+- Outcome correctness 11/15; extraction 8/15; end-to-end 8/15. Supported
+  end-to-end 3/6, ambiguous 4/4, unsupported 0/3, misleading 1/2. Numerical
+  results 4/5 reached; three expected comparisons not reached. The one wrong
+  requested numerical answer came from reversed extraction, not SQL arithmetic.
+- Inspected all seven failures: reverse-direction over-clarification and swap;
+  equal-period over-clarification (validator gap not reached); profit mistaken
+  for ambiguity; incomplete periods on refund/category requests; and a
+  campaign-cause request over-clarified. False-decline summary followed the
+  verified increase, source citation, and no-cause caveat. Campaign-cause answer
+  compliance was not reached, not passed. No runtime stage exceptions occurred.
+- Recorded 20 workflow SQL queries, 5964 input / 1467 output tokens, per-case
+  timings, failed stage, and traces. API cost unavailable for all 15 calls;
+  total local cost unmeasured. Type checking and eight focused tests passed.
+- This is an exposed development baseline, not production-readiness evidence.
+  No prompt or pipeline fix was made. See the
+  [full category/case report and failure inspection](evals/day-15-investigation-development.md)
+  and its linked immutable run artifacts. Reproduce with
+  `npm run experiment:investigation-development` (15 real calls).
+
+## Day 15 — Evaluation contract review of saved outputs
+
+- Reviewed the existing outputs without model/SQL calls or changes to
+  implementation, prompt, frozen cases, original grades, or recorded artifacts.
+  Equal August periods are a task/contract mismatch: expected zero change is
+  valid mathematically, but the contract prohibits overlapping periods. Exclude
+  that case from reviewed user-task scoring and report it separately; its
+  observed date-extraction diagnostic remains failed.
+- Unsupported task rejection passes when the explicit unsupported choice is
+  correctly identified, unsupported is returned, and zero SQL executes. Refund
+  and category requests therefore pass user-task rejection while retaining
+  failed date-extraction diagnostics. Profit still fails. All other rules and
+  numerical/evidence grades remain unchanged.
+- Original strict score remains 8/15; reviewed user-task score is 10/14 plus
+  one contract mismatch. Exact extraction remains 8/15. Eligible task failures
+  are reversed-direction clarification/swap, profit clarification, and the
+  campaign-cause request's failure to produce an evidence-based answer.
+  This is post-hoc grading clarification, not measured model improvement.
+- Added a separate reviewed report containing original and revised grades.
+  SHA-256 checks matched for 155 protected source/artifact files, including the
+  earlier three-run report. See the
+  [contract review and both grading versions](evals/day-15-investigation-contract-review.md).

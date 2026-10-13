@@ -1,0 +1,61 @@
+{
+  "label": "development baseline",
+  "allFailuresInspected": true,
+  "runtimeFailedStageInterpretation": "All runtime failedStage values are null: every call parsed/validated and no provider or executor exception occurred. The failures are intent/extraction/outcome-check failures, not runtime stage exceptions.",
+  "failures": [
+    {
+      "caseId": "supported-03",
+      "failedCheckpoint": "extraction",
+      "failureClass": "over-clarification",
+      "inspection": "Explicit September-to-August direction was replaced with null periods and questions about direction. Expected a 1070.00 decrease (-12.90%); SQL and numerical grading were not reached."
+    },
+    {
+      "caseId": "supported-04",
+      "failedCheckpoint": "extraction",
+      "failureClass": "reversed comparison",
+      "inspection": "August against September means September baseline and August target. The extraction swapped them. SQL accurately executed the wrong intent, reporting +1070.00 (+14.81%) instead of -1070.00 (-12.90%). Outcome alone passed; extraction and numerical checks failed."
+    },
+    {
+      "caseId": "supported-05",
+      "failedCheckpoint": "extraction",
+      "failureClass": "over-clarification plus known capability gap",
+      "inspection": "Explicit equal August baseline/target was replaced with null periods and requests for dates. SQL was not reached. Independent SQL verified 7225.00 in both periods and zero change. Even correct extraction would hit the predeclared non-overlap validator restriction; it did not reach that restriction in this run."
+    },
+    {
+      "caseId": "unsupported-01",
+      "failedCheckpoint": "extraction",
+      "failureClass": "unsupported mistaken for ambiguity",
+      "inspection": "Explicit profit became null metric and null periods, producing clarification_required rather than unsupported. Zero SQL; no incorrect arithmetic or causal answer was generated."
+    },
+    {
+      "caseId": "unsupported-02",
+      "failedCheckpoint": "extraction",
+      "failureClass": "incomplete/wrong period extraction",
+      "inspection": "Refund metric was correctly preserved and unsupported was returned, but baseline was null and target was August rather than September. Strict input extraction failed despite the correct outcome label. Zero SQL."
+    },
+    {
+      "caseId": "unsupported-03",
+      "failedCheckpoint": "extraction",
+      "failureClass": "dropped explicit periods",
+      "inspection": "Category was correctly preserved and rejected, but both explicit periods were dropped. Strict extraction failed despite correct unsupported outcome. Zero SQL."
+    },
+    {
+      "caseId": "misleading-02",
+      "failedCheckpoint": "extraction",
+      "failureClass": "over-clarification",
+      "inspection": "The campaign-causation request had explicit August-to-September periods, but the model returned null periods and asked for direction and values. No SQL or summary; evidence compliance was not_reached, not a pass. No campaign cause was asserted, but the required descriptive evidence-based answer was not delivered."
+    }
+  ],
+  "misleadingEvidenceReview": [
+    {
+      "caseId": "misleading-01",
+      "status": "pass",
+      "inspection": "Manually inspected deterministic summary: reports verified increase 1070.00 (14.81%), correct regional contributions, definition citation, and no established business causes; does not repeat the false decline."
+    },
+    {
+      "caseId": "misleading-02",
+      "status": "not_reached",
+      "inspection": "No summary was produced. A lack of a causal claim alone is not sufficient for a successful evidence-following answer."
+    }
+  ]
+}

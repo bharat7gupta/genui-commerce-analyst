@@ -1,3 +1,5 @@
+import { parseExactDecimal } from "../decimal.js";
+
 export type NumericalVerdict = Readonly<{ pass: boolean; reason: string }>;
 
 export type ScalarExpectation = Readonly<{ field: string; amount: string }>;
@@ -45,16 +47,6 @@ export function gradeScalarNumericalResult(
 // rounding: normalize leading integer zeros and trailing fractional zeros.
 // Numeric inputs are accepted only when they are safe integers.
 function exactDecimal(value: unknown): string | null {
-  if (typeof value === "number" && Number.isSafeInteger(value)) {
-    value = String(value);
-  }
-  if (typeof value !== "string" || !/^[+-]?\d+(?:\.\d+)?$/.test(value)) {
-    return null;
-  }
-  const negative = value.startsWith("-");
-  const unsigned = value.replace(/^[+-]/, "");
-  const [integer = "", fraction = ""] = unsigned.split(".");
-  const significantFraction = fraction.replace(/0+$/, "");
-  const coefficient = BigInt(`${negative ? "-" : ""}${integer}${significantFraction}`);
-  return `${coefficient}:${significantFraction.length}`;
+  const decimal = parseExactDecimal(value);
+  return decimal === null ? null : `${decimal.coefficient}:${decimal.scale}`;
 }

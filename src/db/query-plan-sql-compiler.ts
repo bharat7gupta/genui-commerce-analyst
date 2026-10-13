@@ -45,13 +45,15 @@ export function compileQueryPlan(input: unknown): CompiledQuery {
 
   if (
     plan.dimensions.kind !== "specified" ||
-    plan.dimensions.values.length !== 0
+    !(plan.dimensions.values.length === 0 ||
+      (plan.dimensions.values.length === 1 && plan.dimensions.values[0] === "region"))
   ) {
     reject(
       "UNSUPPORTED_DIMENSIONS",
-      "This compiler slice requires explicitly specified empty dimensions",
+      "This compiler slice supports empty dimensions or region alone",
     );
   }
+  const groupedByRegion = plan.dimensions.values.length === 1;
 
   if (plan.comparison.kind !== "none") {
     reject(
@@ -124,12 +126,17 @@ export function compileQueryPlan(input: unknown): CompiledQuery {
   }
 
   const lines = [
-    `SELECT ${NET_REVENUE_EXPRESSION} AS ${NET_REVENUE_ALIAS}`,
+    `SELECT ${groupedByRegion ? `${REGION_COLUMN}, ` : ""}${NET_REVENUE_EXPRESSION} AS ${NET_REVENUE_ALIAS}`,
     `FROM ${ORDERS_TABLE}`,
   ];
 
   if (predicates.length > 0) {
     lines.push(`WHERE ${predicates.join(" AND ")}`);
+  }
+
+  if (groupedByRegion) {
+    lines.push(`GROUP BY ${REGION_COLUMN}`);
+    lines.push(`ORDER BY ${REGION_COLUMN} ASC`);
   }
 
   return {

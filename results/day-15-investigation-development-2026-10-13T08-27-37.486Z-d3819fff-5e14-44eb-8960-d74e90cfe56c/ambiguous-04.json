@@ -1,0 +1,116 @@
+{
+  "id": "ambiguous-04",
+  "category": "ambiguous",
+  "question": "Investigate how revenue changed from August 2025 to September 2025, broken down by region.",
+  "expectedOutcome": "clarification_required",
+  "expectedInputs": {
+    "metric": null,
+    "baseline": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "target": {
+      "start": "2025-09-01",
+      "end": "2025-10-01"
+    },
+    "dimension": "region"
+  },
+  "expectUnresolvedQuestions": true,
+  "numericalReference": null,
+  "requireEvidence": false,
+  "note": "",
+  "label": "development baseline",
+  "outcome": "clarification_required",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": null,\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": [\n    \"Which metric should be used for revenue?\",\n    \"Is the target period September 2025 or October 2025?\"\n  ]\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 394,
+        "outputTokens": 148,
+        "totalTokens": 542
+      },
+      "latencyMs": 7579,
+      "requestId": null
+    },
+    "latencyMs": 7579,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "clarification_required",
+    "fields": {
+      "metric": null,
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "dimension": "region",
+      "unresolvedQuestions": [
+        "Which metric should be used for revenue?",
+        "Is the target period September 2025 or October 2025?"
+      ]
+    },
+    "unresolvedQuestions": [
+      "Which metric should be used for revenue?",
+      "Is the target period September 2025 or October 2025?",
+      "Specify metric."
+    ]
+  },
+  "investigation": null,
+  "grades": {
+    "outcome": {
+      "status": "pass",
+      "reason": "Expected clarification_required; observed clarification_required"
+    },
+    "extraction": {
+      "status": "pass",
+      "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+    },
+    "numerical": {
+      "status": "not_applicable",
+      "reason": "No numerical result expected"
+    },
+    "sql": {
+      "status": "pass",
+      "reason": "Expected 0 SQL executions; observed 0"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "pass",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 0,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "clarification_required",
+      "elapsedMs": 7579
+    }
+  ],
+  "querySteps": [],
+  "totalLatencyMs": 7580.076499999996,
+  "modelLatencyMs": 7579,
+  "tokens": {
+    "inputTokens": 394,
+    "outputTokens": 148,
+    "totalTokens": 542
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}

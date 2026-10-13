@@ -1,0 +1,111 @@
+{
+  "id": "supported-05",
+  "category": "supported",
+  "question": "Compare net revenue by region for August 2025 against the same August 2025 period. Both baseline and target are August 2025.",
+  "expectedOutcome": "completed",
+  "expectedInputs": {
+    "metric": "net_revenue",
+    "baseline": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "target": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "dimension": "region"
+  },
+  "expectUnresolvedQuestions": false,
+  "numericalReference": "aug-aug",
+  "requireEvidence": false,
+  "note": "Supported analytical intent has zero change. The current non-overlap validator rejects identical periods; this baseline deliberately measures the missing capability rather than changing its expected outcome.",
+  "label": "development baseline",
+  "outcome": "clarification_required",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"net_revenue\",\n  \"baseline\": null,\n  \"target\": null,\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": [\"Specify the start and end dates for the baseline period.\", \"Specify the start and end dates for the target period.\"]\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 404,
+        "outputTokens": 67,
+        "totalTokens": 471
+      },
+      "latencyMs": 3806,
+      "requestId": null
+    },
+    "latencyMs": 3806,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "clarification_required",
+    "fields": {
+      "metric": "net_revenue",
+      "baseline": null,
+      "target": null,
+      "dimension": "region",
+      "unresolvedQuestions": [
+        "Specify the start and end dates for the baseline period.",
+        "Specify the start and end dates for the target period."
+      ]
+    },
+    "unresolvedQuestions": [
+      "Specify the start and end dates for the baseline period.",
+      "Specify the start and end dates for the target period.",
+      "Specify baseline.",
+      "Specify target."
+    ]
+  },
+  "investigation": null,
+  "grades": {
+    "outcome": {
+      "status": "fail",
+      "reason": "Expected completed; observed clarification_required"
+    },
+    "extraction": {
+      "status": "fail",
+      "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+    },
+    "numerical": {
+      "status": "not_reached",
+      "reason": "No completed investigation to grade"
+    },
+    "sql": {
+      "status": "fail",
+      "reason": "Expected 4 SQL executions; observed 0"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "fail",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 0,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "clarification_required",
+      "elapsedMs": 3806
+    }
+  ],
+  "querySteps": [],
+  "totalLatencyMs": 3807.3764999999985,
+  "modelLatencyMs": 3806,
+  "tokens": {
+    "inputTokens": 404,
+    "outputTokens": 67,
+    "totalTokens": 471
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}

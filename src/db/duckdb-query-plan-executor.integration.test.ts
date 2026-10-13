@@ -6,6 +6,7 @@ import test, { after, before } from "node:test";
 
 import { DuckDBInstance } from "@duckdb/node-api";
 
+import { compareNetRevenueByRegion } from "../application/compare-net-revenue-by-region.js";
 import type { QueryPlan } from "../query-plan/query-plan.js";
 import {
   DuckDBDateIntervalLimitError,
@@ -107,6 +108,30 @@ test("executes all-time net revenue and preserves the decimal string", async () 
   assert.deepEqual(actualRows, referenceRows);
   assert.deepEqual(actualRows, expectedRows);
   assert.equal(typeof actualRows[0]?.net_revenue, "string");
+});
+
+test("compares grouped periods with half-open boundaries and an absent region", async () => {
+  const executor = new DuckDBQueryPlanExecutor({ databasePath: testDatabasePath });
+  const result = await compareNetRevenueByRegion(
+    { start: "2025-08-01", end: "2025-09-01" },
+    { start: "2025-09-01", end: "2025-10-01" }, executor,
+  );
+  assert.deepEqual(result.segments, [
+    { region: "North", baselinePresent: true, targetPresent: true,
+      baselineValue: "235.00", targetValue: "250.00", absoluteChange: "15.00" },
+    { region: "South", baselinePresent: true, targetPresent: false,
+      baselineValue: "350.00", targetValue: null, absoluteChange: "-350.00" },
+  ]);
+  const referenceRows = await runReferenceQuery(`
+    SELECT region, SUM(gross_amount - discount_amount - refund_amount) AS net_revenue
+    FROM orders
+    WHERE order_date >= DATE '2025-08-01' AND order_date < DATE '2025-09-01'
+    GROUP BY region ORDER BY region;
+  `);
+  assert.deepEqual(referenceRows, [
+    { region: "North", net_revenue: "235.00" },
+    { region: "South", net_revenue: "350.00" },
+  ]);
 });
 
 test("binds the half-open interval and region filter during execution", async () => {

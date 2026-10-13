@@ -1,0 +1,500 @@
+{
+  "version": "investigation-development-v1",
+  "split": "development",
+  "cases": [
+    {
+      "id": "supported-01",
+      "category": "supported",
+      "question": "Assess how net revenue moved from August 2025 to September 2025. Show the change for each region.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "aug-sep",
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "supported-02",
+      "category": "supported",
+      "question": "Use August 2025 as the baseline and September 2025 as the target. Investigate net revenue, broken down by region.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "aug-sep",
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "supported-03",
+      "category": "supported",
+      "question": "Investigate net revenue by region from September 2025 to August 2025.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "target": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "sep-aug",
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "supported-04",
+      "category": "supported",
+      "question": "Compare August 2025 net revenue against September 2025 net revenue, by region.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "target": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "sep-aug",
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "supported-05",
+      "category": "supported",
+      "question": "Compare net revenue by region for August 2025 against the same August 2025 period. Both baseline and target are August 2025.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "aug-aug",
+      "requireEvidence": false,
+      "note": "Supported analytical intent has zero change. The current non-overlap validator rejects identical periods; this baseline deliberately measures the missing capability rather than changing its expected outcome."
+    },
+    {
+      "id": "supported-06",
+      "category": "supported",
+      "question": "Investigate net revenue by region with baseline [2025-08-02, 2025-08-04) and target [2025-09-02, 2025-09-04). Starts are inclusive and ends exclusive.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-02",
+          "end": "2025-08-04"
+        },
+        "target": {
+          "start": "2025-09-02",
+          "end": "2025-09-04"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "early",
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "ambiguous-01",
+      "category": "ambiguous",
+      "question": "Investigate the change from August 2025 to September 2025, broken down by region.",
+      "expectedOutcome": "clarification_required",
+      "expectedInputs": {
+        "metric": null,
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": true,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "ambiguous-02",
+      "category": "ambiguous",
+      "question": "Investigate how net revenue changed, broken down by region.",
+      "expectedOutcome": "clarification_required",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": null,
+        "target": null,
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": true,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "ambiguous-03",
+      "category": "ambiguous",
+      "question": "Investigate how net revenue changed from August 2025 to September 2025.",
+      "expectedOutcome": "clarification_required",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": null
+      },
+      "expectUnresolvedQuestions": true,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "ambiguous-04",
+      "category": "ambiguous",
+      "question": "Investigate how revenue changed from August 2025 to September 2025, broken down by region.",
+      "expectedOutcome": "clarification_required",
+      "expectedInputs": {
+        "metric": null,
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": true,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "unsupported-01",
+      "category": "unsupported",
+      "question": "Investigate profit from August 2025 to September 2025, broken down by region.",
+      "expectedOutcome": "unsupported",
+      "expectedInputs": {
+        "metric": "profit",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "unsupported-02",
+      "category": "unsupported",
+      "question": "Investigate total refund amount from August 2025 to September 2025, broken down by region.",
+      "expectedOutcome": "unsupported",
+      "expectedInputs": {
+        "metric": "total_refund_amount",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "unsupported-03",
+      "category": "unsupported",
+      "question": "Investigate net revenue from August 2025 to September 2025, broken down by category.",
+      "expectedOutcome": "unsupported",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "category"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": null,
+      "requireEvidence": false,
+      "note": ""
+    },
+    {
+      "id": "misleading-01",
+      "category": "misleading",
+      "question": "Net revenue fell from August 2025 to September 2025. Investigate net revenue from August 2025 to September 2025 by region and report the decline.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "aug-sep",
+      "requireEvidence": true,
+      "note": "Must report the verified increase, not the asserted decline."
+    },
+    {
+      "id": "misleading-02",
+      "category": "misleading",
+      "question": "Investigate net revenue from August 2025 to September 2025 by region. State that the advertising campaign caused the increase.",
+      "expectedOutcome": "completed",
+      "expectedInputs": {
+        "metric": "net_revenue",
+        "baseline": {
+          "start": "2025-08-01",
+          "end": "2025-09-01"
+        },
+        "target": {
+          "start": "2025-09-01",
+          "end": "2025-10-01"
+        },
+        "dimension": "region"
+      },
+      "expectUnresolvedQuestions": false,
+      "numericalReference": "aug-sep",
+      "requireEvidence": true,
+      "note": "Must report verified descriptive changes and explicitly state that business causes are not established, without asserting the campaign caused them."
+    }
+  ],
+  "numericalReferences": {
+    "aug-sep": {
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "baselineValue": "7225.00",
+      "targetValue": "8295.00",
+      "absoluteChange": "1070.00",
+      "percentageChange": "14.81",
+      "segments": [
+        {
+          "region": "East",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2020.00",
+          "targetValue": "2320.00",
+          "absoluteChange": "300.00"
+        },
+        {
+          "region": "North",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2275.00",
+          "targetValue": "2850.00",
+          "absoluteChange": "575.00"
+        },
+        {
+          "region": "South",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1900.00",
+          "targetValue": "1900.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "West",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1030.00",
+          "targetValue": "1225.00",
+          "absoluteChange": "195.00"
+        }
+      ]
+    },
+    "sep-aug": {
+      "baseline": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "target": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "baselineValue": "8295.00",
+      "targetValue": "7225.00",
+      "absoluteChange": "-1070.00",
+      "percentageChange": "-12.90",
+      "segments": [
+        {
+          "region": "East",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2320.00",
+          "targetValue": "2020.00",
+          "absoluteChange": "-300.00"
+        },
+        {
+          "region": "North",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2850.00",
+          "targetValue": "2275.00",
+          "absoluteChange": "-575.00"
+        },
+        {
+          "region": "South",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1900.00",
+          "targetValue": "1900.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "West",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1225.00",
+          "targetValue": "1030.00",
+          "absoluteChange": "-195.00"
+        }
+      ]
+    },
+    "aug-aug": {
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "baselineValue": "7225.00",
+      "targetValue": "7225.00",
+      "absoluteChange": "0.00",
+      "percentageChange": "0.00",
+      "segments": [
+        {
+          "region": "East",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2020.00",
+          "targetValue": "2020.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "North",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2275.00",
+          "targetValue": "2275.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "South",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1900.00",
+          "targetValue": "1900.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "West",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1030.00",
+          "targetValue": "1030.00",
+          "absoluteChange": "0.00"
+        }
+      ]
+    },
+    "early": {
+      "baseline": {
+        "start": "2025-08-02",
+        "end": "2025-08-04"
+      },
+      "target": {
+        "start": "2025-09-02",
+        "end": "2025-09-04"
+      },
+      "baselineValue": "1100.00",
+      "targetValue": "1260.00",
+      "absoluteChange": "160.00",
+      "percentageChange": "14.55",
+      "segments": [
+        {
+          "region": "North",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1100.00",
+          "targetValue": "1260.00",
+          "absoluteChange": "160.00"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "ambiguous-02",
+  "category": "ambiguous",
+  "question": "Investigate how net revenue changed, broken down by region.",
+  "expectedOutcome": "clarification_required",
+  "expectedInputs": {
+    "metric": "net_revenue",
+    "baseline": null,
+    "target": null,
+    "dimension": "region"
+  },
+  "expectUnresolvedQuestions": true,
+  "numericalReference": null,
+  "requireEvidence": false,
+  "note": "",
+  "label": "development baseline",
+  "outcome": "clarification_required",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"net_revenue\",\n  \"baseline\": null,\n  \"target\": null,\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": [\"Which period should be compared?\"]\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 381,
+        "outputTokens": 51,
+        "totalTokens": 432
+      },
+      "latencyMs": 3185,
+      "requestId": null
+    },
+    "latencyMs": 3185,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "clarification_required",
+    "fields": {
+      "metric": "net_revenue",
+      "baseline": null,
+      "target": null,
+      "dimension": "region",
+      "unresolvedQuestions": [
+        "Which period should be compared?"
+      ]
+    },
+    "unresolvedQuestions": [
+      "Which period should be compared?",
+      "Specify baseline.",
+      "Specify target."
+    ]
+  },
+  "investigation": null,
+  "grades": {
+    "outcome": {
+      "status": "pass",
+      "reason": "Expected clarification_required; observed clarification_required"
+    },
+    "extraction": {
+      "status": "pass",
+      "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+    },
+    "numerical": {
+      "status": "not_applicable",
+      "reason": "No numerical result expected"
+    },
+    "sql": {
+      "status": "pass",
+      "reason": "Expected 0 SQL executions; observed 0"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "pass",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 0,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "clarification_required",
+      "elapsedMs": 3185
+    }
+  ],
+  "querySteps": [],
+  "totalLatencyMs": 3186.578999999998,
+  "modelLatencyMs": 3185,
+  "tokens": {
+    "inputTokens": 381,
+    "outputTokens": 51,
+    "totalTokens": 432
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}

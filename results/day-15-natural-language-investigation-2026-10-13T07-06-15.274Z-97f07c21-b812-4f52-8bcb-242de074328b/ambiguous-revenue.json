@@ -1,0 +1,52 @@
+{
+  "id": "ambiguous-revenue",
+  "question": "Why did revenue change?",
+  "sqlExecutionCount": 0,
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  },
+  "outcome": "clarification_required",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": null,\n  \"baseline\": null,\n  \"target\": null,\n  \"dimension\": null,\n  \"unresolvedQuestions\": [\n    \"Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?\",\n    \"What is the comparison period (from baseline to target)?\"\n  ]\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 374,
+        "outputTokens": 81,
+        "totalTokens": 455
+      },
+      "latencyMs": 4919,
+      "requestId": null
+    },
+    "latencyMs": 4919,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "clarification_required",
+    "fields": {
+      "metric": null,
+      "baseline": null,
+      "target": null,
+      "dimension": null,
+      "unresolvedQuestions": [
+        "Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?",
+        "What is the comparison period (from baseline to target)?"
+      ]
+    },
+    "unresolvedQuestions": [
+      "Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?",
+      "What is the comparison period (from baseline to target)?",
+      "Specify metric.",
+      "Specify baseline.",
+      "Specify target.",
+      "Specify dimension."
+    ]
+  },
+  "investigation": null
+}

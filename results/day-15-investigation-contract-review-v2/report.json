@@ -1,0 +1,1219 @@
+{
+  "gradingVersion": "investigation-contract-review-v2",
+  "label": "post-hoc development contract review of existing outputs",
+  "timestamp": "2026-10-13T08:34:43.143958+00:00",
+  "sourceReport": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/report.json",
+  "sourceGradesVersion": "original frozen development grading rules in protocol.json",
+  "newModelCalls": 0,
+  "newSqlExecutions": 0,
+  "scope": "Only unsupported user-task rejection and equal-period eligibility change; original exact extraction, outcome, numerical, evidence and SQL grades remain unchanged.",
+  "rules": {
+    "equalPeriods": "Task/contract mismatch excluded from eligible user-task success denominator; not a model-task failure or a new pass. Original extraction diagnostics preserved.",
+    "unsupported": "Pass user-task rejection iff the explicit unsupported metric/dimension is correctly identified, unsupported outcome returned, and zero SQL executes. Unrelated date fields do not gate rejection success.",
+    "remainingCases": "Retain all original task criteria without relaxation.",
+    "denominators": "Original strict results use all 15 frozen cases. Reviewed user-task results use 14 eligible cases. Exact extraction diagnostics retain all 15."
+  },
+  "byCategory": [
+    {
+      "category": "supported",
+      "frozenCaseCount": 6,
+      "originalStrictPass": 3,
+      "originalStrictDenominator": 6,
+      "reviewedTaskPass": 3,
+      "reviewedTaskDenominator": 5,
+      "contractMismatches": 1,
+      "exactExtractionDiagnosticPass": 3,
+      "exactExtractionDiagnosticDenominator": 6
+    },
+    {
+      "category": "ambiguous",
+      "frozenCaseCount": 4,
+      "originalStrictPass": 4,
+      "originalStrictDenominator": 4,
+      "reviewedTaskPass": 4,
+      "reviewedTaskDenominator": 4,
+      "contractMismatches": 0,
+      "exactExtractionDiagnosticPass": 4,
+      "exactExtractionDiagnosticDenominator": 4
+    },
+    {
+      "category": "unsupported",
+      "frozenCaseCount": 3,
+      "originalStrictPass": 0,
+      "originalStrictDenominator": 3,
+      "reviewedTaskPass": 2,
+      "reviewedTaskDenominator": 3,
+      "contractMismatches": 0,
+      "exactExtractionDiagnosticPass": 0,
+      "exactExtractionDiagnosticDenominator": 3
+    },
+    {
+      "category": "misleading",
+      "frozenCaseCount": 2,
+      "originalStrictPass": 1,
+      "originalStrictDenominator": 2,
+      "reviewedTaskPass": 1,
+      "reviewedTaskDenominator": 2,
+      "contractMismatches": 0,
+      "exactExtractionDiagnosticPass": 1,
+      "exactExtractionDiagnosticDenominator": 2
+    }
+  ],
+  "summary": {
+    "originalStrict": {
+      "pass": 8,
+      "fail": 7,
+      "denominator": 15
+    },
+    "reviewedUserTask": {
+      "pass": 10,
+      "fail": 4,
+      "denominator": 14,
+      "excludedContractMismatches": 1
+    },
+    "exactExtractionDiagnostics": {
+      "pass": 8,
+      "fail": 7,
+      "denominator": 15
+    },
+    "unchangedNumericalDiagnostics": {
+      "pass": 4,
+      "fail": 1,
+      "notReached": 3,
+      "notApplicable": 7
+    },
+    "modelTaskFailures": [
+      "supported-03",
+      "supported-04",
+      "unsupported-01",
+      "misleading-02"
+    ],
+    "contractMismatches": [
+      "supported-05"
+    ],
+    "userTaskPassWithExtractionFailure": [
+      "unsupported-02",
+      "unsupported-03"
+    ]
+  },
+  "cases": [
+    {
+      "caseId": "supported-01",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-01.json",
+      "observedOutcome": "completed",
+      "sqlExecutionCount": 4,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected completed; observed completed"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "pass",
+          "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 4 SQL executions; observed 4"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "pass",
+        "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "supported-02",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-02.json",
+      "observedOutcome": "completed",
+      "sqlExecutionCount": 4,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected completed; observed completed"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "pass",
+          "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 4 SQL executions; observed 4"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "pass",
+        "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "supported-03",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-03.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "fail",
+          "reason": "Expected completed; observed clarification_required"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+        },
+        "numerical": {
+          "status": "not_reached",
+          "reason": "No completed investigation to grade"
+        },
+        "sql": {
+          "status": "fail",
+          "reason": "Expected 4 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "fail",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+      },
+      "numericalDiagnostic": {
+        "status": "not_reached",
+        "reason": "No completed investigation to grade"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "supported-04",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-04.json",
+      "observedOutcome": "completed",
+      "sqlExecutionCount": 4,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected completed; observed completed"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target"
+        },
+        "numerical": {
+          "status": "fail",
+          "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 4 SQL executions; observed 4"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "fail",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target"
+      },
+      "numericalDiagnostic": {
+        "status": "fail",
+        "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "supported-05",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-05.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "fail",
+          "reason": "Expected completed; observed clarification_required"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+        },
+        "numerical": {
+          "status": "not_reached",
+          "reason": "No completed investigation to grade"
+        },
+        "sql": {
+          "status": "fail",
+          "reason": "Expected 4 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "excluded",
+        "reason": "Task/contract mismatch: identical periods violate the current non-overlap validator; expected completed zero-change task cannot be fulfilled by this contract. Preserve date-extraction failure diagnostically, outside model-task failure counts."
+      },
+      "contractClassification": "task_contract_mismatch",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+      },
+      "numericalDiagnostic": {
+        "status": "not_reached",
+        "reason": "No completed investigation to grade"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": true
+    },
+    {
+      "caseId": "supported-06",
+      "category": "supported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-06.json",
+      "observedOutcome": "completed",
+      "sqlExecutionCount": 4,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected completed; observed completed"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "pass",
+          "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 4 SQL executions; observed 4"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "pass",
+        "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "ambiguous-01",
+      "category": "ambiguous",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-01.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected clarification_required; observed clarification_required"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "ambiguous-02",
+      "category": "ambiguous",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-02.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected clarification_required; observed clarification_required"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "ambiguous-03",
+      "category": "ambiguous",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-03.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected clarification_required; observed clarification_required"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "ambiguous-04",
+      "category": "ambiguous",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-04.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected clarification_required; observed clarification_required"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "unsupported-01",
+      "category": "unsupported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-01.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "fail",
+          "reason": "Expected unsupported; observed clarification_required"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: metric, baseline, target, unresolvedQuestions presence"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "fail",
+        "reason": "User-task rejection requires correctly identified unsupported choice, unsupported outcome and zero SQL. Unrelated date extraction remains diagnostic."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": {
+        "unsupportedField": "metric",
+        "expectedChoice": "profit",
+        "observedChoice": null,
+        "correctChoiceIdentified": false,
+        "unsupportedOutcome": false,
+        "zeroSql": true
+      },
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: metric, baseline, target, unresolvedQuestions presence"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": true
+    },
+    {
+      "caseId": "unsupported-02",
+      "category": "unsupported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-02.json",
+      "observedOutcome": "unsupported",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected unsupported; observed unsupported"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "User-task rejection requires correctly identified unsupported choice, unsupported outcome and zero SQL. Unrelated date extraction remains diagnostic."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": {
+        "unsupportedField": "metric",
+        "expectedChoice": "total_refund_amount",
+        "observedChoice": "total_refund_amount",
+        "correctChoiceIdentified": true,
+        "unsupportedOutcome": true,
+        "zeroSql": true
+      },
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": true
+    },
+    {
+      "caseId": "unsupported-03",
+      "category": "unsupported",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-03.json",
+      "observedOutcome": "unsupported",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected unsupported; observed unsupported"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target"
+        },
+        "numerical": {
+          "status": "not_applicable",
+          "reason": "No numerical result expected"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 0 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_applicable",
+          "reason": "Not a misleading case"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "User-task rejection requires correctly identified unsupported choice, unsupported outcome and zero SQL. Unrelated date extraction remains diagnostic."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": {
+        "unsupportedField": "dimension",
+        "expectedChoice": "category",
+        "observedChoice": "category",
+        "correctChoiceIdentified": true,
+        "unsupportedOutcome": true,
+        "zeroSql": true
+      },
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target"
+      },
+      "numericalDiagnostic": {
+        "status": "not_applicable",
+        "reason": "No numerical result expected"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_applicable",
+        "reason": "Not a misleading case"
+      },
+      "regraded": true
+    },
+    {
+      "caseId": "misleading-01",
+      "category": "misleading",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-01.json",
+      "observedOutcome": "completed",
+      "sqlExecutionCount": 4,
+      "originalGrades": {
+        "outcome": {
+          "status": "pass",
+          "reason": "Expected completed; observed completed"
+        },
+        "extraction": {
+          "status": "pass",
+          "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+        },
+        "numerical": {
+          "status": "pass",
+          "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+        },
+        "sql": {
+          "status": "pass",
+          "reason": "Expected 4 SQL executions; observed 4"
+        },
+        "evidence": {
+          "status": "pass",
+          "reason": "Require verified increase, source citation, no established cause, and no asserted decline/campaign cause"
+        },
+        "endToEnd": {
+          "status": "pass",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "pass",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "pass",
+        "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+      },
+      "numericalDiagnostic": {
+        "status": "pass",
+        "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+      },
+      "evidenceDiagnostic": {
+        "status": "pass",
+        "reason": "Require verified increase, source citation, no established cause, and no asserted decline/campaign cause"
+      },
+      "regraded": false
+    },
+    {
+      "caseId": "misleading-02",
+      "category": "misleading",
+      "sourceCaseFile": "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-02.json",
+      "observedOutcome": "clarification_required",
+      "sqlExecutionCount": 0,
+      "originalGrades": {
+        "outcome": {
+          "status": "fail",
+          "reason": "Expected completed; observed clarification_required"
+        },
+        "extraction": {
+          "status": "fail",
+          "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+        },
+        "numerical": {
+          "status": "not_reached",
+          "reason": "No completed investigation to grade"
+        },
+        "sql": {
+          "status": "fail",
+          "reason": "Expected 4 SQL executions; observed 0"
+        },
+        "evidence": {
+          "status": "not_reached",
+          "reason": "No summary to inspect for evidence compliance"
+        },
+        "endToEnd": {
+          "status": "fail",
+          "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+        }
+      },
+      "reviewedUserTaskSuccess": {
+        "status": "fail",
+        "reason": "Unchanged original task checks; contract review does not apply further regrading to this case."
+      },
+      "contractClassification": "eligible",
+      "unsupportedRejectionCheck": null,
+      "exactExtractionDiagnostic": {
+        "status": "fail",
+        "reason": "Mismatch: baseline, target, unresolvedQuestions presence"
+      },
+      "numericalDiagnostic": {
+        "status": "not_reached",
+        "reason": "No completed investigation to grade"
+      },
+      "evidenceDiagnostic": {
+        "status": "not_reached",
+        "reason": "No summary to inspect for evidence compliance"
+      },
+      "regraded": false
+    }
+  ],
+  "preservation": {
+    "sha256Before": {
+      "docs/evals/day-15-investigation-development.md": "5f9f34fcc27499e9f023241978e533098db1c7c3070ec5ad51f573807b63cdd6",
+      "evals/investigation/development-v1.json": "70cb3b49b3b9ce42e43bbb2be3db8d5e51140067e0c966d58e98a76e4a80c697",
+      "package.json": "4b8458f5993d2be5d7ff7a918610d62f42d37643a051e8ea351df50b59119574",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-01.json": "5c86186fe13eab2c4d9c57226608f949300212ea32b8246ef3c37246c4f64910",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-02.json": "8eec961abc34b38f2fdb03fbc6fe4f805f33be41d3fc7646a382e77c3171eb2a",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-03.json": "4649aabf7db38c627bdf62731bb66c7935773cd8c5672385af72f644dfce73cb",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-04.json": "574c1337df4209041c9b7fc9f1e9d9886cee6f7255db5adcd2d8ead3fe837fb4",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/calls.jsonl": "0ed2a0b0b36784178ec4e23c0fb113cddc86fcc437785c377b37551b70f6503a",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/failure-review.json": "79e0912a83746b040c393fa3bc84bacedc31acb4ea0730a3dfff2606cf5beedd",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-01.json": "e3779680d687f58b97ad417ed37a5902859efbf8f0920176f7f82600c34be189",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-02.json": "1f3d5546dcc51a701ddb30eff868844a5f45edb0ca128397fb7d8089019d8986",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/protocol.json": "12767737b98294abedfe2a0f59b37e1b180ce2993ddc0d97affd40828c515673",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/report.json": "7859fd6872bfbc52642a0d136bd7bc0726ecd6c1d453752e3beafb978ee30a84",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-01.json": "e4072cc3fec3b6354c123cc687a606bfe694f443ae1cd49bafcc7a3e5174c571",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-02.json": "3663e3159f73e8a16ae50b0355711af31e6bf7e4f43bdd6b24daf78b321bc653",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-03.json": "284a265e9691c2f04c4b61d79d4c0e5fdb18c9ea39ae0d804fa16928409c5362",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-04.json": "999f81a7958073a3e4a2da9b631b6528326d7630a44495e6161d2899a6911295",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-05.json": "877bb18ea8f8be679f1fbe25ec10823f18de958ba837804f29084feb664fa9eb",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-06.json": "42cbaf6b23f389f47792c5fd00fc0dd1c15a4a95e8a8d9c19683cdc6ef9b3b66",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-01.json": "4300b35f1aa8bcb0ed643e49c80673182583ecd28add85f7cf5aa9dc09abc534",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-02.json": "18bd0f8d4727b893782ed52c62b5d18c10a3c9cebf91b5e98b03628a308e67ae",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-03.json": "eb224f056785b8575d276124f22f4a96d312e4193f557bd5c5de7d76808768db",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/ambiguous-revenue.json": "ce0fe517ba09d0a321983426d8010a1a82daa01641119d3fc3dd2c42e5ba1017",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/calls.jsonl": "8e29c1b2e383e951c76f89d39962781aa9ab0f0126a5ff26544c22e1c59b00e3",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/explicit-net-region.json": "2c4cff822154219455855d6b22cf4933664d8d16de2b9e65024384dd583283dc",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/protocol.json": "5e6deecb824da792977f6ccd23a6f8d9e1c4baf574e1a22a3f0bda003f892067",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/report.json": "2dc7a570cee89c99a4bc0c668039d39464761e98774abe08ee3d30389d679ace",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/unsupported-gross.json": "37a702061ee25cb44ae4f245e9e66c339d56716ee75a549c838d157c80044beb",
+      "src/ai/ollama-embedding.test.ts": "18ef4ed2b8f5663194da611847c778122548c02fe93615c6216949da7e7f0dc7",
+      "src/ai/ollama-embedding.ts": "9f53af6f5a4717875b9016544eac32ff49ddf667b6a96e155d5b13152ccf24e9",
+      "src/ai/provider.ts": "564870028e0e0cd5599f47ee795144e301436dffbf5ac30cd117b5b63daacb76",
+      "src/ai/qwen-provider-stream.test.ts": "8d1ada6760cc1442c1da7ddfbb04ac012cd57c2034244ba2a7ce1c8fb986a0b9",
+      "src/ai/qwen-provider.test.ts": "2cdff3bdf15caa3fab319eee6aeb681f53edcaf8fd9584719bbcb6d994c80675",
+      "src/ai/qwen-provider.ts": "bf5842543484311189a2d9013f335df01c039f1193bbe5357d14d0d394e8b358",
+      "src/application/commerce-analysis-pipeline.test.ts": "b07e0f5253eba9059f6b779f3addc0211cc1639625eccaacd2edfa55dd4edb32",
+      "src/application/commerce-analysis-pipeline.ts": "2c21832837b635b78d07669af704d92f6a20018ef9f293eba9f14d221c8d8cbb",
+      "src/application/commerce-analysis-real-executor.integration.test.ts": "d8b8315554bfa80e585b2b56504a55e2106f299d884cdab6ee8cbe0f5996e275",
+      "src/application/compare-net-revenue-by-region.test.ts": "b4d1bf4a01f20f3b486e50150478067ae7cde8bb9513dd6d964ac9e365b38a8a",
+      "src/application/compare-net-revenue-by-region.ts": "2a6a4a5426f8e9bb82e187c4c96a5ac9dd6bbc29f9d67d68bf4d6af18f7355fe",
+      "src/application/compare-periods.test.ts": "71c825c10004760d8a3b19604994ee9a9763011740b3af515737a07dd5cbd7a4",
+      "src/application/compare-periods.ts": "0135624773b75d361314e00a894542969a0407c0b3235f7795b0f58b2d8fbad3",
+      "src/application/investigate-metric-change.test.ts": "3859c11a9e8a2c6bda01c2fe7844985a158b6cf7d9fd5fd1fdb7448ae31f20e4",
+      "src/application/investigate-metric-change.ts": "71f8f2c6bee83e0adf16d798d997ca30d139aa28ef5a9b9443e4d4156f5892b6",
+      "src/application/investigation-extraction-v1-prompt.ts": "7ce0c6b7900f0aae53585918954550c0f818b484dc2af59d366d60ea4ecffab0",
+      "src/application/metric-definition-tool-workflow-cli.ts": "1a42e6a1c489e519202abab0c05fcafe391fa5eca890b2238d276985f54bfed5",
+      "src/application/metric-definition-tool-workflow.test.ts": "e4168ed54f72c0a9b05bc29b42bd67df45930b7fe0d6697b3a242f8dff7bc02e",
+      "src/application/metric-definition-tool-workflow.ts": "4967bcbad23883837c05a977e8c93c7882273a08b3738857bd1447876ddc4156",
+      "src/application/natural-language-investigation.test.ts": "9c29d6cd1c9094dcf57467c46d3a13f5bd57455b757d314fb3d28cc70c1fd6c3",
+      "src/application/natural-language-investigation.ts": "c6f8449ba5a7fe1719afca366ecd5e9b41e8e902c857ac1b168d22a884545a60",
+      "src/config.ts": "85180fee0d990ce3612beb9c4b60524da2723bfe29d75c1efb0ea86d3af55a4e",
+      "src/db/connection.ts": "fd276664ae094c1b4b58caf696ca12f1732cb2f959c3d275f08c522acb727969",
+      "src/db/duckdb-query-plan-executor.integration.test.ts": "70d47e5801635fa70b6a51dba158ba8a975891a8109b695054a6ca99224a5ab9",
+      "src/db/duckdb-query-plan-executor.ts": "bd47a23a23d38ba57837cc0ef3fcb5bd1ca94c8a88d821969332d8ab381d44e2",
+      "src/db/initialize.ts": "bc4dd29ac263818b9a895b5cb5556c1121c76b6e6928c35c77c91660b39a09f5",
+      "src/db/print-reference-results.ts": "267e80e68b8219c222c56937998acd19015fd02df2107c775d323c91cfca70df",
+      "src/db/query-plan-sql-compiler.test.ts": "8f3f38b50788fb6c359eb7da168deb73ef9c83f820db2b1b84fc4f10eb997463",
+      "src/db/query-plan-sql-compiler.ts": "4f89b35a60fe511540bbb833db091d401c3882c6043244b9be99c4bb936dab6c",
+      "src/decimal.ts": "bc8e06f1a56a4f2f6ec1a855fdbbf4b26567206096b45eb2cfeb836b155ff469",
+      "src/evals/august-net-revenue-case.ts": "d49c3ef00a9f00429b0080c6f25d371d05271257d8caf8b1dae22fffd426c7c8",
+      "src/evals/day-10-parent-ranking.test.ts": "6054c251fbe73bda7b16e20551e0e5351429ddaa5f030c6c8ba848668e0bc6cd",
+      "src/evals/day-10-parent-ranking.ts": "6ec526f79551b9e7aea05457a8397b3711ea233cf36cb27ab591c58265c006d8",
+      "src/evals/extraction-outcome-grader.test.ts": "4ed0fab18b7a73d354842b89f75e3d01220732f9fbde6314b20af43d970b560d",
+      "src/evals/extraction-outcome-grader.ts": "61026a7b390b49383523b57819b8ca8f91a624bbff4c68a67559d38534d360a6",
+      "src/evals/investigation-development.test.ts": "c0f90242aaacd578f3d31006dfaeaa2ac199028cc912be06c0bdee4b0100517c",
+      "src/evals/investigation-development.ts": "e6303c089e387f9e0701ba914d998e91141076f58c7130852e3ff9af7505de13",
+      "src/evals/plan-meaning-grader.test.ts": "bdd73d04961191278b475003e4dd2a8f6cd3d013037c2e995d9d00e9175c66fd",
+      "src/evals/plan-meaning-grader.ts": "c4007d841a32f450bdeac2b6663e2f7433d1dc7ea0ed32d83a90760eaa3f8719",
+      "src/evals/scalar-numerical-grader.test.ts": "b00740e0e1607352a411e4744da9698dba87079a4ed45ad7b9c9fccb418f9010",
+      "src/evals/scalar-numerical-grader.ts": "a4a89fa945409a26cf16e9c79b64363408c940bbdf797380bbd438ae29102dfe",
+      "src/evals/supported-analytics-cases.test.ts": "eb5ffa33c7bb477dd341eebc1caa055616bcaa11320817d58253e8df43e6be9d",
+      "src/evals/supported-analytics-cases.ts": "8d73406d14c7659f42b110c34ce08b4b37227ad80a6b606afde2e4c3156fcf57",
+      "src/examples/commerce-analysis-pipeline.ts": "de68db61eddc0e4b4527e5d6583c675035ca6a95696c26a364ab2f4257f5e2f8",
+      "src/examples/compare-net-revenue-by-region.ts": "daa5679a43bebe07c05037db66113ec0a853b3f72825153c14e48d5eda815230",
+      "src/examples/compare-periods.ts": "d887657e7f4bab4b11112940bb617d2c5e7083298c8a8282b9619a3bb35d5b56",
+      "src/examples/investigate-metric-change.ts": "04fd822bc689f740c86684d919b57baa959d68369a86e2672dd6457e16b2829a",
+      "src/examples/kpi-specification.ts": "47b9655f61b1699d7d3cbafe740653ba477b111a9c0e4444a10501f495486556",
+      "src/examples/verify-date-clarification.ts": "c846bbe30d07fa6109a6052876729e7235446c22c502dcea27ba9fe101e2120d",
+      "src/examples/verify-model-display-browser.ts": "c7875183f629e4c18e8a25114a2a5662aed62e4b02eceb4ab2979ff090d768bd",
+      "src/examples/verify-model-display-dates.ts": "0f5b07bb53d5be1fc66bf1cbf74b0243e85eb4314edd2baabdaefedd55f2849a",
+      "src/examples/verify-no-matching-data.ts": "9ea9a6fcd39a9e78469895fe26ac2014498cb513fa9f18ce3a0b4a3ec5aab347",
+      "src/examples/verify-query-failure.ts": "186f05f7ec9b4f6c9275a3ba196ec0bed36d6e93b312d6d6dec8fc26c5753ebc",
+      "src/examples/verify-streaming-boundary.ts": "2e0cf457db9e9322e4b8b85017ddb7297abfe1f583a14fa7904ec3e95997cd9a",
+      "src/experiments/day-01-baseline.ts": "f8fa12b0ac380cb6c6c7fcb320cd7f021a11758d230140b131eb3c6b980160ea",
+      "src/experiments/day-01-smoke.ts": "dabb86e0ab67dd549e9b991b7c7ed50b441baef34018799dfdbf8b52fb0f90cd",
+      "src/experiments/day-02-routing-baseline.ts": "90022f732b23cf451c9c4f592e89a5710c52b440c79e1a9d78b0d8356c3f4686",
+      "src/experiments/day-03-query-plan-development.ts": "0d58383ea96f724c473a262169111e176ade1ad23471701d2acdf69da42ca793",
+      "src/experiments/day-05-deterministic-numerical-evaluation.ts": "a63532decbc52ff0f94c00943b8a0dcae407f302cf92363b0dfc5d03076be44a",
+      "src/experiments/day-05-live-commerce-analysis.ts": "c04c4aea9a1029ee7d9188bd96671522cf686875de6e5e47259d767151e9a02f",
+      "src/experiments/day-06-display-selection.tsx": "df8501055a5186acf40495f626f112db1d0a7ae92138fa62a10da604c43dfe63",
+      "src/experiments/day-06-live-streaming-display.ts": "5a4c24872391af9cc11ad1983a976e8645797c7246971fd423ecc1d4f71273ca",
+      "src/experiments/day-07-clarification-evaluation.ts": "9d00495e2a95a299f89a7736496f43f96bb783ca23bb6f36265e76bf5cf3da4d",
+      "src/experiments/day-07-interpretation-evaluation.ts": "54551fa85e947ab67224309e402716439f581e38929faa7377cfdd59131c9be7",
+      "src/experiments/day-07-numerical-category.ts": "26094710b1284647f5b20b19eb60885f3b025f6d65a72d0bcbf7159f33c6e76b",
+      "src/experiments/day-07-offline-extraction-outcomes.ts": "6316cefea5ed3be7eb84004c2f488c8a108f86fec0bfd9511932a436d7f1c6f5",
+      "src/experiments/day-07-one-case-evaluation.ts": "286c039659cad31c5597afaba5db79a4657d87e9b349936cb24c173ca361dae5",
+      "src/experiments/day-08-bm25-retrieval.ts": "f68bfdedd2ac468eb4b732ab2b12fbd3e9785731e2b62658286600c9c669d680",
+      "src/experiments/day-08-embedding-retrieval.ts": "30328fe2c905d06e24ea42fc9fa05a968191cf340c2cc5932112547bc88856c0",
+      "src/experiments/day-08-keyword-retrieval.ts": "a7dd47d68f282a0a2f9f25e088823530ced37631657e275347a45fde70edb9cf",
+      "src/experiments/day-08-retrieval-corpus.ts": "82fe4ef434bfb446f2f2e6682ee7f1eb9f51ec5e6c06761d77cc0e43460da029",
+      "src/experiments/day-08-retrieval-evaluation.ts": "8f4dad2791dccda0698948082b1abd1ebd8fe5931c20235e7121e0507698afab",
+      "src/experiments/day-09-document-chunking.ts": "42579602d82ccdf3224d955c296c385341ef5a5959c15c5911bacafb920165b7",
+      "src/experiments/day-09-document-ingestion.ts": "512d588c06b744dff1f34eafaa4538342ebef712add0d1b55a258abf278c882b",
+      "src/experiments/day-09-document-reindexing.ts": "0617bc255f43e2d24402823433f3f186e6988c892de62bd4b7e19e2f33d4824a",
+      "src/experiments/day-10-chunk-embedding.ts": "0d3972a81ddca0e5e2c1662a0f193f50e66d891bfe54f72d56c4bceb4da5c53f",
+      "src/experiments/day-10-exact-chunk-retrieval.ts": "40aae95b76a785110db9b1df5720a44d6d2baec4c784731616860a3efcff3c66",
+      "src/experiments/day-10-refund-embeddings.ts": "e9178cea9ce1f03d515b96b20332549287966ff628565016309fa61ae851dc18",
+      "src/experiments/day-10-retrieval-evaluation.ts": "0da1d93a4e55b34962d8fa29284422a82dfe73b2ff8068b390c6a6f06be95130",
+      "src/experiments/day-15-investigation-development.ts": "68de47d0c0139f68a289894ef7f7fdb31907b3af9c8fecce5335aa9722ca5cdd",
+      "src/experiments/day-15-natural-language-investigation.ts": "6f2e33f86d268d39f2cad01da40173c5a6af15cbc6a4e0a95cedd760c5c8503a",
+      "src/experiments/investigation-recorder.test.ts": "471b5d9216fe91f2812fc1d56e683623eee1031b24930b4cec8dfc496a61728b",
+      "src/experiments/investigation-recorder.ts": "4c7371c1c0033e23b6440fa85982f53c4cbe41079d0f295404d5af1b1fba6cfe",
+      "src/index.ts": "9ad15c2905b4b96a3c70ffaad307c4e56f5589c1b8f3ce674fe33995a324e799",
+      "src/query-plan/query-plan-cli.ts": "d98d2f65aeb27d6d3950b18d52aeb825263154eb7084735c89ce149d0996eeb1",
+      "src/query-plan/query-plan-extraction-v1-prompt.ts": "a1ea426ba27b6a0a566f61eeba2d5d70a433f51ac301688b6012b3c0845201ab",
+      "src/query-plan/query-plan-extraction-v2-prompt.ts": "4af74019126c8eda2589b8f5039bb5b21262a7e514f047efdeed5d6904a9cdbc",
+      "src/query-plan/query-plan-extraction-v3-prompt.ts": "85fc542f8c0c9098e0a16438ea598c79ac61281b1c343f02e68b65438de6a75e",
+      "src/query-plan/query-plan-extraction.fixtures.ts": "b2bcafdbf299c13adf45b124ff2441a76ccfb9bacc9d6935245a2ed4d84405cf",
+      "src/query-plan/query-plan-extraction.test.ts": "7d2e42193430456f666e97fc98d5cd07a9a7203d6ea2a5d0c9b952dd8364691f",
+      "src/query-plan/query-plan-extraction.ts": "170f8a09fb05c35c365a37938a73846f6b9447c32a8f9fd6bba9fc0c0910498e",
+      "src/query-plan/query-plan.test.ts": "55a109fa1247224c4babfe15cd2000c52610d3cac0df239235237892d4f34833",
+      "src/query-plan/query-plan.ts": "21ca9d77734bf292367846b5c9a2b0ebe026b40a0aa3f35160378da4a6cd2963",
+      "src/retrieval/chunk-embedding.test.ts": "18895c7fdb5c1e08e188ae325108707e1a33ff9546e8b10404d4e4068983a916",
+      "src/retrieval/chunk-embedding.ts": "8297360c7152d6d3c10efa8c034471ee15d4e64a93c58d26687d6d41cd8b67f3",
+      "src/retrieval/cosine-similarity.ts": "6e43a701f7afcea588d42f0a6af60356d8a020ec70f54bbfe403901fdd8f684b",
+      "src/retrieval/day-09-ingestion-fixtures.ts": "89797a691c4db89861ccffd1a88c8c3d837c6c0c29ac30538e8df4f319226bbd",
+      "src/retrieval/day-09-refund-policy-fixture.ts": "3d2dbd9162b01fd82bb3328b8d22ee8c9ed327254a6b36497a327f4bbfc83332",
+      "src/retrieval/document-chunker.test.ts": "5cab5b85179f37186b05be1864ca847c078c80afb1af2191c6b41c8210f40af1",
+      "src/retrieval/document-chunker.ts": "675aaefa49f1697329cbb143cc59f92b08f8b4c8f7b2f14995ea5f67d2b2e10a",
+      "src/retrieval/exact-chunk-search.test.ts": "5a0cdc8518a72586f4b97ab50c806c11cfd4b24d337c9083970d0ea3a5ed3906",
+      "src/retrieval/exact-chunk-search.ts": "671ac2a7e88a7c74dc1ec8eed32133731952c00dd7527004363c35bbaac70036",
+      "src/retrieval/in-memory-document-store.test.ts": "7f370ac43da9a142b9805c24374eea78df48adce8104783bff00434c1aa556a1",
+      "src/retrieval/in-memory-document-store.ts": "85f5c513719143f30bea423c9769cdf9ae2086a0c2c862426966e91d8dce6bbb",
+      "src/routing/router-v1-prompt.ts": "97e9fe1279a4716da09b334cd2a0b8c4ae15168f7f2aea7064789df87327fda6",
+      "src/routing/router-v2-prompt.ts": "ca3b7c6c0a7b61cfe918e11a843e1ef64c2e1d8baabce29f7c993f79c3ed6252",
+      "src/routing/router-v3-prompt.ts": "5a2db8cad9766b2f23a779d8e9b408de60398e1f52abcfb9848063f36394f74a",
+      "src/routing/router.test.ts": "3f661e0b2b887ba8bf1404f2e494e7cff7d01388100b4d05c7c913c2b3b0f999",
+      "src/routing/router.ts": "4e274b0e09db443b94bf0111949a98b9f12ecf6840178f99999a05ab76ae5b8a",
+      "src/tools/get-metric-definition.test.ts": "75ec366cfb03a7f4f1bc49ec1869ee3b9108101f7e7b76d56dbf001d895207d0",
+      "src/tools/get-metric-definition.ts": "a1ed682097397de115f3371abe90cc2fa8530b136275c910ad12b556f8c0739f",
+      "src/tools/get-schema.test.ts": "fd6a70b5fd2f3bf98a4820e19be263656175627103986c12cf84006a5b173d91",
+      "src/tools/get-schema.ts": "d6f9043e6ef1ad0aab6631adf0179b14d6aef0d09103ca5b89312c41f51bca7c",
+      "src/tools/preview-query-plan.test.ts": "48b213a413655ad291156a6a1c0a15af722c62bfbda5a8ff52f0a67bdcf37ead",
+      "src/tools/preview-query-plan.ts": "2efc47a64011a80cd5622291ddb908cdf823c523ec609d577381c8cd0c811872",
+      "src/ui/display-selection.test.ts": "3fc72fc7a4bc472dae76f6da1b2969481fd7f994e56ab46f896b4354d6237b1c",
+      "src/ui/display-selection.ts": "2d4f6f23bdeff011d6d28ab602cfe01bbea18003a3aa324e6eff3c0a80495069",
+      "src/ui/kpi-specification.test.ts": "ce81846d8a33fdfadf1185c53cdc0d8eeb44ba7eb409be884c24d23f0011e3bc",
+      "src/ui/kpi-specification.ts": "5855eea1e2c1a54788bd22c68325dd31c1a1ceb28f0d4d6dfe60c45f4f3563f2",
+      "src/ui/model-display-cli.ts": "bfe3a274d8b84cda26f2bc22d583861befc24ed7e9ffea241027a31b21734e68",
+      "src/ui/model-display-client.js": "a698493795bc2811bd11af47870680a2d5817cf66ed9b44a50e9c94110e63196",
+      "src/ui/model-display-request.test.ts": "c9ddec50c7ca0c2406196f626bcb24494587f4a6bc3b1a5d5f16deac7a18088d",
+      "src/ui/model-display-request.ts": "1c2400dfb13e61da5882f6226e791bd7efdbd38be6121e6c30a1b7a6c88628cd",
+      "src/ui/model-display-server.tsx": "021fff3651016afba52ce1c4a3f627c6c6c21d91701b1bedef18870dd90f7557",
+      "src/ui/net-revenue-kpi-page.tsx": "c2fb993dd06e7cdb7e78e1584666d88ff50aa8983c24ba0107fa0f405086c5e7",
+      "src/ui/net-revenue-kpi-plan.ts": "d947149a8cf39d8e6a0ed5385a09534b5719a29a64384e742ab93192b8e84ba7",
+      "src/ui/net-revenue-kpi-server.tsx": "6d36d818674dee0ac61dd7dedf25742b85633a1881fd64c96e4b4a289797a77e"
+    },
+    "sha256After": {
+      "docs/evals/day-15-investigation-development.md": "5f9f34fcc27499e9f023241978e533098db1c7c3070ec5ad51f573807b63cdd6",
+      "evals/investigation/development-v1.json": "70cb3b49b3b9ce42e43bbb2be3db8d5e51140067e0c966d58e98a76e4a80c697",
+      "package.json": "4b8458f5993d2be5d7ff7a918610d62f42d37643a051e8ea351df50b59119574",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-01.json": "5c86186fe13eab2c4d9c57226608f949300212ea32b8246ef3c37246c4f64910",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-02.json": "8eec961abc34b38f2fdb03fbc6fe4f805f33be41d3fc7646a382e77c3171eb2a",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-03.json": "4649aabf7db38c627bdf62731bb66c7935773cd8c5672385af72f644dfce73cb",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/ambiguous-04.json": "574c1337df4209041c9b7fc9f1e9d9886cee6f7255db5adcd2d8ead3fe837fb4",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/calls.jsonl": "0ed2a0b0b36784178ec4e23c0fb113cddc86fcc437785c377b37551b70f6503a",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/failure-review.json": "79e0912a83746b040c393fa3bc84bacedc31acb4ea0730a3dfff2606cf5beedd",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-01.json": "e3779680d687f58b97ad417ed37a5902859efbf8f0920176f7f82600c34be189",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/misleading-02.json": "1f3d5546dcc51a701ddb30eff868844a5f45edb0ca128397fb7d8089019d8986",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/protocol.json": "12767737b98294abedfe2a0f59b37e1b180ce2993ddc0d97affd40828c515673",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/report.json": "7859fd6872bfbc52642a0d136bd7bc0726ecd6c1d453752e3beafb978ee30a84",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-01.json": "e4072cc3fec3b6354c123cc687a606bfe694f443ae1cd49bafcc7a3e5174c571",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-02.json": "3663e3159f73e8a16ae50b0355711af31e6bf7e4f43bdd6b24daf78b321bc653",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-03.json": "284a265e9691c2f04c4b61d79d4c0e5fdb18c9ea39ae0d804fa16928409c5362",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-04.json": "999f81a7958073a3e4a2da9b631b6528326d7630a44495e6161d2899a6911295",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-05.json": "877bb18ea8f8be679f1fbe25ec10823f18de958ba837804f29084feb664fa9eb",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/supported-06.json": "42cbaf6b23f389f47792c5fd00fc0dd1c15a4a95e8a8d9c19683cdc6ef9b3b66",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-01.json": "4300b35f1aa8bcb0ed643e49c80673182583ecd28add85f7cf5aa9dc09abc534",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-02.json": "18bd0f8d4727b893782ed52c62b5d18c10a3c9cebf91b5e98b03628a308e67ae",
+      "results/day-15-investigation-development-2026-10-13T08-27-37.486Z-d3819fff-5e14-44eb-8960-d74e90cfe56c/unsupported-03.json": "eb224f056785b8575d276124f22f4a96d312e4193f557bd5c5de7d76808768db",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/ambiguous-revenue.json": "ce0fe517ba09d0a321983426d8010a1a82daa01641119d3fc3dd2c42e5ba1017",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/calls.jsonl": "8e29c1b2e383e951c76f89d39962781aa9ab0f0126a5ff26544c22e1c59b00e3",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/explicit-net-region.json": "2c4cff822154219455855d6b22cf4933664d8d16de2b9e65024384dd583283dc",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/protocol.json": "5e6deecb824da792977f6ccd23a6f8d9e1c4baf574e1a22a3f0bda003f892067",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/report.json": "2dc7a570cee89c99a4bc0c668039d39464761e98774abe08ee3d30389d679ace",
+      "results/day-15-natural-language-investigation-2026-10-13T07-06-15.274Z-97f07c21-b812-4f52-8bcb-242de074328b/unsupported-gross.json": "37a702061ee25cb44ae4f245e9e66c339d56716ee75a549c838d157c80044beb",
+      "src/ai/ollama-embedding.test.ts": "18ef4ed2b8f5663194da611847c778122548c02fe93615c6216949da7e7f0dc7",
+      "src/ai/ollama-embedding.ts": "9f53af6f5a4717875b9016544eac32ff49ddf667b6a96e155d5b13152ccf24e9",
+      "src/ai/provider.ts": "564870028e0e0cd5599f47ee795144e301436dffbf5ac30cd117b5b63daacb76",
+      "src/ai/qwen-provider-stream.test.ts": "8d1ada6760cc1442c1da7ddfbb04ac012cd57c2034244ba2a7ce1c8fb986a0b9",
+      "src/ai/qwen-provider.test.ts": "2cdff3bdf15caa3fab319eee6aeb681f53edcaf8fd9584719bbcb6d994c80675",
+      "src/ai/qwen-provider.ts": "bf5842543484311189a2d9013f335df01c039f1193bbe5357d14d0d394e8b358",
+      "src/application/commerce-analysis-pipeline.test.ts": "b07e0f5253eba9059f6b779f3addc0211cc1639625eccaacd2edfa55dd4edb32",
+      "src/application/commerce-analysis-pipeline.ts": "2c21832837b635b78d07669af704d92f6a20018ef9f293eba9f14d221c8d8cbb",
+      "src/application/commerce-analysis-real-executor.integration.test.ts": "d8b8315554bfa80e585b2b56504a55e2106f299d884cdab6ee8cbe0f5996e275",
+      "src/application/compare-net-revenue-by-region.test.ts": "b4d1bf4a01f20f3b486e50150478067ae7cde8bb9513dd6d964ac9e365b38a8a",
+      "src/application/compare-net-revenue-by-region.ts": "2a6a4a5426f8e9bb82e187c4c96a5ac9dd6bbc29f9d67d68bf4d6af18f7355fe",
+      "src/application/compare-periods.test.ts": "71c825c10004760d8a3b19604994ee9a9763011740b3af515737a07dd5cbd7a4",
+      "src/application/compare-periods.ts": "0135624773b75d361314e00a894542969a0407c0b3235f7795b0f58b2d8fbad3",
+      "src/application/investigate-metric-change.test.ts": "3859c11a9e8a2c6bda01c2fe7844985a158b6cf7d9fd5fd1fdb7448ae31f20e4",
+      "src/application/investigate-metric-change.ts": "71f8f2c6bee83e0adf16d798d997ca30d139aa28ef5a9b9443e4d4156f5892b6",
+      "src/application/investigation-extraction-v1-prompt.ts": "7ce0c6b7900f0aae53585918954550c0f818b484dc2af59d366d60ea4ecffab0",
+      "src/application/metric-definition-tool-workflow-cli.ts": "1a42e6a1c489e519202abab0c05fcafe391fa5eca890b2238d276985f54bfed5",
+      "src/application/metric-definition-tool-workflow.test.ts": "e4168ed54f72c0a9b05bc29b42bd67df45930b7fe0d6697b3a242f8dff7bc02e",
+      "src/application/metric-definition-tool-workflow.ts": "4967bcbad23883837c05a977e8c93c7882273a08b3738857bd1447876ddc4156",
+      "src/application/natural-language-investigation.test.ts": "9c29d6cd1c9094dcf57467c46d3a13f5bd57455b757d314fb3d28cc70c1fd6c3",
+      "src/application/natural-language-investigation.ts": "c6f8449ba5a7fe1719afca366ecd5e9b41e8e902c857ac1b168d22a884545a60",
+      "src/config.ts": "85180fee0d990ce3612beb9c4b60524da2723bfe29d75c1efb0ea86d3af55a4e",
+      "src/db/connection.ts": "fd276664ae094c1b4b58caf696ca12f1732cb2f959c3d275f08c522acb727969",
+      "src/db/duckdb-query-plan-executor.integration.test.ts": "70d47e5801635fa70b6a51dba158ba8a975891a8109b695054a6ca99224a5ab9",
+      "src/db/duckdb-query-plan-executor.ts": "bd47a23a23d38ba57837cc0ef3fcb5bd1ca94c8a88d821969332d8ab381d44e2",
+      "src/db/initialize.ts": "bc4dd29ac263818b9a895b5cb5556c1121c76b6e6928c35c77c91660b39a09f5",
+      "src/db/print-reference-results.ts": "267e80e68b8219c222c56937998acd19015fd02df2107c775d323c91cfca70df",
+      "src/db/query-plan-sql-compiler.test.ts": "8f3f38b50788fb6c359eb7da168deb73ef9c83f820db2b1b84fc4f10eb997463",
+      "src/db/query-plan-sql-compiler.ts": "4f89b35a60fe511540bbb833db091d401c3882c6043244b9be99c4bb936dab6c",
+      "src/decimal.ts": "bc8e06f1a56a4f2f6ec1a855fdbbf4b26567206096b45eb2cfeb836b155ff469",
+      "src/evals/august-net-revenue-case.ts": "d49c3ef00a9f00429b0080c6f25d371d05271257d8caf8b1dae22fffd426c7c8",
+      "src/evals/day-10-parent-ranking.test.ts": "6054c251fbe73bda7b16e20551e0e5351429ddaa5f030c6c8ba848668e0bc6cd",
+      "src/evals/day-10-parent-ranking.ts": "6ec526f79551b9e7aea05457a8397b3711ea233cf36cb27ab591c58265c006d8",
+      "src/evals/extraction-outcome-grader.test.ts": "4ed0fab18b7a73d354842b89f75e3d01220732f9fbde6314b20af43d970b560d",
+      "src/evals/extraction-outcome-grader.ts": "61026a7b390b49383523b57819b8ca8f91a624bbff4c68a67559d38534d360a6",
+      "src/evals/investigation-development.test.ts": "c0f90242aaacd578f3d31006dfaeaa2ac199028cc912be06c0bdee4b0100517c",
+      "src/evals/investigation-development.ts": "e6303c089e387f9e0701ba914d998e91141076f58c7130852e3ff9af7505de13",
+      "src/evals/plan-meaning-grader.test.ts": "bdd73d04961191278b475003e4dd2a8f6cd3d013037c2e995d9d00e9175c66fd",
+      "src/evals/plan-meaning-grader.ts": "c4007d841a32f450bdeac2b6663e2f7433d1dc7ea0ed32d83a90760eaa3f8719",
+      "src/evals/scalar-numerical-grader.test.ts": "b00740e0e1607352a411e4744da9698dba87079a4ed45ad7b9c9fccb418f9010",
+      "src/evals/scalar-numerical-grader.ts": "a4a89fa945409a26cf16e9c79b64363408c940bbdf797380bbd438ae29102dfe",
+      "src/evals/supported-analytics-cases.test.ts": "eb5ffa33c7bb477dd341eebc1caa055616bcaa11320817d58253e8df43e6be9d",
+      "src/evals/supported-analytics-cases.ts": "8d73406d14c7659f42b110c34ce08b4b37227ad80a6b606afde2e4c3156fcf57",
+      "src/examples/commerce-analysis-pipeline.ts": "de68db61eddc0e4b4527e5d6583c675035ca6a95696c26a364ab2f4257f5e2f8",
+      "src/examples/compare-net-revenue-by-region.ts": "daa5679a43bebe07c05037db66113ec0a853b3f72825153c14e48d5eda815230",
+      "src/examples/compare-periods.ts": "d887657e7f4bab4b11112940bb617d2c5e7083298c8a8282b9619a3bb35d5b56",
+      "src/examples/investigate-metric-change.ts": "04fd822bc689f740c86684d919b57baa959d68369a86e2672dd6457e16b2829a",
+      "src/examples/kpi-specification.ts": "47b9655f61b1699d7d3cbafe740653ba477b111a9c0e4444a10501f495486556",
+      "src/examples/verify-date-clarification.ts": "c846bbe30d07fa6109a6052876729e7235446c22c502dcea27ba9fe101e2120d",
+      "src/examples/verify-model-display-browser.ts": "c7875183f629e4c18e8a25114a2a5662aed62e4b02eceb4ab2979ff090d768bd",
+      "src/examples/verify-model-display-dates.ts": "0f5b07bb53d5be1fc66bf1cbf74b0243e85eb4314edd2baabdaefedd55f2849a",
+      "src/examples/verify-no-matching-data.ts": "9ea9a6fcd39a9e78469895fe26ac2014498cb513fa9f18ce3a0b4a3ec5aab347",
+      "src/examples/verify-query-failure.ts": "186f05f7ec9b4f6c9275a3ba196ec0bed36d6e93b312d6d6dec8fc26c5753ebc",
+      "src/examples/verify-streaming-boundary.ts": "2e0cf457db9e9322e4b8b85017ddb7297abfe1f583a14fa7904ec3e95997cd9a",
+      "src/experiments/day-01-baseline.ts": "f8fa12b0ac380cb6c6c7fcb320cd7f021a11758d230140b131eb3c6b980160ea",
+      "src/experiments/day-01-smoke.ts": "dabb86e0ab67dd549e9b991b7c7ed50b441baef34018799dfdbf8b52fb0f90cd",
+      "src/experiments/day-02-routing-baseline.ts": "90022f732b23cf451c9c4f592e89a5710c52b440c79e1a9d78b0d8356c3f4686",
+      "src/experiments/day-03-query-plan-development.ts": "0d58383ea96f724c473a262169111e176ade1ad23471701d2acdf69da42ca793",
+      "src/experiments/day-05-deterministic-numerical-evaluation.ts": "a63532decbc52ff0f94c00943b8a0dcae407f302cf92363b0dfc5d03076be44a",
+      "src/experiments/day-05-live-commerce-analysis.ts": "c04c4aea9a1029ee7d9188bd96671522cf686875de6e5e47259d767151e9a02f",
+      "src/experiments/day-06-display-selection.tsx": "df8501055a5186acf40495f626f112db1d0a7ae92138fa62a10da604c43dfe63",
+      "src/experiments/day-06-live-streaming-display.ts": "5a4c24872391af9cc11ad1983a976e8645797c7246971fd423ecc1d4f71273ca",
+      "src/experiments/day-07-clarification-evaluation.ts": "9d00495e2a95a299f89a7736496f43f96bb783ca23bb6f36265e76bf5cf3da4d",
+      "src/experiments/day-07-interpretation-evaluation.ts": "54551fa85e947ab67224309e402716439f581e38929faa7377cfdd59131c9be7",
+      "src/experiments/day-07-numerical-category.ts": "26094710b1284647f5b20b19eb60885f3b025f6d65a72d0bcbf7159f33c6e76b",
+      "src/experiments/day-07-offline-extraction-outcomes.ts": "6316cefea5ed3be7eb84004c2f488c8a108f86fec0bfd9511932a436d7f1c6f5",
+      "src/experiments/day-07-one-case-evaluation.ts": "286c039659cad31c5597afaba5db79a4657d87e9b349936cb24c173ca361dae5",
+      "src/experiments/day-08-bm25-retrieval.ts": "f68bfdedd2ac468eb4b732ab2b12fbd3e9785731e2b62658286600c9c669d680",
+      "src/experiments/day-08-embedding-retrieval.ts": "30328fe2c905d06e24ea42fc9fa05a968191cf340c2cc5932112547bc88856c0",
+      "src/experiments/day-08-keyword-retrieval.ts": "a7dd47d68f282a0a2f9f25e088823530ced37631657e275347a45fde70edb9cf",
+      "src/experiments/day-08-retrieval-corpus.ts": "82fe4ef434bfb446f2f2e6682ee7f1eb9f51ec5e6c06761d77cc0e43460da029",
+      "src/experiments/day-08-retrieval-evaluation.ts": "8f4dad2791dccda0698948082b1abd1ebd8fe5931c20235e7121e0507698afab",
+      "src/experiments/day-09-document-chunking.ts": "42579602d82ccdf3224d955c296c385341ef5a5959c15c5911bacafb920165b7",
+      "src/experiments/day-09-document-ingestion.ts": "512d588c06b744dff1f34eafaa4538342ebef712add0d1b55a258abf278c882b",
+      "src/experiments/day-09-document-reindexing.ts": "0617bc255f43e2d24402823433f3f186e6988c892de62bd4b7e19e2f33d4824a",
+      "src/experiments/day-10-chunk-embedding.ts": "0d3972a81ddca0e5e2c1662a0f193f50e66d891bfe54f72d56c4bceb4da5c53f",
+      "src/experiments/day-10-exact-chunk-retrieval.ts": "40aae95b76a785110db9b1df5720a44d6d2baec4c784731616860a3efcff3c66",
+      "src/experiments/day-10-refund-embeddings.ts": "e9178cea9ce1f03d515b96b20332549287966ff628565016309fa61ae851dc18",
+      "src/experiments/day-10-retrieval-evaluation.ts": "0da1d93a4e55b34962d8fa29284422a82dfe73b2ff8068b390c6a6f06be95130",
+      "src/experiments/day-15-investigation-development.ts": "68de47d0c0139f68a289894ef7f7fdb31907b3af9c8fecce5335aa9722ca5cdd",
+      "src/experiments/day-15-natural-language-investigation.ts": "6f2e33f86d268d39f2cad01da40173c5a6af15cbc6a4e0a95cedd760c5c8503a",
+      "src/experiments/investigation-recorder.test.ts": "471b5d9216fe91f2812fc1d56e683623eee1031b24930b4cec8dfc496a61728b",
+      "src/experiments/investigation-recorder.ts": "4c7371c1c0033e23b6440fa85982f53c4cbe41079d0f295404d5af1b1fba6cfe",
+      "src/index.ts": "9ad15c2905b4b96a3c70ffaad307c4e56f5589c1b8f3ce674fe33995a324e799",
+      "src/query-plan/query-plan-cli.ts": "d98d2f65aeb27d6d3950b18d52aeb825263154eb7084735c89ce149d0996eeb1",
+      "src/query-plan/query-plan-extraction-v1-prompt.ts": "a1ea426ba27b6a0a566f61eeba2d5d70a433f51ac301688b6012b3c0845201ab",
+      "src/query-plan/query-plan-extraction-v2-prompt.ts": "4af74019126c8eda2589b8f5039bb5b21262a7e514f047efdeed5d6904a9cdbc",
+      "src/query-plan/query-plan-extraction-v3-prompt.ts": "85fc542f8c0c9098e0a16438ea598c79ac61281b1c343f02e68b65438de6a75e",
+      "src/query-plan/query-plan-extraction.fixtures.ts": "b2bcafdbf299c13adf45b124ff2441a76ccfb9bacc9d6935245a2ed4d84405cf",
+      "src/query-plan/query-plan-extraction.test.ts": "7d2e42193430456f666e97fc98d5cd07a9a7203d6ea2a5d0c9b952dd8364691f",
+      "src/query-plan/query-plan-extraction.ts": "170f8a09fb05c35c365a37938a73846f6b9447c32a8f9fd6bba9fc0c0910498e",
+      "src/query-plan/query-plan.test.ts": "55a109fa1247224c4babfe15cd2000c52610d3cac0df239235237892d4f34833",
+      "src/query-plan/query-plan.ts": "21ca9d77734bf292367846b5c9a2b0ebe026b40a0aa3f35160378da4a6cd2963",
+      "src/retrieval/chunk-embedding.test.ts": "18895c7fdb5c1e08e188ae325108707e1a33ff9546e8b10404d4e4068983a916",
+      "src/retrieval/chunk-embedding.ts": "8297360c7152d6d3c10efa8c034471ee15d4e64a93c58d26687d6d41cd8b67f3",
+      "src/retrieval/cosine-similarity.ts": "6e43a701f7afcea588d42f0a6af60356d8a020ec70f54bbfe403901fdd8f684b",
+      "src/retrieval/day-09-ingestion-fixtures.ts": "89797a691c4db89861ccffd1a88c8c3d837c6c0c29ac30538e8df4f319226bbd",
+      "src/retrieval/day-09-refund-policy-fixture.ts": "3d2dbd9162b01fd82bb3328b8d22ee8c9ed327254a6b36497a327f4bbfc83332",
+      "src/retrieval/document-chunker.test.ts": "5cab5b85179f37186b05be1864ca847c078c80afb1af2191c6b41c8210f40af1",
+      "src/retrieval/document-chunker.ts": "675aaefa49f1697329cbb143cc59f92b08f8b4c8f7b2f14995ea5f67d2b2e10a",
+      "src/retrieval/exact-chunk-search.test.ts": "5a0cdc8518a72586f4b97ab50c806c11cfd4b24d337c9083970d0ea3a5ed3906",
+      "src/retrieval/exact-chunk-search.ts": "671ac2a7e88a7c74dc1ec8eed32133731952c00dd7527004363c35bbaac70036",
+      "src/retrieval/in-memory-document-store.test.ts": "7f370ac43da9a142b9805c24374eea78df48adce8104783bff00434c1aa556a1",
+      "src/retrieval/in-memory-document-store.ts": "85f5c513719143f30bea423c9769cdf9ae2086a0c2c862426966e91d8dce6bbb",
+      "src/routing/router-v1-prompt.ts": "97e9fe1279a4716da09b334cd2a0b8c4ae15168f7f2aea7064789df87327fda6",
+      "src/routing/router-v2-prompt.ts": "ca3b7c6c0a7b61cfe918e11a843e1ef64c2e1d8baabce29f7c993f79c3ed6252",
+      "src/routing/router-v3-prompt.ts": "5a2db8cad9766b2f23a779d8e9b408de60398e1f52abcfb9848063f36394f74a",
+      "src/routing/router.test.ts": "3f661e0b2b887ba8bf1404f2e494e7cff7d01388100b4d05c7c913c2b3b0f999",
+      "src/routing/router.ts": "4e274b0e09db443b94bf0111949a98b9f12ecf6840178f99999a05ab76ae5b8a",
+      "src/tools/get-metric-definition.test.ts": "75ec366cfb03a7f4f1bc49ec1869ee3b9108101f7e7b76d56dbf001d895207d0",
+      "src/tools/get-metric-definition.ts": "a1ed682097397de115f3371abe90cc2fa8530b136275c910ad12b556f8c0739f",
+      "src/tools/get-schema.test.ts": "fd6a70b5fd2f3bf98a4820e19be263656175627103986c12cf84006a5b173d91",
+      "src/tools/get-schema.ts": "d6f9043e6ef1ad0aab6631adf0179b14d6aef0d09103ca5b89312c41f51bca7c",
+      "src/tools/preview-query-plan.test.ts": "48b213a413655ad291156a6a1c0a15af722c62bfbda5a8ff52f0a67bdcf37ead",
+      "src/tools/preview-query-plan.ts": "2efc47a64011a80cd5622291ddb908cdf823c523ec609d577381c8cd0c811872",
+      "src/ui/display-selection.test.ts": "3fc72fc7a4bc472dae76f6da1b2969481fd7f994e56ab46f896b4354d6237b1c",
+      "src/ui/display-selection.ts": "2d4f6f23bdeff011d6d28ab602cfe01bbea18003a3aa324e6eff3c0a80495069",
+      "src/ui/kpi-specification.test.ts": "ce81846d8a33fdfadf1185c53cdc0d8eeb44ba7eb409be884c24d23f0011e3bc",
+      "src/ui/kpi-specification.ts": "5855eea1e2c1a54788bd22c68325dd31c1a1ceb28f0d4d6dfe60c45f4f3563f2",
+      "src/ui/model-display-cli.ts": "bfe3a274d8b84cda26f2bc22d583861befc24ed7e9ffea241027a31b21734e68",
+      "src/ui/model-display-client.js": "a698493795bc2811bd11af47870680a2d5817cf66ed9b44a50e9c94110e63196",
+      "src/ui/model-display-request.test.ts": "c9ddec50c7ca0c2406196f626bcb24494587f4a6bc3b1a5d5f16deac7a18088d",
+      "src/ui/model-display-request.ts": "1c2400dfb13e61da5882f6226e791bd7efdbd38be6121e6c30a1b7a6c88628cd",
+      "src/ui/model-display-server.tsx": "021fff3651016afba52ce1c4a3f627c6c6c21d91701b1bedef18870dd90f7557",
+      "src/ui/net-revenue-kpi-page.tsx": "c2fb993dd06e7cdb7e78e1584666d88ff50aa8983c24ba0107fa0f405086c5e7",
+      "src/ui/net-revenue-kpi-plan.ts": "d947149a8cf39d8e6a0ed5385a09534b5719a29a64384e742ab93192b8e84ba7",
+      "src/ui/net-revenue-kpi-server.tsx": "6d36d818674dee0ac61dd7dedf25742b85633a1881fd64c96e4b4a289797a77e"
+    },
+    "unchanged": true
+  }
+}

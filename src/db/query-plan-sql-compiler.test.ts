@@ -53,18 +53,43 @@ test("binds a half-open date interval and region in predicate order", () => {
   assert.equal(compiled.sql.includes("North"), false);
 });
 
-test("rejects a grouped plan explicitly", () => {
+test("compiles net revenue grouped only by region with deterministic ordering", () => {
+  const compiled = compileQueryPlan(makePlan({
+    dimensions: { kind: "specified", values: ["region"] },
+    dateRange: { kind: "interval", start: "2025-08-01", end: "2025-09-01" },
+  }));
+  assert.equal(compiled.sql, [
+    "SELECT region, SUM(gross_amount - discount_amount - refund_amount) AS net_revenue",
+    "FROM orders",
+    "WHERE order_date >= CAST(? AS DATE) AND order_date < CAST(? AS DATE)",
+    "GROUP BY region",
+    "ORDER BY region ASC;",
+  ].join("\n"));
+  assert.deepEqual(compiled.parameters, ["2025-08-01", "2025-09-01"]);
+});
+
+test("rejects category grouping explicitly", () => {
   assert.throws(
     () =>
       compileQueryPlan(
         makePlan({
-          dimensions: { kind: "specified", values: ["region"] },
+          dimensions: { kind: "specified", values: ["category"] },
         }),
       ),
     (error) =>
       error instanceof QueryPlanCompilationError &&
       error.code === "UNSUPPORTED_DIMENSIONS",
   );
+});
+
+test("rejects unspecified and multiple dimensions", () => {
+  for (const dimensions of [
+    { kind: "unspecified" },
+    { kind: "specified", values: ["region", "category"] },
+  ]) {
+    assert.throws(() => compileQueryPlan(makePlan({ dimensions })),
+      (error) => error instanceof QueryPlanCompilationError && error.code === "UNSUPPORTED_DIMENSIONS");
+  }
 });
 
 test("rejects an unspecified date range instead of treating it as all time", () => {

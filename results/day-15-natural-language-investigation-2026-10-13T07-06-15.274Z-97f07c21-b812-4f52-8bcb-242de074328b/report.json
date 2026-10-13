@@ -1,0 +1,285 @@
+{
+  "reports": [
+    {
+      "id": "explicit-net-region",
+      "question": "Investigate how net revenue changed from August 2025 to September 2025, broken down by region.",
+      "sqlExecutionCount": 4,
+      "apiCost": {
+        "status": "unavailable",
+        "usd": null,
+        "reason": "API pricing is not configured"
+      },
+      "outcome": "completed",
+      "extraction": {
+        "rawOutput": "{\n  \"metric\": \"net_revenue\",\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": []\n}",
+        "metadata": {
+          "model": "qwen3.5:4b",
+          "tokenUsage": {
+            "inputTokens": 395,
+            "outputTokens": 116,
+            "totalTokens": 511
+          },
+          "latencyMs": 15250,
+          "requestId": null
+        },
+        "latencyMs": 15250,
+        "finishReason": "stop",
+        "promptVersion": "investigation-extractor-v1",
+        "schemaVersion": "investigation-input-v1",
+        "modelSettings": {
+          "temperature": 0,
+          "maxTokens": 512
+        },
+        "outcome": "inputs",
+        "fields": {
+          "metric": "net_revenue",
+          "baseline": {
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "target": {
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "dimension": "region",
+          "unresolvedQuestions": []
+        }
+      },
+      "investigation": {
+        "outcome": "completed",
+        "overall": {
+          "metric": "net_revenue",
+          "baseline": {
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "target": {
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "baselineValue": "7225.00",
+          "targetValue": "8295.00",
+          "absoluteChange": "1070.00",
+          "percentageChange": "14.81"
+        },
+        "regional": {
+          "metric": "net_revenue",
+          "dimension": "region",
+          "baseline": {
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "target": {
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "segments": [
+            {
+              "region": "East",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "2020.00",
+              "targetValue": "2320.00",
+              "absoluteChange": "300.00"
+            },
+            {
+              "region": "North",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "2275.00",
+              "targetValue": "2850.00",
+              "absoluteChange": "575.00"
+            },
+            {
+              "region": "South",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "1900.00",
+              "targetValue": "1900.00",
+              "absoluteChange": "0.00"
+            },
+            {
+              "region": "West",
+              "baselinePresent": true,
+              "targetPresent": true,
+              "baselineValue": "1030.00",
+              "targetValue": "1225.00",
+              "absoluteChange": "195.00"
+            }
+          ]
+        },
+        "definition": {
+          "definition": {
+            "metric": "net_revenue",
+            "meaning": "Net revenue after discounts and refunds.",
+            "calculation": "SUM(gross_amount - discount_amount - refund_amount)",
+            "relevantExclusions": [
+              "No order statuses are excluded unless an explicit supported status filter is applied."
+            ]
+          },
+          "sourceId": "src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue",
+          "sourceVersion": null
+        },
+        "summary": "Net revenue increased by 1070.00 (14.81%). Baseline [2025-08-01, 2025-09-01): 7225.00; target [2025-09-01, 2025-10-01): 8295.00.\nRegional contributions (target minus baseline): East: 300.00; North: 575.00; South: 0.00; West: 195.00.\nRegional period values reconcile to the overall totals; regional changes sum to 1070.00.\nDefinition: SUM(gross_amount - discount_amount - refund_amount). No order statuses are excluded unless an explicit supported status filter is applied. Source: [src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue] (version unavailable).\nBusiness causes are not established by these aggregate results.",
+        "trace": [
+          {
+            "stage": "validate_inputs",
+            "status": "completed",
+            "elapsedMs": 1.0117079999999987
+          },
+          {
+            "stage": "compare_periods",
+            "status": "completed",
+            "elapsedMs": 120.48091600000043
+          },
+          {
+            "stage": "compare_regions",
+            "status": "completed",
+            "elapsedMs": 17.62724999999955
+          },
+          {
+            "stage": "get_metric_definition",
+            "status": "completed",
+            "elapsedMs": 0.23533299999871815
+          },
+          {
+            "stage": "produce_summary",
+            "status": "completed",
+            "elapsedMs": 0.14041700000052515
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambiguous-revenue",
+      "question": "Why did revenue change?",
+      "sqlExecutionCount": 0,
+      "apiCost": {
+        "status": "unavailable",
+        "usd": null,
+        "reason": "API pricing is not configured"
+      },
+      "outcome": "clarification_required",
+      "extraction": {
+        "rawOutput": "{\n  \"metric\": null,\n  \"baseline\": null,\n  \"target\": null,\n  \"dimension\": null,\n  \"unresolvedQuestions\": [\n    \"Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?\",\n    \"What is the comparison period (from baseline to target)?\"\n  ]\n}",
+        "metadata": {
+          "model": "qwen3.5:4b",
+          "tokenUsage": {
+            "inputTokens": 374,
+            "outputTokens": 81,
+            "totalTokens": 455
+          },
+          "latencyMs": 4919,
+          "requestId": null
+        },
+        "latencyMs": 4919,
+        "finishReason": "stop",
+        "promptVersion": "investigation-extractor-v1",
+        "schemaVersion": "investigation-input-v1",
+        "modelSettings": {
+          "temperature": 0,
+          "maxTokens": 512
+        },
+        "outcome": "clarification_required",
+        "fields": {
+          "metric": null,
+          "baseline": null,
+          "target": null,
+          "dimension": null,
+          "unresolvedQuestions": [
+            "Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?",
+            "What is the comparison period (from baseline to target)?"
+          ]
+        },
+        "unresolvedQuestions": [
+          "Which metric should be analyzed (e.g., net_revenue, total_gross_revenue)?",
+          "What is the comparison period (from baseline to target)?",
+          "Specify metric.",
+          "Specify baseline.",
+          "Specify target.",
+          "Specify dimension."
+        ]
+      },
+      "investigation": null
+    },
+    {
+      "id": "unsupported-gross",
+      "question": "Compare gross revenue in September 2025 against August 2025 by region.",
+      "sqlExecutionCount": 0,
+      "apiCost": {
+        "status": "unavailable",
+        "usd": null,
+        "reason": "API pricing is not configured"
+      },
+      "outcome": "unsupported",
+      "extraction": {
+        "rawOutput": "{\n  \"metric\": \"total_gross_revenue\",\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": []\n}",
+        "metadata": {
+          "model": "qwen3.5:4b",
+          "tokenUsage": {
+            "inputTokens": 389,
+            "outputTokens": 118,
+            "totalTokens": 507
+          },
+          "latencyMs": 5969,
+          "requestId": null
+        },
+        "latencyMs": 5969,
+        "finishReason": "stop",
+        "promptVersion": "investigation-extractor-v1",
+        "schemaVersion": "investigation-input-v1",
+        "modelSettings": {
+          "temperature": 0,
+          "maxTokens": 512
+        },
+        "outcome": "unsupported",
+        "fields": {
+          "metric": "total_gross_revenue",
+          "baseline": {
+            "start": "2025-08-01",
+            "end": "2025-09-01"
+          },
+          "target": {
+            "start": "2025-09-01",
+            "end": "2025-10-01"
+          },
+          "dimension": "region",
+          "unresolvedQuestions": []
+        },
+        "reason": "Unsupported metric: total_gross_revenue. Only net_revenue executes."
+      },
+      "investigation": null
+    }
+  ],
+  "checksums": {
+    "before": {
+      "src/application/investigation-extraction-v1-prompt.ts": "7ce0c6b7900f0aae53585918954550c0f818b484dc2af59d366d60ea4ecffab0",
+      "src/application/natural-language-investigation.ts": "c6f8449ba5a7fe1719afca366ecd5e9b41e8e902c857ac1b168d22a884545a60",
+      "src/application/investigate-metric-change.ts": "71f8f2c6bee83e0adf16d798d997ca30d139aa28ef5a9b9443e4d4156f5892b6",
+      "src/application/compare-periods.ts": "0135624773b75d361314e00a894542969a0407c0b3235f7795b0f58b2d8fbad3",
+      "src/application/compare-net-revenue-by-region.ts": "2a6a4a5426f8e9bb82e187c4c96a5ac9dd6bbc29f9d67d68bf4d6af18f7355fe",
+      "src/decimal.ts": "bc8e06f1a56a4f2f6ec1a855fdbbf4b26567206096b45eb2cfeb836b155ff469",
+      "src/db/query-plan-sql-compiler.ts": "4f89b35a60fe511540bbb833db091d401c3882c6043244b9be99c4bb936dab6c",
+      "src/db/duckdb-query-plan-executor.ts": "bd47a23a23d38ba57837cc0ef3fcb5bd1ca94c8a88d821969332d8ab381d44e2",
+      "src/tools/get-metric-definition.ts": "a1ed682097397de115f3371abe90cc2fa8530b136275c910ad12b556f8c0739f",
+      "src/ai/qwen-provider.ts": "bf5842543484311189a2d9013f335df01c039f1193bbe5357d14d0d394e8b358",
+      "src/experiments/day-15-natural-language-investigation.ts": "1df84f0e192cd44894649178f0b403618227dea07df948082a985940e9697cc0",
+      "data/seed.sql": "18f4ddd475ab0274ebe904412519d049e10f3850d42ca0fca0f70a78ab52ced2"
+    },
+    "after": {
+      "src/application/investigation-extraction-v1-prompt.ts": "7ce0c6b7900f0aae53585918954550c0f818b484dc2af59d366d60ea4ecffab0",
+      "src/application/natural-language-investigation.ts": "c6f8449ba5a7fe1719afca366ecd5e9b41e8e902c857ac1b168d22a884545a60",
+      "src/application/investigate-metric-change.ts": "71f8f2c6bee83e0adf16d798d997ca30d139aa28ef5a9b9443e4d4156f5892b6",
+      "src/application/compare-periods.ts": "0135624773b75d361314e00a894542969a0407c0b3235f7795b0f58b2d8fbad3",
+      "src/application/compare-net-revenue-by-region.ts": "2a6a4a5426f8e9bb82e187c4c96a5ac9dd6bbc29f9d67d68bf4d6af18f7355fe",
+      "src/decimal.ts": "bc8e06f1a56a4f2f6ec1a855fdbbf4b26567206096b45eb2cfeb836b155ff469",
+      "src/db/query-plan-sql-compiler.ts": "4f89b35a60fe511540bbb833db091d401c3882c6043244b9be99c4bb936dab6c",
+      "src/db/duckdb-query-plan-executor.ts": "bd47a23a23d38ba57837cc0ef3fcb5bd1ca94c8a88d821969332d8ab381d44e2",
+      "src/tools/get-metric-definition.ts": "a1ed682097397de115f3371abe90cc2fa8530b136275c910ad12b556f8c0739f",
+      "src/ai/qwen-provider.ts": "bf5842543484311189a2d9013f335df01c039f1193bbe5357d14d0d394e8b358",
+      "src/experiments/day-15-natural-language-investigation.ts": "1df84f0e192cd44894649178f0b403618227dea07df948082a985940e9697cc0",
+      "data/seed.sql": "18f4ddd475ab0274ebe904412519d049e10f3850d42ca0fca0f70a78ab52ced2"
+    },
+    "unchanged": true
+  }
+}

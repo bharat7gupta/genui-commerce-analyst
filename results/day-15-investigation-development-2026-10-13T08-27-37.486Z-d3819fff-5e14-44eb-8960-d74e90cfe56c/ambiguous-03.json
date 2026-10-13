@@ -1,0 +1,114 @@
+{
+  "id": "ambiguous-03",
+  "category": "ambiguous",
+  "question": "Investigate how net revenue changed from August 2025 to September 2025.",
+  "expectedOutcome": "clarification_required",
+  "expectedInputs": {
+    "metric": "net_revenue",
+    "baseline": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "target": {
+      "start": "2025-09-01",
+      "end": "2025-10-01"
+    },
+    "dimension": null
+  },
+  "expectUnresolvedQuestions": true,
+  "numericalReference": null,
+  "requireEvidence": false,
+  "note": "",
+  "label": "development baseline",
+  "outcome": "clarification_required",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"net_revenue\",\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": null,\n  \"unresolvedQuestions\": [\n    \"Which region should be analyzed?\"\n  ]\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 390,
+        "outputTokens": 127,
+        "totalTokens": 517
+      },
+      "latencyMs": 6067,
+      "requestId": null
+    },
+    "latencyMs": 6067,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "clarification_required",
+    "fields": {
+      "metric": "net_revenue",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "dimension": null,
+      "unresolvedQuestions": [
+        "Which region should be analyzed?"
+      ]
+    },
+    "unresolvedQuestions": [
+      "Which region should be analyzed?",
+      "Specify dimension."
+    ]
+  },
+  "investigation": null,
+  "grades": {
+    "outcome": {
+      "status": "pass",
+      "reason": "Expected clarification_required; observed clarification_required"
+    },
+    "extraction": {
+      "status": "pass",
+      "reason": "All four inputs match; unresolved-question presence matches (wording ungraded)"
+    },
+    "numerical": {
+      "status": "not_applicable",
+      "reason": "No numerical result expected"
+    },
+    "sql": {
+      "status": "pass",
+      "reason": "Expected 0 SQL executions; observed 0"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "pass",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 0,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "clarification_required",
+      "elapsedMs": 6067
+    }
+  ],
+  "querySteps": [],
+  "totalLatencyMs": 6068.914375,
+  "modelLatencyMs": 6067,
+  "tokens": {
+    "inputTokens": 390,
+    "outputTokens": 127,
+    "totalTokens": 517
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}

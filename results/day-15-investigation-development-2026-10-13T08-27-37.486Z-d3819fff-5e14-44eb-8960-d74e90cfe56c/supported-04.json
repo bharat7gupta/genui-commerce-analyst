@@ -1,0 +1,301 @@
+{
+  "id": "supported-04",
+  "category": "supported",
+  "question": "Compare August 2025 net revenue against September 2025 net revenue, by region.",
+  "expectedOutcome": "completed",
+  "expectedInputs": {
+    "metric": "net_revenue",
+    "baseline": {
+      "start": "2025-09-01",
+      "end": "2025-10-01"
+    },
+    "target": {
+      "start": "2025-08-01",
+      "end": "2025-09-01"
+    },
+    "dimension": "region"
+  },
+  "expectUnresolvedQuestions": false,
+  "numericalReference": "sep-aug",
+  "requireEvidence": false,
+  "note": "",
+  "label": "development baseline",
+  "outcome": "completed",
+  "extraction": {
+    "rawOutput": "{\n  \"metric\": \"net_revenue\",\n  \"baseline\": {\n    \"start\": \"2025-08-01\",\n    \"end\": \"2025-09-01\"\n  },\n  \"target\": {\n    \"start\": \"2025-09-01\",\n    \"end\": \"2025-10-01\"\n  },\n  \"dimension\": \"region\",\n  \"unresolvedQuestions\": []\n}",
+    "metadata": {
+      "model": "qwen3.5:4b",
+      "tokenUsage": {
+        "inputTokens": 391,
+        "outputTokens": 116,
+        "totalTokens": 507
+      },
+      "latencyMs": 5528,
+      "requestId": null
+    },
+    "latencyMs": 5528,
+    "finishReason": "stop",
+    "promptVersion": "investigation-extractor-v1",
+    "schemaVersion": "investigation-input-v1",
+    "modelSettings": {
+      "temperature": 0,
+      "maxTokens": 512
+    },
+    "outcome": "inputs",
+    "fields": {
+      "metric": "net_revenue",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "dimension": "region",
+      "unresolvedQuestions": []
+    }
+  },
+  "investigation": {
+    "outcome": "completed",
+    "overall": {
+      "metric": "net_revenue",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "baselineValue": "7225.00",
+      "targetValue": "8295.00",
+      "absoluteChange": "1070.00",
+      "percentageChange": "14.81"
+    },
+    "regional": {
+      "metric": "net_revenue",
+      "dimension": "region",
+      "baseline": {
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "target": {
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "segments": [
+        {
+          "region": "East",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2020.00",
+          "targetValue": "2320.00",
+          "absoluteChange": "300.00"
+        },
+        {
+          "region": "North",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "2275.00",
+          "targetValue": "2850.00",
+          "absoluteChange": "575.00"
+        },
+        {
+          "region": "South",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1900.00",
+          "targetValue": "1900.00",
+          "absoluteChange": "0.00"
+        },
+        {
+          "region": "West",
+          "baselinePresent": true,
+          "targetPresent": true,
+          "baselineValue": "1030.00",
+          "targetValue": "1225.00",
+          "absoluteChange": "195.00"
+        }
+      ]
+    },
+    "definition": {
+      "definition": {
+        "metric": "net_revenue",
+        "meaning": "Net revenue after discounts and refunds.",
+        "calculation": "SUM(gross_amount - discount_amount - refund_amount)",
+        "relevantExclusions": [
+          "No order statuses are excluded unless an explicit supported status filter is applied."
+        ]
+      },
+      "sourceId": "src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue",
+      "sourceVersion": null
+    },
+    "summary": "Net revenue increased by 1070.00 (14.81%). Baseline [2025-08-01, 2025-09-01): 7225.00; target [2025-09-01, 2025-10-01): 8295.00.\nRegional contributions (target minus baseline): East: 300.00; North: 575.00; South: 0.00; West: 195.00.\nRegional period values reconcile to the overall totals; regional changes sum to 1070.00.\nDefinition: SUM(gross_amount - discount_amount - refund_amount). No order statuses are excluded unless an explicit supported status filter is applied. Source: [src/tools/get-metric-definition.ts#METRIC_DEFINITIONS.net_revenue] (version unavailable).\nBusiness causes are not established by these aggregate results.",
+    "trace": [
+      {
+        "stage": "validate_inputs",
+        "status": "completed",
+        "elapsedMs": 0.25600000000122236
+      },
+      {
+        "stage": "compare_periods",
+        "status": "completed",
+        "elapsedMs": 28.85475000000224
+      },
+      {
+        "stage": "compare_regions",
+        "status": "completed",
+        "elapsedMs": 18.57508400000006
+      },
+      {
+        "stage": "get_metric_definition",
+        "status": "completed",
+        "elapsedMs": 0.017250000000785803
+      },
+      {
+        "stage": "produce_summary",
+        "status": "completed",
+        "elapsedMs": 0.1650420000005397
+      }
+    ]
+  },
+  "grades": {
+    "outcome": {
+      "status": "pass",
+      "reason": "Expected completed; observed completed"
+    },
+    "extraction": {
+      "status": "fail",
+      "reason": "Mismatch: baseline, target"
+    },
+    "numerical": {
+      "status": "fail",
+      "reason": "Compare all scalar amounts and all regional values/presence/change fields with SQL-verified expectations"
+    },
+    "sql": {
+      "status": "pass",
+      "reason": "Expected 4 SQL executions; observed 4"
+    },
+    "evidence": {
+      "status": "not_applicable",
+      "reason": "Not a misleading case"
+    },
+    "endToEnd": {
+      "status": "fail",
+      "reason": "All applicable checks must pass; not_reached does not count as numerical success"
+    }
+  },
+  "sqlExecutionCount": 4,
+  "failedStage": null,
+  "steps": [
+    {
+      "stage": "extract_inputs",
+      "status": "inputs",
+      "elapsedMs": 5528
+    },
+    {
+      "stage": "validate_inputs",
+      "status": "completed",
+      "elapsedMs": 0.25600000000122236
+    },
+    {
+      "stage": "compare_periods",
+      "status": "completed",
+      "elapsedMs": 28.85475000000224
+    },
+    {
+      "stage": "compare_regions",
+      "status": "completed",
+      "elapsedMs": 18.57508400000006
+    },
+    {
+      "stage": "get_metric_definition",
+      "status": "completed",
+      "elapsedMs": 0.017250000000785803
+    },
+    {
+      "stage": "produce_summary",
+      "status": "completed",
+      "elapsedMs": 0.1650420000005397
+    }
+  ],
+  "querySteps": [
+    {
+      "ordinal": 1,
+      "dimensions": {
+        "kind": "specified",
+        "values": []
+      },
+      "dateRange": {
+        "kind": "interval",
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "status": "completed",
+      "elapsedMs": 16.420208999999886,
+      "error": null
+    },
+    {
+      "ordinal": 2,
+      "dimensions": {
+        "kind": "specified",
+        "values": []
+      },
+      "dateRange": {
+        "kind": "interval",
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "status": "completed",
+      "elapsedMs": 12.206707999997889,
+      "error": null
+    },
+    {
+      "ordinal": 3,
+      "dimensions": {
+        "kind": "specified",
+        "values": [
+          "region"
+        ]
+      },
+      "dateRange": {
+        "kind": "interval",
+        "start": "2025-08-01",
+        "end": "2025-09-01"
+      },
+      "status": "completed",
+      "elapsedMs": 9.972290999998222,
+      "error": null
+    },
+    {
+      "ordinal": 4,
+      "dimensions": {
+        "kind": "specified",
+        "values": [
+          "region"
+        ]
+      },
+      "dateRange": {
+        "kind": "interval",
+        "start": "2025-09-01",
+        "end": "2025-10-01"
+      },
+      "status": "completed",
+      "elapsedMs": 8.386499999996886,
+      "error": null
+    }
+  ],
+  "totalLatencyMs": 5579.064208,
+  "modelLatencyMs": 5528,
+  "tokens": {
+    "inputTokens": 391,
+    "outputTokens": 116,
+    "totalTokens": 507
+  },
+  "apiCost": {
+    "status": "unavailable",
+    "usd": null,
+    "reason": "API pricing is not configured"
+  }
+}
